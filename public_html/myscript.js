@@ -39,9 +39,9 @@ console.log(arrays_to)
 words_to=[];
 for (var key in arrays_to)
 	words_to.push([arrays_to[key][0]])
-var to_Translate = [].concat.apply([], words_to);
 
-console.log(to_Translate)
+//var to_Translate = [].concat.apply([], words_to);
+//console.log(to_Translate)
 
-chrome.runtime.sendMessage({to_Translate}, function(response) {
+chrome.runtime.sendMessage({to_Translate: JSON.stringify(words_to)}, function(response) {
 });
