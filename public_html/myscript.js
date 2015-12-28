@@ -39,9 +39,9 @@ console.log(arrays_to)
 words_to=[];
 for (var key in arrays_to)
 	words_to.push([arrays_to[key][0]])
-var merged_words_to = [].concat.apply([], words_to);
+var to_Translate = [].concat.apply([], words_to);
 
-console.log(merged_words_to)
+console.log(to_Translate)
 
-chrome.runtime.sendMessage({to_Translate: "Hello World"}, function(response) {
+chrome.runtime.sendMessage({to_Translate}, function(response) {
 });
