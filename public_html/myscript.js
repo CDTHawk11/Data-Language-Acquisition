@@ -37,5 +37,6 @@ var to_Translate = [].concat.apply([], words_to);
 
 console.log(to_Translate);
 
+
 chrome.runtime.sendMessage({to_Translate}, function(response) {
 });
