@@ -4,8 +4,8 @@ chrome.runtime.onMessage.addListener(
 
             var deferred = $.Deferred();
 
-            translate(request.to_Translate, deferred);
-
+            translate(request.json_to_Translate, deferred);
+            
             deferred.done(function (translation) {
                 sendResponse({translated_words: translation});
             });
@@ -17,7 +17,7 @@ function translate(original_text, dfrd) {
 
     var my_Key = "AIzaSyDGcpNr1_IzF5aEeS5TIF8Sf7NFpBBtjf8";
     var translated = [];
-
+        
     for (word in original_text) {
 
         $.ajax({
