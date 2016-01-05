@@ -30,12 +30,14 @@ console.log(arrays_to);
 
 words_to=[];
 for (var key in arrays_to)
-	words_to.push([arrays_to[key][0]])
+	words_to.push([arrays_to[key][0]]);
 var to_Translate = [].concat.apply([], words_to);
 
-var json_to_Translate=JSON.stringify(to_Translate);
-alert(json_to_Translate);
+var json_to_Translate=JSON.stringify(to_Translate),
+    json_parse=JSON.parse(json_to_Translate);
 
-chrome.runtime.sendMessage({json_to_Translate}, function(response) {  
-    alert(response.translated_words);
+alert(json_parse);
+
+chrome.runtime.sendMessage({json_parse}, function(response) {  
+    alert(response.merged);
 });
