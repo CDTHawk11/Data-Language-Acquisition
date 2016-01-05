@@ -1,8 +1,7 @@
 function getText(){
     return document.body.innerText;
 }
-//please commit
-//console.log(getText());             //Gives you all the text on the page
+
 var str=getText();
 var words=str.split(" ");
 //console.log(words);
@@ -34,9 +33,9 @@ for (var key in arrays_to)
 	words_to.push([arrays_to[key][0]])
 var to_Translate = [].concat.apply([], words_to);
 
-console.log(to_Translate);
+var json_to_Translate=JSON.stringify(to_Translate);
+alert(json_to_Translate);
 
-
-chrome.runtime.sendMessage({to_Translate}, function(response) {
+chrome.runtime.sendMessage({json_to_Translate}, function(response) {  
     alert(response.translated_words);
 });
