@@ -4,22 +4,22 @@ chrome.runtime.onMessage.addListener(
 
             var deferred = $.Deferred();
 
-            translate(request.json_to_Translate, deferred);
+            translate(request.json_parse, deferred);
             
-            deferred.done(function (translation) {
-                sendResponse({translated_words: translation});
+            deferred.done(function (merged) {
+                sendResponse({merged_words: merged});
             });
 
             return true;
         });
 
 function translate(original_text, dfrd) {
-
+    
     var my_Key = "AIzaSyDGcpNr1_IzF5aEeS5TIF8Sf7NFpBBtjf8";
     var translated = [];
         
     for (word in original_text) {
-
+        
         $.ajax({
             type: "GET",
             url: "https://www.googleapis.com/language/translate/v2?",
@@ -29,7 +29,14 @@ function translate(original_text, dfrd) {
                 translated.push(result.data.translations[0].translatedText);
 
                 if (translated.length === original_text.length) {
-                    dfrd.resolve(JSON.stringify(translated));
+                    var merged=[];
+                    for (word in original_text) {
+                        for (new_word in translated) {
+                            merged.push({original_text[word]:translated[new_word]});
+                        }
+                    },
+                    alert(merged);
+                    dfrd.resolve(merged);
                 }
             },
             error: function (xhr, status, errorMsg) {
