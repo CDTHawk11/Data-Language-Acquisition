@@ -3,11 +3,9 @@ chrome.runtime.onMessage.addListener(
         function (request, sender, sendResponse) {
 
             var deferred = $.Deferred();
-
-            translate(request.json_to_Translate, deferred);
-            
-            deferred.done(function (translation) {
-                sendResponse({translated_words: translation});
+            translate(request.json_parse, deferred);
+            deferred.done(function (merged) {
+                sendResponse({merged_words: merged});
             });
 
             return true;
@@ -17,7 +15,7 @@ function translate(original_text, dfrd) {
 
     var my_Key = "AIzaSyDGcpNr1_IzF5aEeS5TIF8Sf7NFpBBtjf8";
     var translated = [];
-        
+
     for (word in original_text) {
 
         $.ajax({
@@ -29,7 +27,12 @@ function translate(original_text, dfrd) {
                 translated.push(result.data.translations[0].translatedText);
 
                 if (translated.length === original_text.length) {
-                    dfrd.resolve(JSON.stringify(translated));
+                    var merged = {};
+                    for (word in original_text) {
+                        merged[original_text[word]] = translated[word];
+                    }
+
+                    dfrd.resolve(JSON.stringify(merged));
                 }
             },
             error: function (xhr, status, errorMsg) {

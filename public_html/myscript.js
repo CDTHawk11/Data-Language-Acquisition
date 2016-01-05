@@ -39,5 +39,5 @@ var json_to_Translate=JSON.stringify(to_Translate),
 alert(json_parse);
 
 chrome.runtime.sendMessage({json_parse}, function(response) {  
-    alert(response.merged);
+    alert(response.merged_words);
 });
