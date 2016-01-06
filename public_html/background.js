@@ -1,4 +1,3 @@
-
 chrome.runtime.onMessage.addListener(
         function (request, sender, sendResponse) {
 
@@ -31,7 +30,7 @@ function translate(original_text, dfrd) {
                     for (word in original_text) {
                         merged[original_text[word]] = translated[word];
                     }
-
+                    
                     dfrd.resolve(JSON.stringify(merged));
                 }
             },
