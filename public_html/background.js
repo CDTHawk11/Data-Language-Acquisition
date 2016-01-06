@@ -12,12 +12,12 @@ chrome.runtime.onMessage.addListener(
         });
 
 function translate(original_text, dfrd) {
-
+    
     var my_Key = "AIzaSyDGcpNr1_IzF5aEeS5TIF8Sf7NFpBBtjf8";
     var translated = [];
 
     for (word in original_text) {
-
+        
         $.ajax({
             type: "GET",
             url: "https://www.googleapis.com/language/translate/v2?",
