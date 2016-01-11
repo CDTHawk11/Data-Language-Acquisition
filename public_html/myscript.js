@@ -22,7 +22,7 @@ console.log(unique_numbers);
 var counts_new=[];
 for (var key in counts)
 	counts_new.push([key,counts[key]]);
-counts_new.sort(function(a, b) {return b[1] - a[1]})
+counts_new.sort(function(a, b) {return b[1] - a[1]});
 
 console.log(counts_new);
 var arrays_to=counts_new.splice(0,4);
@@ -37,6 +37,18 @@ var json_to_Translate=JSON.stringify(to_Translate),
     json_parse=JSON.parse(json_to_Translate);
 
 alert(json_parse);
+
+$.ajax({
+    type: "POST",
+    url: "ajax/count.php",
+    data: { words_for_translation: json_parse },
+    dataType: 'json',
+    success: function(data){
+    // ...
+    }
+});
+
+
 
 chrome.runtime.sendMessage({json_parse}, function(response) {  
     alert(response.merged_words);
