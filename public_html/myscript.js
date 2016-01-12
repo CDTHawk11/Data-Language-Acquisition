@@ -26,30 +26,40 @@ counts_new.sort(function(a, b) {return b[1] - a[1]});
 
 console.log(counts_new);
 var arrays_to=counts_new.splice(0,4);
-console.log(arrays_to);
+
 
 words_to=[];
 for (var key in arrays_to)
 	words_to.push([arrays_to[key][0]]);
 var to_Translate = [].concat.apply([], words_to);
+console.log(to_Translate);
 
 var json_to_Translate=JSON.stringify(to_Translate),
     json_parse=JSON.parse(json_to_Translate);
 
 alert(json_parse);
 
-$.ajax({
-    type: "POST",
-    url: "ajax/count.php",
-    data: { words_for_translation: json_parse },
-    dataType: 'json',
-    success: function(data){
-    // ...
-    }
-});
+//$.ajax({
+//    type: "POST",
+//    url: "ajax/count.php",
+//    data: { words_for_translation: json_parse },
+//    dataType: 'json',
+//    success: function(data){
+//    
+//    }
+//});
 
+//$.getJSON( "/url", {params }, function( data, status, xhr ) {
+//    $.each(data.response, function(resKey, resValue){
+//        if(resKey == "success"){
+//             var _result = JSON.parse(resValue);
+//        }
+//    }
+//}
 
+wordDict={"football":"stupid","Alabama":"wimps", "a":"ANIMALS"}
 
-chrome.runtime.sendMessage({json_parse}, function(response) {  
-    alert(response.merged_words);
-});
+for (word in wordDict) {
+    document.body.innerHTML = document.body.innerHTML.replace(new RegExp('\\b' + word + '\\b',"gi"), wordDict[word]);
+};
+
