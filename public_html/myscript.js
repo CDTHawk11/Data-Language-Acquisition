@@ -57,9 +57,23 @@ alert(json_parse);
 //    }
 //}
 
-wordDict={"football":"stupid","Alabama":"wimps", "a":"ANIMALS"}
+wordDict={"the":"piano","and":"Hello", "a":"huh?"};
 
-for (word in wordDict) {
-    document.body.innerHTML = document.body.innerHTML.replace(new RegExp('\\b' + word + '\\b',"gi"), wordDict[word]);
-};
+//$('body *').each(function (){
+//    $(this).text();
+//});
+
+var items = document.getElementsByTagName("*");
+    for (var i=0; i < items.length; i++) {
+        if (items[i].innerText && items[i].innerText != "") {
+            for (word in wordDict) {
+                items[i].innerText = items[i].innerText.replace(new RegExp('\\b' + word + '\\b',"gi"), wordDict[word]);
+            }
+        }
+    }
+
+//for (word in wordDict) {
+//    document.body.innerText = document.body.innerText.replace(new RegExp('\\b' + word + '\\b',"gi"), wordDict[word]);
+//    document.body.innerText = document.body.innerText.replace(word,"gi"), wordDict[word])
+//};
 
