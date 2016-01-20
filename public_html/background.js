@@ -11,6 +11,23 @@ chrome.runtime.onMessage.addListener(
         });
 
 function translate(original_text, dfrd) {
+    $.ajax({
+        type: "POST",
+        url: "http://translator.elasticbeanstalk.com/",
+        data: {target: "es", q: original_text.join(",")},
+        dataType: 'json',
+        success: function (result, status, xhr) {
+               dfrd.resolve(JSON.stringify(result));
+        },
+        error: function (xhr, status, errorMsg) {
+            alert(xhr.status + "::" + xhr.statusText + "::" + xhr.responseText);
+        }
+
+    });
+}
+
+/*
+function translate(original_text, dfrd) {
     
     var my_Key = "AIzaSyDGcpNr1_IzF5aEeS5TIF8Sf7NFpBBtjf8";
     var translated = [];
@@ -41,4 +58,4 @@ function translate(original_text, dfrd) {
         });
     }
 }
-
+*/

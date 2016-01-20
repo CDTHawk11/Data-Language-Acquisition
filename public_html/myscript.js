@@ -65,6 +65,12 @@ console.log(json_parse);
 //    }
 //}
 
+chrome.runtime.sendMessage({json_parse}, function(response) {  
+    alert(response.merged_words);
+});
+
+/*
+
 wordDict = {"the": "piano", "and": "Hello", "a": "huh?"};
 
 //$('body *').each(function (){
@@ -88,3 +94,4 @@ for (var i = 0; i < items.length; i++) {
 //    document.body.innerText = document.body.innerText.replace(word,"gi"), wordDict[word])
 //};
 
+*/
