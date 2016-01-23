@@ -55,9 +55,19 @@ chrome.runtime.sendMessage({json_parse}, function(response) {
     replaceText(JSON.parse(response.merged_words));
 });
 
+function replaceText(jsonArr) {
+	$("body *").textFinder(function() {
+		for (var key in jsonArr) {
+			var matcher = new RegExp('\\b' + key + '\\b', "gi");
+		    this.data = this.data.replace(matcher, jsonArr[key]);
+		}
+	});
+}
+
+// jQuery plugin to find and replace text
 jQuery.fn.textFinder = function( fn ) {
     this.contents().each( scan );
-    
+    // callback function to scan through the child nodes recursively
     function scan() {
         var node = this.nodeName.toLowerCase();
         if( node === '#text' ) {
@@ -68,12 +78,3 @@ jQuery.fn.textFinder = function( fn ) {
     }
     return this;
 };
-
-function replaceText(jsonArr) {
-	$("body *").textFinder(function() {
-		for (var key in jsonArr) {
-			var matcher = new RegExp('\\b' + key + '\\b', "gi");
-		    this.data = this.data.replace(matcher, jsonArr[key]);
-		}
-	});
-}
