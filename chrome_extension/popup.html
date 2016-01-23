@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Slider Bar!</title>
+        <script type="text/javascript" src="jquery-1.11.3.min.js"></script>
+        <script type="text/javascript" src="jquery-ui.min.js"></script>
+        <script type="text/javascript" src="script.js"></script>
+        <link rel="stylesheet" href="jquery-ui.css">
+        <style>
+            #application-progress {
+                float: left;
+                clear: left;
+                width: 300px;
+                margin: 15px;
+                background-color: #fcefa1;
+            }
+            #application-progress .ui-slider-range { background: #8ae234; }
+            #application-progress .ui-slider-handle { background: #9e3f1a; }
+        </style>
+    </head>
+    <body>
+        <div>
+            <label for="progress">Limit Translation</label>
+            <input type="text" id="progress" readonly style="border:0; color:#9e3f1a; font-weight:bold;">
+        </div>
+        <div id="application-progress"></div>
+    </body>
+</html>
+
+
