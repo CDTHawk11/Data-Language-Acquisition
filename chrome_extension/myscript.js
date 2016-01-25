@@ -3,9 +3,11 @@ function getText() {
     return document.body.innerText;
 }
 
-var str = getText(); // stores into browser text into variable
-var words = str.split(" "); // make a list of the words
-// console.log(words);
+var allText = getText(); // stores into browser text into variable
+var purified=allText.replace('-',' ').replace(/[^\w\s]/gi, ''); //remove unwanted characters
+var Words=purified.split(" ");
+
+console.log(words);
 
 var counts = [];
 
