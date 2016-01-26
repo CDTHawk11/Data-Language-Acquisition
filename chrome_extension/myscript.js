@@ -13,8 +13,8 @@ chrome.storage.sync.get("TRAN_LIMIT", function (limit) {
 	}
 	
 	var allText = getText(); // stores into browser text into variable
-	var purified=allText.replace('-',' ').replace(/[^\w\s]/gi, ''); //remove unwanted characters
-	var Words=purified.split(" ");
+
+	var words = allText.match((/\b[a-zA-Z]+\b/g));
 
 	console.log(words);
 
