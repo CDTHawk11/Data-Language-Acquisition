@@ -51,17 +51,20 @@ chrome.storage.sync.get("TRAN_LIMIT", function (limit) {
 
 	conjugations=[];
 	
-	for (t in to_Translate)
-		for (i in words)
-			if (to_Translate[t]==words[i]) {
-				conjugations.push(to_Translate[t].concat(" "+words[i+1]));
-			}
+//	for (t in to_Translate)
+//		for (i in words)
+//			if (to_Translate[t]==words[i] && words[i+1]=='undefined') {
+//				conjugations.push(to_Translate[t].concat(" "+words[i]));
+//			}	else if (to_Translate[t]==words[i] && words[i+1] != 'undefined') {
+//					conjugations.push(to_Translate[t].concat(" "+words[i+1]));
+//			}
 	
-	console.log(conjugations);
+	
+//	console.log(conjugations);
 
 	// packaging list of words to be translated in JSON for transfer to background
 	// scripts
-	var json_to_Translate = JSON.stringify(conjugations),
+	var json_to_Translate = JSON.stringify(to_Translate),
 	        json_parse = JSON.parse(json_to_Translate);
 
 	console.log(json_parse);
@@ -77,8 +80,8 @@ function replaceText(jsonArr) {
 		for (var key in jsonArr) {
 			
 			var matcher = new RegExp('\\b' + key + '\\b', "gi");
-			var replacer = jsonArr[key].split(" ");
-			this.data = this.data.replace(matcher, replacer[0]);
+			//var replacer = jsonArr[key].split(" ");
+			this.data = this.data.replace(matcher, jsonArr[key]);
 		    
 		}
 	});
