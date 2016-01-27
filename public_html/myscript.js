@@ -66,7 +66,7 @@ console.log(json_parse);
 //}
 
 chrome.runtime.sendMessage({json_parse}, function(response) {  
-    alert(response.merged_words);
+    alert(JSON.stringify(response.merged_words));
 });
 
 /*
