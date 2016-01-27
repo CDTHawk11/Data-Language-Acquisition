@@ -13,11 +13,8 @@ chrome.storage.sync.get("TRAN_LIMIT", function (limit) {
 	}
 	
 	var allText = getText(); // stores into browser text into variable
-	var purified=allText.replace('-',' ').replace(/[^\w\s]/gi, ''); //remove unwanted characters
-	var Words=purified.split(" ");
-
-	console.log(words);
-
+	var words = allText.match((/\b[a-zA-Z]+\b/g)); // filter all text to only words
+	
 	var counts = [];
 
 	// counts number of words
@@ -33,7 +30,7 @@ chrome.storage.sync.get("TRAN_LIMIT", function (limit) {
 
 	console.log(unique_numbers); 
 
-	// orders words from most occuring to least
+	// orders words from most occurring to least
 	var counts_new = [];
 	for (var key in counts)
 	    counts_new.push([key, counts[key]]);
@@ -43,16 +40,27 @@ chrome.storage.sync.get("TRAN_LIMIT", function (limit) {
 
 	console.log(counts_new);
 
-	var arrays_to = counts_new.splice(0, 4); // four most occuring words
+	var arrays_to = counts_new.splice(0, 4); // four most occurring words
 												// (temporary)
 
-	// Extracts most words from the dictionary and places them in a list
+	// Extracts the most frequently occurring words from the arrays_to dictionary and places them in a list
 	words_to = [];
 	for (var key in arrays_to)
 	    words_to.push([arrays_to[key][0]]);
 	var to_Translate = [].concat.apply([], words_to);
 
-	console.log(to_Translate);
+	conjugations=[];
+	
+//	for (t in to_Translate)
+//		for (i in words)
+//			if (to_Translate[t]==words[i] && words[i+1]=='undefined') {
+//				conjugations.push(to_Translate[t].concat(" "+words[i]));
+//			}	else if (to_Translate[t]==words[i] && words[i+1] != 'undefined') {
+//					conjugations.push(to_Translate[t].concat(" "+words[i+1]));
+//			}
+	
+	
+//	console.log(conjugations);
 
 	// packaging list of words to be translated in JSON for transfer to background
 	// scripts
@@ -70,8 +78,11 @@ chrome.storage.sync.get("TRAN_LIMIT", function (limit) {
 function replaceText(jsonArr) {
 	$("body *").textFinder(function() {
 		for (var key in jsonArr) {
+			
 			var matcher = new RegExp('\\b' + key + '\\b', "gi");
-		    this.data = this.data.replace(matcher, jsonArr[key]);
+			//var replacer = jsonArr[key].split(" ");
+			this.data = this.data.replace(matcher, jsonArr[key]);
+		    
 		}
 	});
 }
