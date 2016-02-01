@@ -9,7 +9,6 @@ var tranLimit = 10;
 chrome.storage.sync.get("TRAN_LIMIT", function (limit) {
 	if(limit["TRAN_LIMIT"]) {
 		tranLimit = parseInt(limit["TRAN_LIMIT"]);
-		alert(tranLimit);
 	}
 	
 	var allText = getText(); // stores into browser text into variable
@@ -70,8 +69,7 @@ chrome.storage.sync.get("TRAN_LIMIT", function (limit) {
 	console.log(json_parse);
 
 	chrome.runtime.sendMessage({json_parse}, function(response) {  
-	    alert(response.merged_words);
-	    replaceText(JSON.parse(response.merged_words));
+	    replaceText(response.merged_words);
 	});
 });
 

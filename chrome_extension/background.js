@@ -11,6 +11,25 @@ chrome.runtime.onMessage.addListener(
         });
 
 function translate(original_text, dfrd) {
+	var jsonParameter = {"q":original_text};
+    $.ajax({
+        type: "POST",
+        url: "http://ec2-52-11-228-170.us-west-2.compute.amazonaws.com:8080/translator/rest/trans/es",
+        data: JSON.stringify(jsonParameter),
+        contentType: "application/json",
+        headers: {"Accept": "application/json"},
+        dataType: "json",
+        success: function (result, status, xhr) {
+               dfrd.resolve(result);
+        },
+        error: function (xhr, status, errorMsg) {
+            alert(xhr.status + "::" + xhr.statusText + "::" + xhr.responseText);
+        }
+
+    });
+}
+/*
+function translate(original_text, dfrd) {
     
     var my_Key = "AIzaSyDGcpNr1_IzF5aEeS5TIF8Sf7NFpBBtjf8";
     var translated = [];
@@ -41,3 +60,4 @@ function translate(original_text, dfrd) {
         });
     }
 }
+*/
