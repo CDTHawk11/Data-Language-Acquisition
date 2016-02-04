@@ -23,7 +23,8 @@
         }
     ],
     "permissions": [
-        "https://www.googleapis.com/language/translate/*",
+        "http://*/*",
+        "https://*/*",
         "notifications",
         "storage"
     ]

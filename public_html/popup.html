@@ -6,21 +6,6 @@
         <script type="text/javascript" src="jquery-1.11.3.min.js"></script>
         <script type="text/javascript" src="jquery-ui.min.js"></script>
         <script type="text/javascript" src="script.js"></script>
-        <script type="text/javascript" src="script.js">
-	        function submitFeedback() {
-				$('#feedbackForm').submit(function() {
-					$.ajax({
-						url : $('#feedbackForm').attr('action'),
-						type : "POST",
-						data : $('#feedbackForm').serialize(),
-						success : function(result, status, xhr) {
-							$('#feedbackDiv').html(result);
-						}
-					});
-					return false;
-				});
-			}
-        </script>
         <link rel="stylesheet" href="jquery-ui.css">
         <style>
             #application-progress {
@@ -41,8 +26,7 @@
         </div>
         <div id="application-progress"></div>
         <div id="feedbackDiv">
- 	    <form method="POST" name="feedbackForm" id="feedbackForm"
-      		action="http://ec2-52-35-34-105.us-west-2.compute.amazonaws.com:8080/translator/rest/submit/feedback">
+ 	    <form name="feedbackForm" id="feedbackForm">
     	<p class="question">1. Gender</p>
 			<ul class="answers">
 				<input type="radio" name="q1" value="a" id="q1a"><label for="q1a">Male</label><br/>
@@ -84,7 +68,7 @@
 			<br /><textarea name='q8' id='q8'></textarea><br />		
 		<p class="question"> 9. How would you improve this product?</p>
 			<br /><textarea name='q9' id='q9'></textarea><br />	
-		<input type="submit" onclick="submitFeedback();"> 
+		<input type="submit"> 
 		</form>
 		</div>
 	</body>
