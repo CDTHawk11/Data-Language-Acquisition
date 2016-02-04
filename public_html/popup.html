@@ -6,6 +6,21 @@
         <script type="text/javascript" src="jquery-1.11.3.min.js"></script>
         <script type="text/javascript" src="jquery-ui.min.js"></script>
         <script type="text/javascript" src="script.js"></script>
+        <script type="text/javascript" src="script.js">
+	        function submitFeedback() {
+				$('#feedbackForm').submit(function() {
+					$.ajax({
+						url : $('#feedbackForm').attr('action'),
+						type : "POST",
+						data : $('#feedbackForm').serialize(),
+						success : function(result, status, xhr) {
+							$('#feedbackDiv').html(result);
+						}
+					});
+					return false;
+				});
+			}
+        </script>
         <link rel="stylesheet" href="jquery-ui.css">
         <style>
             #application-progress {
@@ -25,8 +40,9 @@
             <input type="text" id="progress" readonly style="border:0; color:#9e3f1a; font-weight:bold;">
         </div>
         <div id="application-progress"></div>
-    </body>
-    <form method="POST" action="http://ec2-52-11-228-170.us-west-2.compute.amazonaws.com:8080/translator" onsubmit="disappear(event);">
+        <div id="feedbackDiv">
+ 	    <form method="POST" name="feedbackForm" id="feedbackForm"
+      		action="http://ec2-52-35-34-105.us-west-2.compute.amazonaws.com:8080/translator/rest/submit/feedback">
     	<p class="question">1. Gender</p>
 			<ul class="answers">
 				<input type="radio" name="q1" value="a" id="q1a"><label for="q1a">Male</label><br/>
@@ -36,13 +52,13 @@
 			<ul class="answers">
 				<input type="radio" name="q2" value="a" id="q2a"><label for="q2a">18-29</label><br/>
 				<input type="radio" name="q2" value="b" id="q2b"><label for="q2b">30-49</label><br/>
-				<input type="radio" name="q2" value="b" id="q2c"><label for="q2c">50+</label><br/>
+				<input type="radio" name="q2" value="c" id="q2c"><label for="q2c">50+</label><br/>
 			</ul>
 		<p class="question">3. Education</p>
 			<ul class="answers">
 				<input type="radio" name="q3" value="a" id="q3a"><label for="q3a">No College</label><br/>
 				<input type="radio" name="q3" value="b" id="q3b"><label for="q3b">Some College</label><br/>
-				<input type="radio" name="q3" value="b" id="q3c"><label for="q3c">College Degree</label><br/>
+				<input type="radio" name="q3" value="c" id="q3c"><label for="q3c">College Degree</label><br/>
 			</ul>
 		<p class="question">4. Are the foreign words distracting?</p>
 			<ul class="answers">
@@ -68,8 +84,8 @@
 			<br /><textarea name='q8' id='q8'></textarea><br />		
 		<p class="question"> 9. How would you improve this product?</p>
 			<br /><textarea name='q9' id='q9'></textarea><br />	
-		<input type="submit"> 
-	</form>
+		<input type="submit" onclick="submitFeedback();"> 
+		</form>
+		</div>
+	</body>
 </html>
-
-

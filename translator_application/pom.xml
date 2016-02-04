@@ -15,6 +15,12 @@
 		<jackson.databind-version>2.2.3</jackson.databind-version>
 	</properties>
 	<dependencies>
+		<!-- AWS DynamoDB SDK -->
+		<dependency>
+			<groupId>com.amazonaws</groupId>
+			<artifactId>aws-java-sdk-dynamodb</artifactId>
+			<version>1.10.43</version>
+		</dependency>
 		<!-- Google Translate -->
 		<dependency>
 			<groupId>com.google.apis</groupId>

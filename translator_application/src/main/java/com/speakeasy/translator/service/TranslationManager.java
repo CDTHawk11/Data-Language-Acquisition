@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.speakeasy.translator.model;
+package com.speakeasy.translator.service;
 
 import java.util.HashMap;
 import java.util.Iterator;

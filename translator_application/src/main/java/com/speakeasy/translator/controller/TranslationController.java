@@ -11,14 +11,17 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.speakeasy.translator.model.TranslationManager;
+import com.speakeasy.translator.model.FeedbackRequest;
 import com.speakeasy.translator.model.TranslationRequest;
+import com.speakeasy.translator.service.FeedbackManager;
+import com.speakeasy.translator.service.TranslationManager;
 
 /**
  * Handles requests for the Translation service.
@@ -66,5 +69,13 @@ public class TranslationController {
 		translationData = TranslationManager.translate(request.getQ(), target);
 		logger.info("Obtained translationsin searchTranslations." + translationData.toString());
 		return translationData;
+	}
+	
+	@RequestMapping(value = TranslatorRestURIConstants.SUBMIT_FEEDBACK, method = RequestMethod.POST)
+	public @ResponseBody String submitFeedback(@ModelAttribute("feedbackForm") FeedbackRequest feedbackForm) {
+		logger.info("Start submitFeedback.");
+		FeedbackManager.putFeedback(feedbackForm);
+		logger.info("Completed submitFeedback.");
+		return "Thank you, for your feedback!";
 	}
 }
