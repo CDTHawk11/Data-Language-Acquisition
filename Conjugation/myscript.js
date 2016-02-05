@@ -48,18 +48,14 @@ chrome.storage.sync.get("TRAN_LIMIT", function (limit) {
 	    words_to.push([arrays_to[key][0]]);
 	var to_Translate = [].concat.apply([], words_to);
 
-	conjugations=[];
+//Regex for finding sentences:
 	
-//	for (t in to_Translate)
-//		for (i in words)
-//			if (to_Translate[t]==words[i] && words[i+1]=='undefined') {
-//				conjugations.push(to_Translate[t].concat(" "+words[i]));
-//			}	else if (to_Translate[t]==words[i] && words[i+1] != 'undefined') {
-//					conjugations.push(to_Translate[t].concat(" "+words[i+1]));
-//			}
+	var rx=/["']?[A-Z][^.?!]+((?![.?!]['"]?\s["']?[A-Z][^.?!]).)+[.?!'"]+/g,
+	str='Mr. Sherlock Holmes and Dr. John Watson were better than the F.B.I. at crime fighting';
+
+	str.match(rx).join('\\')
 	
-	
-//	console.log(conjugations);
+	console.log(str)
 
 	// packaging list of words to be translated in JSON for transfer to background
 	// scripts
