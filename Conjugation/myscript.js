@@ -49,13 +49,26 @@ chrome.storage.sync.get("TRAN_LIMIT", function (limit) {
 	var to_Translate = [].concat.apply([], words_to);
 
 //Regex for finding sentences:
-	
-	var rx=/["']?[A-Z][^.?!]+((?![.?!]['"]?\s["']?[A-Z][^.?!]).)+[.?!'"]+/g,
-	str='Mr. Sherlock Holmes and Dr. John Watson were better than the F.B.I. at crime fighting';
+//Website I pulled regex from: https://www.sitepoint.com/community/t/choose-whole-sentences-and-only-whole-sentences-reliably-with-regex/8075/16	
 
-	str.match(rx).join('\\')
+	//var rx=/["'“]?(un-Z[.?!]+["']?\s+["']?[un-Z]).))(((Mr|Ms|Mrs|Dr|Capt|Col)\.\s+((?!\w{2,}[.?!]['"]?\s+["']?[un-Z]).))?)((?![.?!]["']?\s+["']?[un-Z]).)[.?!]+["'”]?+/g,
 	
-	console.log(str)
+		
+	str="Hello, my name is Lance.  How are you? I am in the F.B.I." 
+
+	//This works but includes the first two sentences as one sentence:	
+	
+	//var res= str.match( /["']?[A-Z][^.?!]+((?![.?!]['"]?\s["']?[A-Z][^.?!]).)+[.?!'"]+/g );	
+		
+	var res= allText.match( /["']?[A-Z][^.?!]+((?![.?!]['"]?\s["']?[A-Z][^.?!]).)+[.?!'"]+/g );
+	
+	//This also works: var result = str.match( /[^\.!\?]+[\.!\?]+/g ); but messes up on FBI
+	
+	//I cannot get this regex code to work.  I am getting a regex error:
+	//var res= str.match(/["'“]?(un-Z[.?!]+["']?\s+["']?[un-Z]).))(((Mr|Ms|Mrs|Dr|Capt|Col)\.\s+((?!\w{2,}[.?!]['"]?\s+["']?[un-Z]).))?)((?![.?!]["']?\s+["']?[un-Z]).)[.?!]+["'”]?/);
+
+	
+	console.log(res)
 
 	// packaging list of words to be translated in JSON for transfer to background
 	// scripts
