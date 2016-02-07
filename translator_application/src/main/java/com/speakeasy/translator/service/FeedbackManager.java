@@ -16,7 +16,7 @@ public class FeedbackManager {
 
 		DynamoDBMapper dynamoDBMapper = new DynamoDBMapper(client);
 		
-		logger.info("Saving the feedback request .. " + feedbackRequest);
+		logger.info("Saving in putFeedback .. " + feedbackRequest);
 		dynamoDBMapper.save(feedbackRequest);
 	}
 }
