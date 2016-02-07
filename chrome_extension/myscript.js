@@ -80,7 +80,7 @@ function replaceText(jsonArr) {
 			var matcher = new RegExp('\\b' + key + '\\b', "gi");
 			//var replacer = jsonArr[key].split(" ");
 			this.data = this.data.replace(matcher, jsonArr[key]);
-		    
+			
 		}
 	});
 }
