@@ -1,8 +1,13 @@
 // Check whether new version is installed
 chrome.runtime.onInstalled.addListener(function(details){
     if(details.reason == "install") {
-    	chrome.storage.sync.remove("TRAN_TARGET", function() {});
-    	window.open("popup.html", "extension_popup", "width=500,height=400,status=no,scrollbars=yes,resizable=no");
+    	chrome.storage.sync.remove("TRAN_TARGET", function() {
+    		var leftPos = screen.width - 450;
+        	var popup = window.open("popup.html", "Speak Easy", "width=425,height=150,left="+leftPos+",top=60,menubar=no,toolbar=no,titlebar=no,status=no,scrollbars=yes,resizable=no");
+        	popup.onblur = function(){
+        		popup.close();
+        	};
+    	});
     } else if(details.reason == "update") {
         var thisVersion = chrome.runtime.getManifest().version;
         console.log("Updated from " + details.previousVersion + " to " + thisVersion + "!");
@@ -26,7 +31,7 @@ function translate(original_text, dfrd) {
 	var targetURL = "http://ec2-52-35-34-105.us-west-2.compute.amazonaws.com:8080/translator/rest/trans/";
 	
 	chrome.storage.sync.get("TRAN_TARGET", function(target) {
-		if (!(target["TRAN_TARGET"])) {
+		if (!(target["TRAN_TARGET"]) || target["TRAN_TARGET"] == "") {
 			return false;
 		} else {
 			targetURL = targetURL + target["TRAN_TARGET"];

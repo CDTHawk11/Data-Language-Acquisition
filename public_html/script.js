@@ -1,12 +1,13 @@
 $(document).ready(function() {
 	
 	chrome.storage.sync.get("TRAN_TARGET", function(target) {
-		if (!(target["TRAN_TARGET"])) {
+		if (!(target["TRAN_TARGET"]) || target["TRAN_TARGET"] == "") {
 			$("#languageDiv #firstInstallLabel").css("display", "block");
 			$("#languageDiv #regularLabel").css("display", "none");
 		} else {
 			$("#languageDiv #firstInstallLabel").css("display", "none");
 			$("#languageDiv #regularLabel").css("display", "block");
+			$("#feedbackDiv").css("display", "block");
 			$("#target").val(target["TRAN_TARGET"]);
 		}
 	});
