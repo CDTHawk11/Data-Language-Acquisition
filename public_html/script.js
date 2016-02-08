@@ -7,8 +7,12 @@ $(document).ready(function() {
 		} else {
 			$("#languageDiv #firstInstallLabel").css("display", "none");
 			$("#languageDiv #regularLabel").css("display", "block");
-			$("#feedbackDiv").css("display", "block");
 			$("#target").val(target["TRAN_TARGET"]);
+			chrome.storage.sync.get("TRAN_FEEDBACK_SUBMITTED", function(flag) {
+				if (!(flag["TRAN_FEEDBACK_SUBMITTED"])) {
+					$("#feedbackDiv").css("display", "block");
+				} 
+			});
 		}
 	});
 
@@ -41,6 +45,10 @@ $(document).ready(function() {
 	        headers: {"Accept": "application/json"},
 			success: function(result, status, xhr) {
 				$("#feedbackDiv").html(result['message']);
+				chrome.storage.sync.set({
+					'TRAN_FEEDBACK_SUBMITTED' : "true"
+				}, function() {
+				});
 			},
 			error: function (xhr, status, errorMsg) {
 	            alert(xhr.status + "::" + xhr.statusText + "::" + xhr.responseText);

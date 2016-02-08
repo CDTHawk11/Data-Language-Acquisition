@@ -2,11 +2,11 @@
 chrome.runtime.onInstalled.addListener(function(details){
     if(details.reason == "install") {
     	chrome.storage.sync.remove("TRAN_TARGET", function() {
-    		var leftPos = screen.width - 450;
-        	var popup = window.open("popup.html", "Speak Easy", "width=425,height=150,left="+leftPos+",top=60,menubar=no,toolbar=no,titlebar=no,status=no,scrollbars=yes,resizable=no");
-        	popup.onblur = function(){
-        		popup.close();
-        	};
+    		chrome.windows.getCurrent(function(win) {
+    			var leftPos = win.left + win.width - 450;
+    			var topPos = win.top + 70;
+        		window.open("popup.html", "Speak Easy", "width=425,height=150,left="+leftPos+",top="+topPos+",menubar=no,toolbar=no,titlebar=no,status=no,scrollbars=yes,resizable=no");
+    		});
     	});
     } else if(details.reason == "update") {
         var thisVersion = chrome.runtime.getManifest().version;
