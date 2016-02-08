@@ -48,30 +48,51 @@ chrome.storage.sync.get("TRAN_LIMIT", function (limit) {
 	    words_to.push([arrays_to[key][0]]);
 	var to_Translate = [].concat.apply([], words_to);
 
-//Regex for finding sentences:
-//Website I pulled regex from: https://www.sitepoint.com/community/t/choose-whole-sentences-and-only-whole-sentences-reliably-with-regex/8075/16	
+    //Regex for finding sentences:
 
-	//var rx=/["'“]?(un-Z[.?!]+["']?\s+["']?[un-Z]).))(((Mr|Ms|Mrs|Dr|Capt|Col)\.\s+((?!\w{2,}[.?!]['"]?\s+["']?[un-Z]).))?)((?![.?!]["']?\s+["']?[un-Z]).)[.?!]+["'”]?+/g,
+	var result1= allText.match( /["']?[A-Z][^.?!]+((?![.?!]['"]?\s\n["']?[A-Z][^.?!]).)+[.?!'"]+/g );
 	
+	var res_split=[];
+	
+	//Regex for creating variables based upon line breaks:
+	
+	for (i in result1) {
+	    res_split.push(result1[i].split(/(\r\n|\n|\r)/gm));
+	};
 		
-	str="Hello, my name is Lance.  How are you? I am in the F.B.I." 
+	cleanArray=[];
+	
+	//Clean-up excess spaces and line breaks:
+	
+	for (i in res_split) {
+		for (t in res_split[i]) {
+			res_split[i][t]=res_split[i][t].replace(/(\r\n|\n|\r)/gm,"")
+			if (res_split[i][t]) {
+		       	cleanArray.push(res_split[i][t]);
+		      }		
+		};
+	};
+	
+	//console.log(cleanArray);
+	
+	for (i in cleanArray){
+		cleanArray[i]=cleanArray[i].split(/\s+/);
+	};
+	
+	console.log(cleanArray);
 
-	//This works but includes the first two sentences as one sentence:	
+/*
+	var conjugs=[];
 	
-	//var res= str.match( /["']?[A-Z][^.?!]+((?![.?!]['"]?\s["']?[A-Z][^.?!]).)+[.?!'"]+/g );	
-		
-	var res= allText.match( /["']?[A-Z][^.?!]+((?![.?!]['"]?\s["']?[A-Z][^.?!]).)+[.?!'"]+/g );
-	
-	//This also works: var result = str.match( /[^\.!\?]+[\.!\?]+/g ); but messes up on FBI
-	
-	//I cannot get this regex code to work.  I am getting a regex error:
-	//var res= str.match(/["'“]?(un-Z[.?!]+["']?\s+["']?[un-Z]).))(((Mr|Ms|Mrs|Dr|Capt|Col)\.\s+((?!\w{2,}[.?!]['"]?\s+["']?[un-Z]).))?)((?![.?!]["']?\s+["']?[un-Z]).)[.?!]+["'”]?/);
+	for (word in to_Translate){
+		for (i in cleanArray){
 
+		};
+	};
 	
-	console.log(res)
-
-	// packaging list of words to be translated in JSON for transfer to background
-	// scripts
+	console.log(conjugs);
+*/	
+	// packaging list of words to be translated in JSON for transfer to background scripts
 	var json_to_Translate = JSON.stringify(to_Translate),
 	        json_parse = JSON.parse(json_to_Translate);
 
