@@ -39,7 +39,7 @@ chrome.storage.sync.get("TRAN_LIMIT", function (limit) {
 
 	console.log(counts_new);
 
-	var arrays_to = counts_new.splice(0, 4); // four most occurring words
+	var arrays_to = counts_new.splice(0, 20); // four most occurring words
 												// (temporary)
 
 	// Extracts the most frequently occurring words from the arrays_to dictionary and places them in a list
@@ -79,8 +79,49 @@ chrome.storage.sync.get("TRAN_LIMIT", function (limit) {
 		cleanArray[i]=cleanArray[i].split(/\s+/);
 	};
 	
-	console.log(cleanArray);
+	//console.log(cleanArray);
 
+	var conjugs=[];
+
+loop1:	
+	for (i in cleanArray){
+loop2:
+		for (t in cleanArray[i]){
+loop3:
+			for (word in to_Translate){
+				if (cleanArray[i][t]===to_Translate[word]){
+					console.log(cleanArray[i]);
+					var limit=cleanArray[i].length-1;
+					console.log(limit + " Number of words");
+					var rLimit=limit-t;
+					console.log(rLimit +" Number of words right limit");
+					var lLimit=t
+					console.log(lLimit+" Number of words until left limit and place of word");
+			
+					if (t < limit){
+						t=parseInt(t);
+						var a=t+1
+loop4:						
+						for (a; a<=limit; a++){
+							console.log(a + " is less than " + limit );
+							console.log(cleanArray[i][a])
+loop5:
+							for (w in to_Translate){
+								if (to_Translate[w]!=cleanArray[i][a]){break loop4;}
+									console.log(cleanArray[i][a]);
+									conjugs[i][t]=cleanArray[i][t];
+									conjugs.concat(cleanArray[i][a]);
+							};	
+						};	
+					};					
+				};	
+			};			
+		};
+	};	
+	
+	
+	console.log(conjugs);
+	
 /*
 	var conjugs=[];
 	
