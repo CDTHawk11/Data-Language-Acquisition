@@ -1,39 +1,29 @@
 $(document).ready(function() {
-
-	var tranLimit = "10%";
-
-	chrome.storage.sync.get("TRAN_LIMIT", function(limit) {
-
-		if (!(limit["TRAN_LIMIT"])) {
-			chrome.storage.sync.set({
-				'TRAN_LIMIT' : tranLimit
-			}, function() {
-			});
+	
+	chrome.storage.sync.get("TRAN_TARGET", function(target) {
+		if (!(target["TRAN_TARGET"]) || target["TRAN_TARGET"] == "") {
+			$("#languageDiv #firstInstallLabel").css("display", "block");
+			$("#languageDiv #regularLabel").css("display", "none");
 		} else {
-			tranLimit = limit["TRAN_LIMIT"];
+			$("#languageDiv #firstInstallLabel").css("display", "none");
+			$("#languageDiv #regularLabel").css("display", "block");
+			$("#target").val(target["TRAN_TARGET"]);
+			chrome.storage.sync.get("TRAN_FEEDBACK_SUBMITTED", function(flag) {
+				if (!(flag["TRAN_FEEDBACK_SUBMITTED"])) {
+					$("#feedbackDiv").css("display", "block");
+				} 
+			});
 		}
-
-		$('#application-progress').slider({
-			range : "min",
-			min : 0,
-			value : parseInt(tranLimit),
-			max : 100,
-			animate : true,
-			slide : function(event, ui) {
-				$("#progress").val(ui.value + "%");
-			},
-			change : function(event, ui) {
-				var translationLimit = $("#progress").val();
-				chrome.storage.sync.set({
-					'TRAN_LIMIT' : translationLimit
-				}, function() {
-				});
-			}
-		});
-
-		$("#progress").val($("#application-progress").slider("value") + "%");
-
 	});
+
+	// Save the selected target language on user's PC
+	$("#target").change(function() {
+		chrome.storage.sync.set({
+				'TRAN_TARGET' : $("#target option:selected").val()
+			}, function() {
+		});
+	});
+
 
 	// Attach a submit handler to feedback form
 	$('#feedbackForm').submit(function(event) {
@@ -55,6 +45,10 @@ $(document).ready(function() {
 	        headers: {"Accept": "application/json"},
 			success: function(result, status, xhr) {
 				$("#feedbackDiv").html(result['message']);
+				chrome.storage.sync.set({
+					'TRAN_FEEDBACK_SUBMITTED' : "true"
+				}, function() {
+				});
 			},
 			error: function (xhr, status, errorMsg) {
 	            alert(xhr.status + "::" + xhr.statusText + "::" + xhr.responseText);
