@@ -79,48 +79,66 @@ chrome.storage.sync.get("TRAN_LIMIT", function (limit) {
 		cleanArray[i]=cleanArray[i].split(/\s+/);
 	};
 	
-	//console.log(cleanArray);
+	console.log(cleanArray);
 
-	var conjugs=[];
+	var mergedConsPlus=[];
 
 loop1:	
 	for (i in cleanArray){
 loop2:
-		for (t in cleanArray[i]){
+		console.log(cleanArray[i].length + " This is the number of words in this sentence")
+		t=0;
+		for (t; t<=cleanArray[i].length; t++){
+			console.log(t + " This is the word we are on")
+			var conjugs=[];
+			var z=0
+			var x=0
+			var mergedCons=[];
 loop3:
 			for (word in to_Translate){
 				if (cleanArray[i][t]===to_Translate[word]){
-					console.log(cleanArray[i]);
 					var limit=cleanArray[i].length-1;
-					console.log(limit + " Number of words");
-					var rLimit=limit-t;
-					console.log(rLimit +" Number of words right limit");
-					var lLimit=t
-					console.log(lLimit+" Number of words until left limit and place of word");
-			
 					if (t < limit){
 						t=parseInt(t);
-						var a=t+1
+						var a=t+1;
+						var conjugsPlus=[];
 loop4:						
 						for (a; a<=limit; a++){
-							console.log(a + " is less than " + limit );
-							console.log(cleanArray[i][a])
 loop5:
 							for (w in to_Translate){
-								if (to_Translate[w]!=cleanArray[i][a]){break loop4;}
-									console.log(cleanArray[i][a]);
-									conjugs[i][t]=cleanArray[i][t];
-									conjugs.concat(cleanArray[i][a]);
+								if (to_Translate[w]===cleanArray[i][a]){
+									z=z+1;
+								};
 							};	
-						};	
-					};					
-				};	
-			};			
+							if(z>x){
+								x=x+1;
+							} else {break loop4;}
+						conjugsPlus.push(cleanArray[i][a]);
+						console.log(conjugsPlus + " These are the words to be added");
+						};
+					};	
+				};					
+			};
+		if (z>0){
+			conjugs.push(cleanArray[i][t]);
+			console.log(conjugsPlus + " This is what made it");
+			conjugs.push(conjugsPlus);
+			mergedCons = [].concat.apply([], conjugs);
+			console.log(mergedCons);
+			console.log(t + " This is the value of t");
+			console.log(limit + " This should be the limit of a");
+			if (a<limit){
+				console.log(a + " This is the value of a");
+				t=a+1;
+				console.log(t + " This is the word we need to jump to");
+				}
+			}
+		if (mergedCons){
+		mergedConsPlus.push(mergedCons);
+		}
 		};
-	};	
-	
-	
-	console.log(conjugs);
+	console.log(mergedConsPlus);
+	};
 	
 /*
 	var conjugs=[];
