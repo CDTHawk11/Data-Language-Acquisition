@@ -48,7 +48,11 @@ chrome.storage.sync.get("TRAN_LIMIT", function (limit) {
 	    words_to.push([arrays_to[key][0]]);
 	var to_Translate = [].concat.apply([], words_to);
 
-    //Regex for finding sentences:
+    
+	//CONJUGATION CODE:
+	
+	
+	//Regex for finding sentences:
 
 	var result1= allText.match( /["']?[A-Z][^.?!]+((?![.?!]['"]?\s\n["']?[A-Z][^.?!]).)+[.?!'"]+/g );
 	
@@ -79,17 +83,15 @@ chrome.storage.sync.get("TRAN_LIMIT", function (limit) {
 		cleanArray[i]=cleanArray[i].split(/\s+/);
 	};
 	
-	console.log(cleanArray);
+	//console.log(cleanArray);
 
 	var mergedConsPlus=[];
 
 loop1:	
 	for (i in cleanArray){
 loop2:
-		console.log(cleanArray[i].length + " This is the number of words in this sentence")
 		t=0;
 		for (t; t<=cleanArray[i].length; t++){
-			console.log(t + " This is the word we are on")
 			var conjugs=[];
 			var z=0
 			var x=0
@@ -114,44 +116,36 @@ loop5:
 								x=x+1;
 							} else {break loop4;}
 						conjugsPlus.push(cleanArray[i][a]);
-						console.log(conjugsPlus + " These are the words to be added");
 						};
 					};	
 				};					
 			};
 		if (z>0){
 			conjugs.push(cleanArray[i][t]);
-			console.log(conjugsPlus + " This is what made it");
 			conjugs.push(conjugsPlus);
 			mergedCons = [].concat.apply([], conjugs);
-			console.log(mergedCons);
-			console.log(t + " This is the value of t");
-			console.log(limit + " This should be the limit of a");
+			mergedConsPlus.push(mergedCons)
 			if (a<limit){
-				console.log(a + " This is the value of a");
 				t=a+1;
-				console.log(t + " This is the word we need to jump to");
 				}
 			}
-		if (mergedCons){
-		mergedConsPlus.push(mergedCons);
-		}
 		};
+	};
+	
+	//Array consisting of all collections that require conjugation:
 	console.log(mergedConsPlus);
-	};
-	
-/*
-	var conjugs=[];
-	
-	for (word in to_Translate){
-		for (i in cleanArray){
 
-		};
-	};
 	
-	console.log(conjugs);
-*/	
+	//CONJUGATION CODE END
+	
+	
 	// packaging list of words to be translated in JSON for transfer to background scripts
+	
+	forTranslation=[];
+	forTranslation=mergedConsPlus.concat(to_Translate);
+	
+	console.log(forTranslation);
+	
 	var json_to_Translate = JSON.stringify(to_Translate),
 	        json_parse = JSON.parse(json_to_Translate);
 
