@@ -33,3 +33,11 @@ $(document).ready(function () {
     
 });
 
+function disappear(event){
+	  
+	event.preventDefault();
+	  
+	document.GetElementsByClassName("question").innerHTML="<p>Thanks you!</p>";
+		  
+	return false;	  
+	 };

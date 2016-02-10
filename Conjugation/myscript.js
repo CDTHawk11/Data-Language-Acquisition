@@ -132,7 +132,7 @@ loop5:
 	};
 	
 	//Array consisting of all collections that require conjugation:
-	console.log(mergedConsPlus);
+	//console.log(mergedConsPlus);
 	
 	//CONJUGATION CODE END
 	
@@ -142,9 +142,15 @@ loop5:
 	forTranslation=[];
 	forTranslation=mergedConsPlus.concat(to_Translate);
 	
-	console.log(forTranslation);
+	//delete duplicates
+	var uniqueTrans = [];
+	$.each(forTranslation, function(i, el){
+	    if($.inArray(el, uniqueTrans) === -1) uniqueTrans.push(el);
+	});
 	
-	var json_to_Translate = JSON.stringify(forTranslation),
+	console.log(uniqueTrans);
+	
+	var json_to_Translate = JSON.stringify(uniqueTrans),
 	        json_parse = JSON.parse(json_to_Translate);
 
 	console.log(json_parse);
