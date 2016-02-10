@@ -144,10 +144,10 @@ loop5:
 	
 	console.log(forTranslation);
 	
-	var json_to_Translate = JSON.stringify(to_Translate),
+	var json_to_Translate = JSON.stringify(forTranslation),
 	        json_parse = JSON.parse(json_to_Translate);
 
-	console.log("json_parse.. " + json_parse);
+	console.log(json_parse);
 
 	chrome.runtime.sendMessage({json_parse}, function(response) {  
 	    replaceText(response.merged_words);
