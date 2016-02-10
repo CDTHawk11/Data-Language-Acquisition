@@ -75,9 +75,7 @@ chrome.storage.sync.get("TRAN_LIMIT", function (limit) {
 		       	cleanArray.push(res_split[i][t]);
 		      }		
 		};
-	};
-	
-	//console.log(cleanArray);
+	}
 	
 	for (i in cleanArray){
 		cleanArray[i]=cleanArray[i].split(/\s+/);
@@ -87,8 +85,6 @@ chrome.storage.sync.get("TRAN_LIMIT", function (limit) {
 
 loop1:	
 	for (i in cleanArray){
-		console.log(cleanArray[i]);
-		console.log(cleanArray[0]);
 loop2:
 		t=0;
 		for (t; t<=cleanArray[i].length; t++){
@@ -117,7 +113,6 @@ loop5:
 								x=x+1;
 							} else {break loop4;}
 						conjugsPlus.push(cleanArray[i][a]);
-						console.log("this is what is getting recognized " + conjugsPlus);
 						};
 					};	
 				};					
@@ -128,7 +123,6 @@ loop5:
 			mergedCons.push(conjugs);
 			mergedCons = [].concat.apply([], conjugs);
 			joinedCons=mergedCons.join(' ');
-			console.log(joinedCons);
 			mergedConsPlus.push(joinedCons);
 			if (a<limit){
 				t=a+1;
@@ -139,7 +133,6 @@ loop5:
 	
 	//Array consisting of all collections that require conjugation:
 	console.log(mergedConsPlus);
-
 	
 	//CONJUGATION CODE END
 	
