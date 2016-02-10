@@ -82,19 +82,20 @@ chrome.storage.sync.get("TRAN_LIMIT", function (limit) {
 	for (i in cleanArray){
 		cleanArray[i]=cleanArray[i].split(/\s+/);
 	};
-	
-	//console.log(cleanArray);
 
 	var mergedConsPlus=[];
 
 loop1:	
 	for (i in cleanArray){
+		console.log(cleanArray[i]);
+		console.log(cleanArray[0]);
 loop2:
 		t=0;
 		for (t; t<=cleanArray[i].length; t++){
+			var joinedCons=[];
 			var conjugs=[];
-			var z=0
-			var x=0
+			var z=0;
+			var x=0;
 			var mergedCons=[];
 loop3:
 			for (word in to_Translate){
@@ -116,6 +117,7 @@ loop5:
 								x=x+1;
 							} else {break loop4;}
 						conjugsPlus.push(cleanArray[i][a]);
+						console.log("this is what is getting recognized " + conjugsPlus);
 						};
 					};	
 				};					
@@ -123,17 +125,20 @@ loop5:
 		if (z>0){
 			conjugs.push(cleanArray[i][t]);
 			conjugs.push(conjugsPlus);
+			mergedCons.push(conjugs);
 			mergedCons = [].concat.apply([], conjugs);
-			mergedConsPlus.push(mergedCons)
+			joinedCons=mergedCons.join(' ');
+			console.log(joinedCons);
+			mergedConsPlus.push(joinedCons);
 			if (a<limit){
 				t=a+1;
 				}
 			}
-		};
+		};	
 	};
 	
 	//Array consisting of all collections that require conjugation:
-	console.log("mergedConsPlus.. " + mergedConsPlus);
+	console.log(mergedConsPlus);
 
 	
 	//CONJUGATION CODE END
@@ -144,7 +149,7 @@ loop5:
 	forTranslation=[];
 	forTranslation=mergedConsPlus.concat(to_Translate);
 	
-	console.log("forTranslation.. " + forTranslation);
+	console.log(forTranslation);
 	
 	var json_to_Translate = JSON.stringify(to_Translate),
 	        json_parse = JSON.parse(json_to_Translate);
