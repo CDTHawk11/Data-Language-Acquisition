@@ -22,12 +22,12 @@ chrome.storage.sync.get("TRAN_LIMIT", function (limit) {
 	    counts[num] = counts[num] ? counts[num] + 1 : 1;
 	}
 
-	console.log(counts);
+	//console.log(counts);
 
 	var unique_numbers = Object.keys(counts).length; // number unique words that
 														// appear on page
 
-	console.log(unique_numbers); 
+	//console.log(unique_numbers); 
 
 	// orders words from most occurring to least
 	var counts_new = [];
@@ -37,9 +37,9 @@ chrome.storage.sync.get("TRAN_LIMIT", function (limit) {
 	    return b[1] - a[1]
 	});
 
-	console.log(counts_new);
+	//console.log(counts_new);
 
-	var arrays_to = counts_new.splice(0, 20); // four most occurring words
+	var arrays_to = counts_new.splice(0, 5); // four most occurring words
 												// (temporary)
 
 	// Extracts the most frequently occurring words from the arrays_to dictionary and places them in a list
@@ -133,7 +133,7 @@ loop5:
 	};
 	
 	//Array consisting of all collections that require conjugation:
-	console.log(mergedConsPlus);
+	console.log("mergedConsPlus.. " + mergedConsPlus);
 
 	
 	//CONJUGATION CODE END
@@ -144,12 +144,12 @@ loop5:
 	forTranslation=[];
 	forTranslation=mergedConsPlus.concat(to_Translate);
 	
-	console.log(forTranslation);
+	console.log("forTranslation.. " + forTranslation);
 	
 	var json_to_Translate = JSON.stringify(to_Translate),
 	        json_parse = JSON.parse(json_to_Translate);
 
-	console.log(json_parse);
+	console.log("json_parse.. " + json_parse);
 
 	chrome.runtime.sendMessage({json_parse}, function(response) {  
 	    replaceText(response.merged_words);
