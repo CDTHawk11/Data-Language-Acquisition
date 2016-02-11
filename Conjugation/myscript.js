@@ -180,7 +180,7 @@ jQuery.fn.textFinder = function( fn ) {
         var node = this.nodeName.toLowerCase();
         if( node === '#text' ) {
             fn.call( this );
-        } else if( this.nodeType === 1 && this.childNodes && this.childNodes[0] && node !== 'script' && node !== 'textarea' ) {
+        } else if( this.nodeType === 1 && this.childNodes && this.childNodes[0] && node !== 'script' && node !== 'textarea'  && node !== 'iframe' ) {
             $(this).contents().each( scan );
         }
     }
