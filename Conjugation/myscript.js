@@ -162,9 +162,24 @@ loop5:
 
 function replaceText(jsonArr) {
 	jsonArr.sort(function(a, b){
-		  return b.length - a.length; // ASC -> a - b; DESC -> b - a
+		  return b.length - a.length; 
+	});
+console.log(jsonArr);
+}
+
+
+function replaceText(jsonArr) {
+	var makeArray = Object.keys(jsonArr).map(function(index){
+        return [index,jsonArr[index]];
+	});
+	
+/*	
+	makeArray.sort(function (a, b) {
+		  return Object.keys(b).length - Object.keys(a).length;
 		});
-	console.log(jsonArr);
+	console.log(makeArray);
+*/	
+	
 	$("body *").textFinder(function() {
 		for (var key in jsonArr) {
 			
