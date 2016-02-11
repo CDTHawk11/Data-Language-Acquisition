@@ -148,7 +148,7 @@ loop5:
 	    if($.inArray(el, uniqueTrans) === -1) uniqueTrans.push(el);
 	});
 	
-	console.log(uniqueTrans);
+	//send to background scripts/server
 	
 	var json_to_Translate = JSON.stringify(uniqueTrans),
 	        json_parse = JSON.parse(json_to_Translate);
@@ -161,11 +161,15 @@ loop5:
 });
 
 function replaceText(jsonArr) {
+	jsonArr.sort(function(a, b){
+		  return b.length - a.length; // ASC -> a - b; DESC -> b - a
+		});
+	console.log(jsonArr);
 	$("body *").textFinder(function() {
 		for (var key in jsonArr) {
 			
 			var matcher = new RegExp('\\b' + key + '\\b', "gi");
-			//var replacer = jsonArr[key].split(" ");
+			
 			this.data = this.data.replace(matcher, jsonArr[key]);
 			
 		}
