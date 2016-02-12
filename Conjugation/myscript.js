@@ -160,11 +160,14 @@ loop5:
 	});
 });
 
+
 function replaceText(jsonArr) {
-	jsonArr.sort(function(a, b){
-		  return b.length - a.length; // ASC -> a - b; DESC -> b - a
+	var makeArray = Object.keys(jsonArr).map(function(index){
+        return [index,jsonArr[index]];
+	});
+	makeArray.sort(function (a, b) {
+		  return b[0].length - a[0].length;
 		});
-	console.log(jsonArr);
 	$("body *").textFinder(function() {
 		for (var key in jsonArr) {
 			
