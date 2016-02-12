@@ -168,7 +168,7 @@ function replaceText(jsonArr) {
 	makeArray.sort(function (a, b) {
 		  return b[0].length - a[0].length;
 		});
-	$("body *").textFinder(function() {
+	$("body :not(iframe)").textFinder(function() {
 		for (var key in jsonArr) {
 			
 			var matcher = new RegExp('\\b' + key + '\\b', "gi");
@@ -187,7 +187,7 @@ jQuery.fn.textFinder = function( fn ) {
         var node = this.nodeName.toLowerCase();
         if( node === '#text' ) {
             fn.call(this);
-        } else if( this.nodeType === 1 && this.childNodes && this.childNodes[0] && node !== 'script' && node !== 'textarea'  && node !== 'iframe' ) {
+        } else if( this.nodeType === 1 && this.childNodes && this.childNodes[0] && node !== 'script' && node !== 'textarea' && node !== 'iframe' ) {
             $(this).contents().each( scan );
         }
     }
