@@ -160,26 +160,14 @@ loop5:
 	});
 });
 
-function replaceText(jsonArr) {
-	jsonArr.sort(function(a, b){
-		  return b.length - a.length; 
-	});
-console.log(jsonArr);
-}
-
 
 function replaceText(jsonArr) {
 	var makeArray = Object.keys(jsonArr).map(function(index){
         return [index,jsonArr[index]];
 	});
-	
-/*	
 	makeArray.sort(function (a, b) {
-		  return Object.keys(b).length - Object.keys(a).length;
+		  return b[0].length - a[0].length;
 		});
-	console.log(makeArray);
-*/	
-	
 	$("body *").textFinder(function() {
 		for (var key in jsonArr) {
 			
