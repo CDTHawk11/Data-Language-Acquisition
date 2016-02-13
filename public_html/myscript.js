@@ -148,8 +148,12 @@ loop5:
 	});
 	
 	//send to background scripts/server
+	
+	var json_to_Translate = JSON.stringify(uniqueTrans),
+	        json_parse = JSON.parse(json_to_Translate);
 
-	chrome.runtime.sendMessage({uniqueTrans}, function(response) {  
+
+	chrome.runtime.sendMessage({json_parse}, function(response) {  
 	    replaceText(response.merged_words);
 	});
 });
