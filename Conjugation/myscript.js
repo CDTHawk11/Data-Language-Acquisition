@@ -81,6 +81,7 @@ chrome.storage.sync.get("TRAN_LIMIT", function (limit) {
 		cleanArray[i]=cleanArray[i].split(/\s+/);
 	};
 
+	//find collocated words for translation and group them together for proper conjugation
 	var mergedConsPlus=[];
 
 loop1:	
@@ -158,16 +159,24 @@ loop5:
 	});
 });
 
+//replace function
 
 function replaceText(jsonArr) {
+	
+	//change jsonArr from object to array in order to enable sorting
+	
 	var makeArray = Object.keys(jsonArr).map(function(index){
         return [index,jsonArr[index]];
 	});
 	
+	//sort array from longest string to shortest string thereby ensuring the longest strings are replaced first
+	
 	makeArray.sort(function (a, b) {
 		  return b[0].length - a[0].length;
 		});
-		
+	
+	//replace with translations
+	
 	$("body :not(iframe)").textFinder(function() {
 		for (d in makeArray){	
 			var matcher = new RegExp('\\b' + makeArray[d][0] + '\\b', "gi");
