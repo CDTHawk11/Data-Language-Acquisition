@@ -181,16 +181,15 @@ function replaceText(jsonArr) {
 	});
 }
 
-
-// jQuery plugin to find and replace text
+//jQuery plugin to find and replace text
 jQuery.fn.textFinder = function( fn ) {
     this.contents().each( scan );
     // callback function to scan through the child nodes recursively
     function scan() {
         var node = this.nodeName.toLowerCase();
         if( node === '#text' ) {
-            fn.call( this );
-        } else if( this.nodeType === 1 && this.childNodes && this.childNodes[0] && node !== 'script' && node !== 'textarea' ) {
+            fn.call(this);
+        } else if( this.nodeType === 1 && this.childNodes && this.childNodes[0] && node !== 'script' && node !== 'textarea' && node !== 'iframe' ) {
             $(this).contents().each( scan );
         }
     }
