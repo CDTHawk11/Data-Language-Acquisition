@@ -153,8 +153,6 @@ loop5:
 	var json_to_Translate = JSON.stringify(uniqueTrans),
 	        json_parse = JSON.parse(json_to_Translate);
 
-	console.log(json_parse);
-
 	chrome.runtime.sendMessage({json_parse}, function(response) {  
 	    replaceText(response.merged_words);
 	});
@@ -165,16 +163,16 @@ function replaceText(jsonArr) {
 	var makeArray = Object.keys(jsonArr).map(function(index){
         return [index,jsonArr[index]];
 	});
+	
 	makeArray.sort(function (a, b) {
 		  return b[0].length - a[0].length;
 		});
+		
 	$("body :not(iframe)").textFinder(function() {
-		for (var key in jsonArr) {
+		for (d in makeArray){	
+			var matcher = new RegExp('\\b' + makeArray[d][0] + '\\b', "gi");
 			
-			var matcher = new RegExp('\\b' + key + '\\b', "gi");
-			
-			this.data = this.data.replace(matcher, jsonArr[key]);
-			
+			this.data = this.data.replace(matcher, makeArray[d][1]);
 		}
 	});
 }
