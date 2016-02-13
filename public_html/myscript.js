@@ -48,42 +48,139 @@ chrome.storage.sync.get("TRAN_LIMIT", function (limit) {
 	    words_to.push([arrays_to[key][0]]);
 	var to_Translate = [].concat.apply([], words_to);
 
-	conjugations=[];
-	
-//	for (t in to_Translate)
-//		for (i in words)
-//			if (to_Translate[t]==words[i] && words[i+1]=='undefined') {
-//				conjugations.push(to_Translate[t].concat(" "+words[i]));
-//			}	else if (to_Translate[t]==words[i] && words[i+1] != 'undefined') {
-//					conjugations.push(to_Translate[t].concat(" "+words[i+1]));
-//			}
+	//CONJUGATION CODE:
 	
 	
-//	console.log(conjugations);
+	//Regex for finding sentences:
 
-	// packaging list of words to be translated in JSON for transfer to background
-	// scripts
-	var json_to_Translate = JSON.stringify(to_Translate),
-	        json_parse = JSON.parse(json_to_Translate);
+	var result1= allText.match( /["']?[A-Z][^.?!]+((?![.?!]['"]?\s\n["']?[A-Z][^.?!]).)+[.?!'"]+/g );
+	
+	var res_split=[];
+	
+	//Regex for creating variables based upon line breaks:
+	
+	for (i in result1) {
+	    res_split.push(result1[i].split(/(\r\n|\n|\r)/gm));
+	};
+		
+	cleanArray=[];
+	
+	//Clean-up excess spaces and line breaks:
+	
+	for (i in res_split) {
+		for (t in res_split[i]) {
+			res_split[i][t]=res_split[i][t].replace(/(\r\n|\n|\r)/gm,"")
+			if (res_split[i][t]) {
+		       	cleanArray.push(res_split[i][t]);
+		      }		
+		};
+	}
+	
+	for (i in cleanArray){
+		cleanArray[i]=cleanArray[i].split(/\s+/);
+	};
 
-	console.log(json_parse);
+	//find collocated words for translation and group them together for proper conjugation
+	var mergedConsPlus=[];
 
-	chrome.runtime.sendMessage({json_parse}, function(response) {  
+loop1:	
+	for (i in cleanArray){
+loop2:
+		t=0;
+		for (t; t<=cleanArray[i].length; t++){
+			var joinedCons=[];
+			var conjugs=[];
+			var z=0;
+			var x=0;
+			var mergedCons=[];
+loop3:
+			for (word in to_Translate){
+				if (cleanArray[i][t]===to_Translate[word]){
+					var limit=cleanArray[i].length-1;
+					if (t < limit){
+						t=parseInt(t);
+						var a=t+1;
+						var conjugsPlus=[];
+loop4:						
+						for (a; a<=limit; a++){
+loop5:
+							for (w in to_Translate){
+								if (to_Translate[w]===cleanArray[i][a]){
+									z=z+1;
+								};
+							};	
+							if(z>x){
+								x=x+1;
+							} else {break loop4;}
+						conjugsPlus.push(cleanArray[i][a]);
+						};
+					};	
+				};					
+			};
+		if (z>0){
+			conjugs.push(cleanArray[i][t]);
+			conjugs.push(conjugsPlus);
+			mergedCons.push(conjugs);
+			mergedCons = [].concat.apply([], conjugs);
+			joinedCons=mergedCons.join(' ');
+			mergedConsPlus.push(joinedCons);
+			if (a<limit){
+				t=a+1;
+				}
+			}
+		};	
+	};
+	
+	//Array consisting of all collections that require conjugation:
+	//console.log(mergedConsPlus);
+	
+	//CONJUGATION CODE END
+
+	// packaging list of words to be translated in JSON for transfer to background scripts
+	
+	forTranslation=[];
+	forTranslation=mergedConsPlus.concat(to_Translate);
+	
+	//delete duplicates
+	var uniqueTrans = [];
+	$.each(forTranslation, function(i, el){
+	    if($.inArray(el, uniqueTrans) === -1) uniqueTrans.push(el);
+	});
+	
+	//send to background scripts/server
+
+	chrome.runtime.sendMessage({uniqueTrans}, function(response) {  
 	    replaceText(response.merged_words);
 	});
 });
 
+//replace function
+
 function replaceText(jsonArr) {
-	$("body *").textFinder(function() {
-		for (var key in jsonArr) {
+	
+	//change jsonArr from object to array in order to enable sorting
+	
+	var makeArray = Object.keys(jsonArr).map(function(index){
+        return [index,jsonArr[index]];
+	});
+	
+	//sort array from longest string to shortest string thereby ensuring the longest strings are replaced first
+	
+	makeArray.sort(function (a, b) {
+		  return b[0].length - a[0].length;
+		});
+	
+	//replace with translations
+	
+	$("body :not(iframe)").textFinder(function() {
+		for (d in makeArray){	
+			var matcher = new RegExp('\\b' + makeArray[d][0] + '\\b', "gi");
 			
-			var matcher = new RegExp('\\b' + key + '\\b', "gi");
-			//var replacer = jsonArr[key].split(" ");
-			this.data = this.data.replace(matcher, jsonArr[key]);
-			
+			this.data = this.data.replace(matcher, makeArray[d][1]);
 		}
 	});
 }
+
 
 // jQuery plugin to find and replace text
 jQuery.fn.textFinder = function( fn ) {
