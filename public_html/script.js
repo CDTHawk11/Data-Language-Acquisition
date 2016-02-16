@@ -1,29 +1,37 @@
 $(document).ready(function() {
 	
-	chrome.storage.sync.get("TRAN_TARGET", function(target) {
-		if (!(target["TRAN_TARGET"]) || target["TRAN_TARGET"] == "") {
-			$("#languageDiv #firstInstallLabel").css("display", "block");
-			$("#languageDiv #regularLabel").css("display", "none");
+    chrome.storage.sync.get("TRAN_TARGET", function (obj) {
+		if (!obj["TRAN_TARGET"] || obj["TRAN_TARGET"] == "") {
+			$("#setupTarget").css("display", "block");
+			$("#regularTarget").css("display", "none");
 		} else {
-			$("#languageDiv #firstInstallLabel").css("display", "none");
-			$("#languageDiv #regularLabel").css("display", "block");
-			$("#target").val(target["TRAN_TARGET"]);
-			chrome.storage.sync.get("TRAN_FEEDBACK_SUBMITTED", function(flag) {
-				if (!(flag["TRAN_FEEDBACK_SUBMITTED"])) {
-					$("#feedbackDiv").css("display", "block");
-				} 
-			});
+			$("#setupTarget").css("display", "none");
+			$("#regularTarget").css("display", "block");
+			$("#target").val(obj["TRAN_TARGET"]);
 		}
-	});
+    });
 
+    chrome.storage.sync.get("TRAN_LEVEL", function (obj) {
+		if (!obj["TRAN_LEVEL"] || obj["TRAN_LEVEL"] == "") {
+			$("#setupLevel").css("display", "block");
+			$("#regularLevel").css("display", "none");
+		} else {
+			$("#setupLevel").css("display", "none");
+			$("#regularLevel").css("display", "block");
+			$("#difficulty").val(obj["TRAN_LEVEL"]);
+		}
+    });
+	
 	// Save the selected target language on user's PC
 	$("#target").change(function() {
-		chrome.storage.sync.set({
-				'TRAN_TARGET' : $("#target option:selected").val()
-			}, function() {
+		chrome.storage.sync.set({"TRAN_TARGET":$("#target option:selected").val()}, function() {
 		});
 	});
 
+	$("#difficulty").change(function() {
+		chrome.storage.sync.set({"TRAN_LEVEL":$("#difficulty option:selected").val()}, function() {
+		});
+	});
 
 	// Attach a submit handler to feedback form
 	$('#feedbackForm').submit(function(event) {
@@ -45,14 +53,15 @@ $(document).ready(function() {
 	        headers: {"Accept": "application/json"},
 			success: function(result, status, xhr) {
 				$("#feedbackDiv").html(result['message']);
-				chrome.storage.sync.set({
-					'TRAN_FEEDBACK_SUBMITTED' : "true"
-				}, function() {
-				});
 			},
 			error: function (xhr, status, errorMsg) {
 	            alert(xhr.status + "::" + xhr.statusText + "::" + xhr.responseText);
 	        }
 		});
+	});
+
+	$("#feedbackButton").click(function() {
+		$("#languageDiv").animate({width:'toggle'},300);
+	    $("#feedbackDiv").animate({width:'toggle'},300);
 	});
 });

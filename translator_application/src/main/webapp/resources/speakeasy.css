@@ -1,0 +1,63 @@
+body {
+	border: 0;
+	margin: 0;
+    font: normal normal 17px Arial;
+}
+
+*:focus {
+    outline: none;
+}
+
+.page {
+	display: inline-block;
+    width: 590px;
+    height: 350px;
+}
+
+.page .content {
+	background: linear-gradient(to bottom, #ffffb3, white);
+	padding-left: 10px;
+}
+
+#icon {
+	float: left; 
+	height:67px;
+	width:168px;
+	padding:10px; 
+}
+
+#banner {
+	background: #ffffb3;
+	height: 100px;
+}
+
+#banner #heading {
+	height: 50px;
+	font: normal 45px Arial;
+	text-align: left;
+	padding-top: 30px;
+}
+
+#fullName, #email, select {
+	width: 350px;
+	font-size: 15px;
+	border-radius: 10px;
+	border: 2px solid #00b3b3;
+	padding: 5px;
+}
+
+.errorSelect {
+	border-radius: 10px;
+	border: 2px solid red;
+}
+
+.button {
+	font-size: 16px;
+	color: #ffffb3;
+	border-radius: 15px;
+	border: 2px solid black;
+	font-weight: bold;
+	background: #00b3b3;
+	cursor: pointer;
+	padding: 8px;
+}

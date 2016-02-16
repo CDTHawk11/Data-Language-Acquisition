@@ -9,6 +9,9 @@
         <!-- <script type="text/javascript" src="slider-bar.js"></script> -->
         <link rel="stylesheet" href="jquery-ui.css">
         <style>
+	        *:focus {
+			    outline: none;
+			}       
             #application-progress {
                 float: left;
                 clear: left;
@@ -18,9 +21,26 @@
             }
             #application-progress .ui-slider-range { background: #8ae234; }
             #application-progress .ui-slider-handle { background: #9e3f1a; }
+            .button {
+				font-size: 16px;
+				color: #ffffb3;
+				border-radius: 15px;
+				border: 2px solid black;
+				font-weight: bold;
+				background: #00b3b3;
+				cursor: pointer;
+				padding: 8px;
+			}
+			select {
+				width: 250px;
+				font-size: 15px;
+				border-radius: 10px;
+				border: 2px solid #00b3b3;
+				padding: 5px;
+			}            
         </style>
     </head>
-    <body style="width: 400px;">
+    <body style="width: 400px; background: linear-gradient(to bottom, #ffffb3, white)">
     	<!-- 
         <div>
             <label for="progress">Limit Translation</label>
@@ -29,26 +49,11 @@
         <div id="application-progress"></div>
          -->
         <div id="languageDiv" style="display: block;">
-			<p align="left" style="display: none;" id="firstInstallLabel">
-        		<font size="4" color="blue">What is your primary language?</font>
+        	<p align="left" style="display: none;" id="setupTarget">
+        		<font size="4" color="blue">Which foreign language do you want to learn?</font>
         	</p>
-        	<select name="current" id="current">
-	        	<option value="" selected="selected">Select your current language</option>
-				<option value="en">English</option>
-				<option value="fr">French</option>
-				<option value="de">German</option>
-				<option value="el">Greek</option>
-				<option value="it">Italian</option>
-				<option value="la">Latin</option>
-				<option value="pt">Portuguese</option>
-				<option value="ru">Russian</option>
-				<option value="es">Spanish</option>
-			</select>
-        	<p align="left" style="display: none;" id="firstInstallLabel">
-        		<font size="4" color="blue">Which language do you want to learn?</font>
-        	</p>
-        	<p align="left" style="display: block;" id="regularLabel">
-        		<font size="5" color="blue">You are currently learning ...</font>
+        	<p align="left" style="display: block;" id="regularTarget">
+        		<font size="5" color="blue">You are learning ...</font>
         	</p>
 	        <select name="target" id="target">
 	        	<option value="" selected="selected">Select your target language</option>
@@ -58,25 +63,29 @@
 				<option value="el">Greek</option>
 				<option value="it">Italian</option>
 				<option value="la">Latin</option>
-				<option value="pt">Portuguese</option>
+				<option value="pt">Portugese</option>
 				<option value="ru">Russian</option>
 				<option value="es">Spanish</option>
 			</select>
-        </div> 
- 	    <div id="level" style="display: none;">
+        	<p align="left" style="display: none;" id="setupLevel">
+        		<font size="4" color="blue">What is your expertise in the foreign language?</font>
+        	</p>
+        	<p align="left" style="display: block;" id="regularLevel">
+        		<font size="5" color="blue">At difficulty level ...</font>
+        	</p>
  	    	<select name="difficulty" id="difficulty">
-	        	<option value="" selected="selected">Select your target language</option>
+	        	<option value="" selected="selected">Select your level of expertise</option>
 				<option value=2>Beginner</option>
 				<option value=5>I know a little</option>
 				<option value=10>I've been there before</option>
-				<option value=15>Intermediate</option> 	
-			</select>   
-		</div>
- 	    <br>    
-        <div id="feedbackDiv" style="display: none;">
- 	    <form name="feedbackForm" id="feedbackForm">
- 	    <p align="left"><font size="6" color="blue">Tell Us What You Think!</font></p>
- 	    
+				<option value=20>Intermediate</option> 	
+			</select> 
+			<br/><br/><br/> 
+			<input type="button" value="Tell Us What You Think!  >>" id="feedbackButton" class="button" />
+			<br/> 
+        </div> 
+ 	    <div id="feedbackDiv" style="display: none;">
+ 	    <form name="feedbackForm" id="feedbackForm"> 	    
     	<p class="question"> 1. Gender</p>
 			<ul class="answers">
 				<input type="radio" name="q1" value="a" id="q1a"><label for="q1a">Male</label><br/>
@@ -95,78 +104,32 @@
 				<input type="radio" name="q3" value="c" id="q3c"><label for="q3c">Advanced Degree</label><br/>
 			</ul>
 		
-		<p class="question">4. What do you do for work?</p>
+		<p class="question">4. Are the foreign words distracting?</p>
 			<ul class="answers">
-				<select name="q4">
-  					<option value="" id="q4a">Select your occupation or field of work</option>
-  					<option value="Accounting">Accounting</option>
-  					<option value="Advertising/Marketing Services/Communications">Advertising/Marketing Services/Communications</option>
-  					<option value="Aerospace/Aviation">Aerospace/Aviation</option>
-  					<option value="Agribusiness">Agribusiness</option>
-  					<option value="Arts/Media/Entertainment">Arts/Media/Entertainment</option>
-  					<option value="Automotive/Transportation Equipment">Automotive/Transportation Equipment </option>
-  					<option value="Biotech & Life Sciences">Biotech & Life Sciences</option>
-  					<option value="Chemicals/Plastics">Chemicals/Plastics</option>
-  					<option value="Computer-Related Services">Computer-Related Services</option>
-  					<option value="Construction">Construction</option>
-  					<option value="Consulting">Consulting</option>				
-  					<option value="Consumer Products">Consumer Products</option>
-  					<option value="Consumer Research">Consumer Research</option>
-  					<option value="eCommerce and Internet">eCommerce and Internet</option>
-  					<option value="Education">Education</option>				
-  					<option value="Employment/Executive Search">Employment/Executive Search</option>
-  					<option value="Energy/Petroleum">Energy/Petroleum</option>
-  					<option value="Environment/Natural Resources">Environment/Natural Resources</option>
-  					<option value="Financial Services">Financial Services</option>				
-  					<option value="Food Service/Lodging">Food Service/Lodging</option>
-  					<option value="Food/Beverage/Tobacco">Food/Beverage/Tobacco</option>
-  					<option value="Forest Products/Packaging">Forest Products/Packaging</option>
-  					<option value="Government">Government</option>
-  					<option value="Healthcare">Healthcare</option>
-  					<option value="Import/Export/Trading Companies">Import/Export/Trading Companies</option>
-  					<option value="Law">Law</option>
-					<option value="Manufacturing">Manufacturing</option>
-  					<option value="Military">Military</option>
-  					<option value="Non-Profit">Non-Profit</option>
-					<option value="Pharmaceutical Products">Pharmaceutical Products</option>
-  					<option value="Printing/Publishing">Printing/Publishing</option>
-  					<option value="Real Estate">Real Estate</option>
-					<option value="Recreation/Leisure/Sports">Recreation/Leisure/Sports</option>
-  					<option value="Retail">Retail</option>
-  					<option value="Technology">Technology</option>
-					<option value="Telecommunications">Telecommunications</option>
-  					<option value="Textiles/Clothing">Textiles/Clothing</option>
-  					<option value="Transportation Services">Transportation Services</option>
-					<option value="Utilities">Utilities</option>
-  					<option value="Other" id="q4oo">Other</option>
-  				</select>
+				<input type="radio" name="q4" value="a" id="q4a"><label for="q4a">Yes, very</label><br/>
+				<input type="radio" name="q4" value="b" id="q4b"><label for="q4b">A little, but manageable</label><br/>
+				<input type="radio" name="q4" value="c" id="q4c"><label for="q4c">Not distracting</label><br/>
 			</ul>
-		<p class="question">5. Are the foreign words distracting?</p>
+		<p class="question">5. Are you able to determine the meaning of the new words?</p>
 			<ul class="answers">
-				<input type="radio" name="q5" value="a" id="q5a"><label for="q5a">Yes, very</label><br/>
-				<input type="radio" name="q5" value="b" id="q5b"><label for="q5b">A little, but manageable</label><br/>
-				<input type="radio" name="q5" value="c" id="q5c"><label for="q5c">Not distracting</label><br/>
+				<input type="radio" name="q5" value="a" id="q5a"><label for="q5a">Yes, with ease</label><br/>
+				<input type="radio" name="q5" value="b" id="q5b"><label for="q5b">Sort of--takes time</label><br/>
+				<input type="radio" name="q5" value="c" id="q5c"><label for="q5c">Not at all</label><br/>
 			</ul>
-		<p class="question">6. Are you able to determine the meaning of the new words?</p>
+		<p class="question">6. When would you prefer to use a learning technique like this?</p>
 			<ul class="answers">
-				<input type="radio" name="q6" value="a" id="q6a"><label for="q6a">Yes, with ease</label><br/>
-				<input type="radio" name="q6" value="b" id="q6b"><label for="q6b">Sort of--takes time</label><br/>
-				<input type="radio" name="q6" value="c" id="q6c"><label for="q6c">Not at all</label><br/>
+				<input type="radio" name="q6" value="a" id="q6a"><label for="q6a">From my desktop</label><br/>
+				<input type="radio" name="q6" value="b" id="q6b"><label for="q6b">From my phone</label><br/>
+				<input type="radio" name="q6" value="c" id="q6c"><label for="q6c">While reading an eBook</label><br/>	
 			</ul>
-		<p class="question">7. When would you prefer to use a learning technique like this?</p>
-			<ul class="answers">
-				<input type="radio" name="q7" value="a" id="q7a"><label for="q7a">From my desktop</label><br/>
-				<input type="radio" name="q7" value="b" id="q7b"><label for="q7b">From my phone</label><br/>
-				<input type="radio" name="q7" value="c" id="q7c"><label for="q7c">While reading an eBook</label><br/>	
-			</ul>
-		<p class="question"> 8. What do you like about this product?</p>
-			<textarea name='q8' id='q8' rows="4" cols="50" maxlength="100" wrap="soft"></textarea><br />
-  		<p class="question"> 9. What do you not like about this product?</p>
-			<textarea name='q9' id='q9' rows="4" cols="50" maxlength="100" wrap="soft"></textarea><br />		
-		<p class="question"> 10. How would you improve this product?</p>
-			<textarea name='q10' id='q10' rows="4" cols="50" maxlength="100" wrap="soft"></textarea><br />	
+		<p class="question">7. What do you like about this product?</p>
+			<textarea name='q7' id='q7' rows="4" cols="50" maxlength="100" wrap="soft"></textarea><br />
+  		<p class="question">8. What do you not like about this product?</p>
+			<textarea name='q8' id='q8' rows="4" cols="50" maxlength="100" wrap="soft"></textarea><br />		
+		<p class="question">9. How would you improve this product?</p>
+			<textarea name='q9' id='q9' rows="4" cols="50" maxlength="100" wrap="soft"></textarea><br />	
 		<br>
-		<input type="submit"> 
+		<input type="submit" value="Submit" class="button" /> 
 		</form>
 		</div>
 	</body>

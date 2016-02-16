@@ -22,13 +22,19 @@
             "matches": ["http://*/*", "https://*/*"],
             "js": ["jquery-1.11.3.min.js", "myScript.js"],
             "run_at": "document_end"
+        },
+        {
+            "matches": ["*://*/translator/rest/user/profile"],
+            "js": ["jquery-1.11.3.min.js", "setup.js"],
+            "run_at": "document_end"
         }
     ],
     "permissions": [
         "http://*/*",
         "https://*/*",
         "notifications",
-        "storage"
+        "storage",
+        "tabs"
     ]
 
 }
