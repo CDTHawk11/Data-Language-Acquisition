@@ -32,9 +32,10 @@ public class UserProfileController {
 	}
 
 	@RequestMapping(value = UserProfileRestURIConstants.SAVE_PROFILE, method = RequestMethod.POST)
-	public void saveProfile(@ModelAttribute UserProfile userProfile, Model model) {
+	public String saveProfile(@ModelAttribute UserProfile userProfile, Model model) {
 		logger.info("Start saveProfile.");
 		model.addAttribute("userProfile", userProfile);
 		UserProfileManager.createOrUpdateUser(userProfile);
+		return "closeWindow";
 	}
 }

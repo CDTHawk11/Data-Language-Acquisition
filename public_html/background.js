@@ -17,7 +17,7 @@ chrome.runtime.onInstalled.addListener(function(details) {
 		            focused: true
 		        }, function(window) {
 		        	chrome.tabs.create({
-		                url: "http://localhost:8080/translator/rest/user/profile",
+		                url: "http://ec2-52-35-34-105.us-west-2.compute.amazonaws.com:8080/translator/rest/user/profile",
 		                windowId: window.id
 		            });
 		        });

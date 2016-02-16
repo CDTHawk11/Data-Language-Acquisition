@@ -19,8 +19,7 @@
 		</script>
     </head>
     <body>
-    <form name="userProfileForm" id="userProfileForm" action="/translator/rest/user/save" 
-    	  method="post" onsubmit="return closeWindow(this);">
+    <form name="userProfileForm" id="userProfileForm" action="/translator/rest/user/save" method="post">
 	    <div id="page1" class="page">
 	    	<div id="banner">
 	           	<img id="icon" alt="speakeasy" src="/translator/resources/Marquee.png"/>
