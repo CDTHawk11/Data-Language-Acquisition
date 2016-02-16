@@ -159,6 +159,7 @@ loop5:
 	});
 });
 
+
 //replace function
 
 function replaceText(jsonArr) {
@@ -184,6 +185,33 @@ function replaceText(jsonArr) {
 			this.data = this.data.replace(matcher, makeArray[d][1]);
 		}
 	});
+	
+	function findText(element, pattern, callback) {
+	    for (var childi= element.childNodes.length; childi-->0;) {
+	        var child= element.childNodes[childi];
+	        if (child.nodeType==1) {
+	            findText(child, pattern, callback);
+	        } else if (child.nodeType==3) {
+	            var matches= [];
+	            var match;
+	            while (match= pattern.exec(child.data))
+	                matches.push(match);
+	            for (var i= matches.length; i-->0;)
+	                callback.call(window, child, matches[i]);
+	        }
+	    }
+	}
+
+	for (d in makeArray){
+		var highlighter = new RegExp('\\b' + makeArray[d][1] + '\\b', "g");
+		findText(document.body, highlighter, function(node, match) {
+			var span= document.createElement('span');
+			span.className= 'highlight';
+			node.splitText(match.index+makeArray[d][1].length);
+			span.appendChild(node.splitText(match.index));
+			node.parentNode.insertBefore(span, node.nextSibling);
+		});
+	}
 }
 
 // jQuery plugin to find and replace text
@@ -192,11 +220,15 @@ jQuery.fn.textFinder = function( fn ) {
     // callback function to scan through the child nodes recursively
     function scan() {
         var node = this.nodeName.toLowerCase();
+        
         if( node === '#text' ) {
-            fn.call(this);
+        	
+        	fn.call(this);
         } else if( this.nodeType === 1 && this.childNodes && this.childNodes[0] && node !== 'script' && node !== 'textarea' && node !== 'iframe' ) {
             $(this).contents().each( scan );
         }
     }
     return this;
 };
+
+
