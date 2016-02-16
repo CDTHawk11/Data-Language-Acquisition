@@ -39,5 +39,5 @@ $(document).ready(function() {
 
 function closeWindow(form) {
 	form.submit();
-	//window.close();
+	window.close();
 }
