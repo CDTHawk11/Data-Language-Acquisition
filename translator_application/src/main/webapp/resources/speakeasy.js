@@ -25,8 +25,6 @@ $(document).ready(function() {
 			$("#difficulty").addClass("errorSelect");
 			return false;
 		}
-		$("#userProfileForm").submit();
-		//window.close();
 	});
 
 	$("#occupation").change(function() {
@@ -38,3 +36,8 @@ $(document).ready(function() {
 	});
 
 });
+
+function closeWindow(form) {
+	form.submit();
+	//window.close();
+}

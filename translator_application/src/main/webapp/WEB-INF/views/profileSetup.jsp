@@ -19,7 +19,8 @@
 		</script>
     </head>
     <body>
-    <form name="userProfileForm" id="userProfileForm" action="/translator/rest/user/save" method="post">
+    <form name="userProfileForm" id="userProfileForm" action="/translator/rest/user/save" 
+    	  method="post" onsubmit="return closeWindow(this);">
 	    <div id="page1" class="page">
 	    	<div id="banner">
 	           	<img id="icon" alt="speakeasy" src="/translator/resources/Marquee.png"/>
@@ -119,7 +120,7 @@
 					<option value=20>Intermediate</option> 	
 				</select>   
 				<br/><br/>
-				<input type="button" value="Let's get started!" id="completeSetup" class="button"/>
+				<input type="submit" value="Let's get started!" id="completeSetup" class="button"/>
 	        </div> 
 	    </div>
 	</form>
