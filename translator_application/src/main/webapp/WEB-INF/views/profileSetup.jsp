@@ -4,6 +4,7 @@
     <head>
         <meta charset="utf-8">
         <title>Speak Easy</title>
+		<link rel="icon" href="/translator/resources/favicon.ico" type="image/x-icon" >
         <link rel="stylesheet" href="/translator/resources/jquery-ui.css">
         <link rel="stylesheet" href="/translator/resources/speakeasy.css">
         <script type="text/javascript" src="/translator/resources/jquery-1.11.3.min.js"></script>
@@ -19,7 +20,7 @@
 		</script>
     </head>
     <body>
-    <form name="userProfileForm" id="userProfileForm" action="/translator/rest/user/save" method="post">
+    <form name="userProfileForm" id="userProfileForm">
 	    <div id="page1" class="page">
 	    	<div id="banner">
 	           	<img id="icon" alt="speakeasy" src="/translator/resources/Marquee.png"/>
@@ -119,7 +120,7 @@
 					<option value=20>Intermediate</option> 	
 				</select>   
 				<br/><br/>
-				<input type="submit" value="Let's get started!" id="completeSetup" class="button"/>
+				<input type="button" value="Let's get started!" id="completeSetup" class="button"/>
 	        </div> 
 	    </div>
 	</form>

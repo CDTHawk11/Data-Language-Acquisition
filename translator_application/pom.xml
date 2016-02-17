@@ -6,7 +6,7 @@
 	<artifactId>translator</artifactId>
 	<name>translator_application</name>
 	<packaging>war</packaging>
-	<version>0.0.4</version>
+	<version>0.0.5</version>
 	<properties>
 		<java-version>1.8</java-version>
 		<org.springframework-version>4.0.0.RELEASE</org.springframework-version>

@@ -25,7 +25,29 @@ $(document).ready(function() {
 			$("#difficulty").addClass("errorSelect");
 			return false;
 		}
-		$("#userProfileForm").submit();
+
+		var array = $("#userProfileForm").serializeArray();
+		var jsonParameter = {};
+		
+		jQuery.each(array, function() {
+			jsonParameter[this.name] = this.value || '';
+	    });
+		
+		$.ajax({
+			url : "http://ec2-52-35-34-105.us-west-2.compute.amazonaws.com:8080/translator/rest/user/save",
+			type : "POST",
+	        data: JSON.stringify(jsonParameter),
+	        contentType: "application/json",
+	        headers: {"Accept": "application/json"},
+			success: function(result, status, xhr) {
+				if(result["message"] && result["message"] == "done") {
+					window.close();
+				}
+			},
+			error: function (xhr, status, errorMsg) {
+	            alert(xhr.status + "::" + xhr.statusText + "::" + xhr.responseText);
+	        }
+		});
 	});
 
 	$("#occupation").change(function() {

@@ -5,14 +5,18 @@ function getText() {
 
 // Get the saved limit of translation that has been configured through slider
 // and saved within user's computer.
-var tranLimit = 10;
-chrome.storage.sync.get("TRAN_LIMIT", function (limit) {
-	if(limit["TRAN_LIMIT"]) {
-		tranLimit = parseInt(limit["TRAN_LIMIT"]);
+var tranLimit = 5;
+chrome.storage.sync.get("TRAN_LEVEL", function (limit) {
+	if(limit["TRAN_LEVEL"]) {
+		tranLimit = parseInt(limit["TRAN_LEVEL"]);
 	}
 	
 	var allText = getText(); // stores into browser text into variable
 	var words = allText.match((/\b[a-zA-Z]+\b/g)); // filter all text to only words
+	
+	if(!words || words.length == 0) {
+		return;
+	}
 	
 	var counts = [];
 
