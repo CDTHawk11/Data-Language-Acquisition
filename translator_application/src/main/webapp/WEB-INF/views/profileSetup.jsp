@@ -8,6 +8,7 @@
         <link rel="stylesheet" href="/translator/resources/jquery-ui.css">
         <link rel="stylesheet" href="/translator/resources/speakeasy.css">
         <script type="text/javascript" src="/translator/resources/jquery-1.11.3.min.js"></script>
+        <script type="text/javascript" src="/translator/resources/jquery-ui.min.js"></script>
         <script type="text/javascript" src="/translator/resources/speakeasy.js"></script>
         <script type="text/javascript">
      		window.onbeforeunload = function() {
@@ -45,7 +46,7 @@
   					<option value="Construction">Construction</option>
   					<option value="Consulting">Consulting</option>				
   					<option value="Consumer Products">Consumer Products</option>
-  					<option value="Consumer Research">/Consumer Research</option>
+  					<option value="Consumer Research">Consumer Research</option>
   					<option value="eCommerce and Internet">eCommerce and Internet</option>
   					<option value="Education">Education</option>				
   					<option value="Employment/Executive Search">Employment/Executive Search</option>
