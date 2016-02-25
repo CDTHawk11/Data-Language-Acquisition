@@ -206,7 +206,7 @@ function replaceText(jsonArr) {
 		var highlighter = new RegExp('\\b' + makeArray[d][1] + '\\b', "g");
 		findText(document.body, highlighter, function(node, match) {
 			var span= document.createElement('span');
-			span.className= 'highlight';
+			span.style.backgroundColor = "yellow";
 			node.splitText(match.index+makeArray[d][1].length);
 			span.appendChild(node.splitText(match.index));
 			node.parentNode.insertBefore(span, node.nextSibling);
@@ -230,6 +230,9 @@ jQuery.fn.textFinder = function( fn ) {
     }
     return this;
 };
+
+/*
+wrapText(document.body, '');
 
 function wrapText(container, text) {
 	  // Construct a regular expression that matches text at the start or end of a string or surrounded by non-word characters.
@@ -293,3 +296,4 @@ function wrapText(container, text) {
 	      curNode = curNode.nextSibling;
 	  }
 	}
+*/
