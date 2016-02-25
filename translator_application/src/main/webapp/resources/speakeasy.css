@@ -10,6 +10,7 @@ body {
 
 .page {
 	display: inline-block;
+	position: fixed;
     width: 590px;
     height: 350px;
 }

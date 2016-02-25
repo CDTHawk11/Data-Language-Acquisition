@@ -8,6 +8,7 @@
         <link rel="stylesheet" href="/translator/resources/jquery-ui.css">
         <link rel="stylesheet" href="/translator/resources/speakeasy.css">
         <script type="text/javascript" src="/translator/resources/jquery-1.11.3.min.js"></script>
+        <script type="text/javascript" src="/translator/resources/jquery-ui.min.js"></script>
         <script type="text/javascript" src="/translator/resources/speakeasy.js"></script>
         <script type="text/javascript">
      		window.onbeforeunload = function() {
@@ -33,16 +34,15 @@
 	        	<input name="email" id="email" type="text" maxlength="100" />
 	        	<div style="height:25px;padding-top:20px;">What do you do for work?</div>
 				<select name="occupation" id="occupation">
-  					<option value="" id="q4a">Select your occupation or field of work</option>
-  					<option value="Accounting">Accounting</option>
+  					<option value="">Select your occupation or field of work</option>
+  					<option value="Accounting/Financial Services">Accounting/Financial Services</option>
   					<option value="Advertising/Marketing Services/Communications">Advertising/Marketing Services/Communications</option>
   					<option value="Aerospace/Aviation">Aerospace/Aviation</option>
   					<option value="Agribusiness">Agribusiness</option>
   					<option value="Arts/Media/Entertainment">Arts/Media/Entertainment</option>
   					<option value="Automotive/Transportation Equipment">Automotive/Transportation Equipment </option>
-  					<option value="Biotech & Life Sciences">Biotech & Life Sciences</option>
+  					<option value="Biotech/Life Sciences/Pharmaceutical Products">Biotech/Life Sciences/Pharmaceutical Products</option>
   					<option value="Chemicals/Plastics">Chemicals/Plastics</option>
-  					<option value="Computer-Related Services">Computer-Related Services</option>
   					<option value="Construction">Construction</option>
   					<option value="Consulting">Consulting</option>				
   					<option value="Consumer Products">Consumer Products</option>
@@ -52,28 +52,26 @@
   					<option value="Employment/Executive Search">Employment/Executive Search</option>
   					<option value="Energy/Petroleum">Energy/Petroleum</option>
   					<option value="Environment/Natural Resources">Environment/Natural Resources</option>
-  					<option value="Financial Services">Financial Services</option>				
   					<option value="Food Service/Lodging">Food Service/Lodging</option>
   					<option value="Food/Beverage/Tobacco">Food/Beverage/Tobacco</option>
   					<option value="Forest Products/Packaging">Forest Products/Packaging</option>
   					<option value="Government">Government</option>
-  					<option value="Healthcare">Healthcare</option>
+  					<option value="Insurance/Healthcare">Insurance/Healthcare</option>
   					<option value="Import/Export/Trading Companies">Import/Export/Trading Companies</option>
   					<option value="Law">Law</option>
 					<option value="Manufacturing">Manufacturing</option>
   					<option value="Military">Military</option>
   					<option value="Non-Profit">Non-Profit</option>
-					<option value="Pharmaceutical Products">Pharmaceutical Products</option>
   					<option value="Printing/Publishing">Printing/Publishing</option>
   					<option value="Real Estate">Real Estate</option>
 					<option value="Recreation/Leisure/Sports">Recreation/Leisure/Sports</option>
   					<option value="Retail">Retail</option>
-  					<option value="Technology">Technology</option>
+  					<option value="Technology/Computer-Related Services">Technology/Computer-Related Services</option>
 					<option value="Telecommunications">Telecommunications</option>
   					<option value="Textiles/Clothing">Textiles/Clothing</option>
   					<option value="Transportation Services">Transportation Services</option>
 					<option value="Utilities">Utilities</option>
-  					<option value="Other" id="q4oo">Other</option>
+  					<option value="Other">Other</option>
   				</select>
 				<br/><br/>
 				<input type="button" value="Next >>" id="next" class="button"/>

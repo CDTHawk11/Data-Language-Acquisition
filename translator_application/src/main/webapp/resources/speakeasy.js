@@ -8,8 +8,8 @@ $(document).ready(function() {
 			$("#occupation").addClass("errorSelect");
 			return false;
 		}
-		$("#page1").animate({width:'toggle'},300);
-	    $("#page2").animate({width:'toggle'},300);
+		$("#page1").hide("slide", { direction: "left" }, 400);
+		$("#page2").show("slide", { direction: "right" }, 400);
 	});
 
 	$("#completeSetup").click(function() {
