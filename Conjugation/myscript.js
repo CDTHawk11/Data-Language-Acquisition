@@ -176,7 +176,7 @@ function replaceText(jsonArr) {
 		  return b[0].length - a[0].length;
 		});
 	
-	//replace with translations
+	//replace with translations .....
 	
 	$("body :not(iframe)").textFinder(function() {
 		for (d in makeArray){	
