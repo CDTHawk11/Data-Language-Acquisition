@@ -178,7 +178,7 @@ function replaceText(jsonArr) {
 		  return b[0].length - a[0].length;
 		});
 	
-	//replace with translations
+	//replace with translations .....
 	
 	$("body :not(iframe)").textFinder(function() {
 		for (d in makeArray){	
@@ -187,6 +187,49 @@ function replaceText(jsonArr) {
 			this.data = this.data.replace(matcher, makeArray[d][1]);
 		}
 	});
+	
+	function findText(element, pattern, callback) {
+	    for (var childi= element.childNodes.length; childi-->0;) {
+	        var child= element.childNodes[childi];
+	        if (child.nodeType==1) {
+	            findText(child, pattern, callback);
+	        } else if (child.nodeType==3) {
+	            var matches= [];
+	            var match;
+	            while (match= pattern.exec(child.data))
+	                matches.push(match);
+	            for (var i= matches.length; i-->0;)
+	                callback.call(window, child, matches[i]);
+	        }
+	    }
+	}
+
+	for (d in makeArray){
+		var highlighter = new RegExp('\\b' + makeArray[d][1] + '\\b', "g");
+		findText(document.body, highlighter, function(node, match) {
+			var span= document.createElement('span');
+
+			$(span).attr("title", makeArray[d][0]);
+			$(span).tooltip({
+		      position: {
+		          my: "center bottom-15",
+		          at: "center top",
+		          using: function( position, feedback ) {
+		            $( this ).css( position );
+		            $( "<div>" )
+		              .addClass( "arrow" )
+		              .addClass( feedback.vertical )
+		              .addClass( feedback.horizontal )
+		              .appendTo( this );
+		          	}
+		        }
+			});
+			
+			node.splitText(match.index+makeArray[d][1].length);
+			span.appendChild(node.splitText(match.index));
+			node.parentNode.insertBefore(span, node.nextSibling);
+		});
+	}
 }
 
 //jQuery plugin to find and replace text

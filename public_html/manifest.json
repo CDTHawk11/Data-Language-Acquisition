@@ -2,11 +2,11 @@
     "manifest_version": 2,
     "name": "Speak Easy",
     "description": "An immersive foreign language learning experience",
-    "version": "1.1",
+    "version": "1.2",
     "browser_action": {
         "default_icon": "icon.png",
         "default_popup": "popup.html",
-        "default_title": "Click here!"
+        "default_title": "Speak Easy"
     },
     "icons": {
         "16": "icon16.png",
@@ -20,7 +20,9 @@
     "content_scripts": [
         {
             "matches": ["http://*/*", "https://*/*"],
-            "js": ["jquery-1.11.3.min.js", "myScript.js"],
+            "exclude_matches": ["*://*/translator/rest/user/profile"],
+            "css": ["jquery-ui.css", "spkeasy.css"],
+            "js": ["jquery-1.11.3.min.js", "jquery-ui.min.js", "myScript.js"],
             "run_at": "document_end"
         },
         {
