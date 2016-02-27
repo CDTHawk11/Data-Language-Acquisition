@@ -73,8 +73,8 @@
 					<option value="Utilities">Utilities</option>
   					<option value="Other">Other</option>
   				</select>
-				<br/><br/>
-				<input type="button" value="Next >>" id="next" class="button"/>
+				<br/><br/><br/>
+				<input type="button" value="Next" id="next" class="button"/>
 	        </div> 
 	    </div>
 	    <div id="page2" class="page" style="display: none;">
@@ -85,7 +85,8 @@
 	        <div id="languageDiv" class="content">
 				<div style="height:25px;">What is your primary language?</div>
 	        	<select name="current" id="current">
-		        	<option value="" selected="selected">Select your current language</option>
+		        	<option value="" selected="selected">Select your primary language</option>
+					<option value="nl">Dutch</option>
 					<option value="en">English</option>
 					<option value="fr">French</option>
 					<option value="de">German</option>
@@ -99,6 +100,7 @@
 				<div style="height:25px;padding-top:20px;">Which foreign language do you want to learn?</div>
 		        <select name="target" id="target">
 		        	<option value="" selected="selected">Select your target language</option>
+					<option value="nl">Dutch</option>
 					<option value="en">English</option>
 					<option value="fr">French</option>
 					<option value="de">German</option>
@@ -112,12 +114,16 @@
 				<div style="height:25px;padding-top:20px;">What is your level of expertise in the foreign language you want to learn?</div>
 	 	    	<select name="difficulty" id="difficulty">
 		        	<option value="" selected="selected">Select your level of expertise</option>
-					<option value=2>Beginner</option>
-					<option value=5>I know a little</option>
-					<option value=10>I've been there before</option>
-					<option value=20>Intermediate</option> 	
+					<option class="difficultyDescription" title="No practical understanding of the language" value=3>No Proficiency - No practical understanding</option>
+					<option class="difficultyDescription" title="Understand familiar everyday expressions and very basic phrases in areas of immediate needs" value=7>Beginner - Understand familiar and very basic phrases</option>
+					<option class="difficultyDescription" title="Understand short conversations about basic survival needs and minimum courtesy" value=10>Elementary - Comprehend up to basic survival needs</option>
+					<option class="difficultyDescription" title="Can deal with most situations likely to arise while traveling in area where the language is spoken" value=15>Threshold - Understand familiar matters regularly encountered</option>
+					<option class="difficultyDescription" title="Understand the essentials of all speech, including technical discussions in one's field of specialization" value=20>Intermediate - Conversational in a standard face-to-face dialogue</option> 	
+					<option class="difficultyDescription" title="Express fluently and spontaneously without much obvious searching for expressions" value=30>Operational - Use language flexibly and effectively</option> 	
+					<option class="difficultyDescription" title="Can understand virtually everything heard or read" value=50>Advanced - Expert comprehension proficiency</option> 	
 				</select>   
-				<br/><br/>
+				<div style="height: 10px; padding: 5px; font-size: 12px; color: #00b3b3;">Mouse over each option to view a brief description of each level</div>
+				<br/>
 				<input type="button" value="Let's get started!" id="completeSetup" class="button"/>
 	        </div> 
 	    </div>
