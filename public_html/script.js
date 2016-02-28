@@ -61,7 +61,22 @@ $(document).ready(function() {
 	});
 
 	$("#feedbackButton").click(function() {
-		$("#languageDiv").animate({width:'toggle'},300);
-	    $("#feedbackDiv").animate({width:'toggle'},300);
+		$("#languageDiv").hide("slide", { direction: "left" }, 400);
+	    $("#feedbackDiv").show("slide", { direction: "right" }, 400);
 	});
+	
+	$(".difficultyDescription").tooltip({
+	      position: {
+	          my: "center bottom-15",
+	          at: "center top",
+	          using: function( position, feedback ) {
+	            $( this ).css( position );
+	            $( "<div>" )
+	              .addClass( "arrow" )
+	              .addClass( feedback.vertical )
+	              .addClass( feedback.horizontal )
+	              .appendTo( this );
+	          	}
+	        }
+		});
 });

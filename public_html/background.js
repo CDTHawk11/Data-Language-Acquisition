@@ -1,17 +1,15 @@
 // Check whether new version is installed
 chrome.runtime.onInstalled.addListener(function(details) {
-	var tran_data = ["TRAN_TARGET", "TRAN_LEVEL"];
-	chrome.storage.sync.remove(tran_data, function() {
-		chrome.windows.getCurrent(function(win) {
-			var leftPos = win.left + win.width - 635;
-			var topPos = win.top + 70;
-			if (details.reason == "install") {
+	chrome.windows.getCurrent(function(win) {
+		if (details.reason == "install") {
+			var tran_data = ["TRAN_TARGET", "TRAN_LEVEL"];
+			chrome.storage.sync.remove(tran_data, function() {
 				var leftPos = win.left + win.width - 635;
 				var topPos = win.top + 70;
 		        chrome.windows.create({
 		            type: "popup",
 		            width: 610,
-		            height: 420,
+		            height: 440,
 		            top: topPos,
 		            left: leftPos,
 		            focused: true
@@ -21,12 +19,12 @@ chrome.runtime.onInstalled.addListener(function(details) {
 		                windowId: window.id
 		            });
 		        });
-		    } else if(details.reason == "update") {
-		        var thisVersion = chrome.runtime.getManifest().version;
-		        console.log("Updated from " + details.previousVersion + " to " + thisVersion + "!");
-		    }
-		});    		
-	});
+			});
+	    } else if(details.reason == "update") {
+	        var thisVersion = chrome.runtime.getManifest().version;
+	        console.log("Updated from " + details.previousVersion + " to " + thisVersion + "!");
+	    }
+	});    		
 });
 
 chrome.runtime.onMessage.addListener(

@@ -58,4 +58,18 @@ $(document).ready(function() {
 		$("#email").css("border-color", "#00b3b3");
 	});
 
+	$(".difficultyDescription").tooltip({
+      position: {
+          my: "center bottom-15",
+          at: "center top",
+          using: function( position, feedback ) {
+            $( this ).css( position );
+            $( "<div>" )
+              .addClass( "arrow" )
+              .addClass( feedback.vertical )
+              .addClass( feedback.horizontal )
+              .appendTo( this );
+          	}
+        }
+	});
 });

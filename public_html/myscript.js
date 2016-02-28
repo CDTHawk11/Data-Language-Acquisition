@@ -3,8 +3,7 @@ function getText() {
     return document.body.innerText;
 }
 
-// Get the saved limit of translation that has been configured through slider
-// and saved within user's computer.
+// Get the saved translation level.
 var tranLimit = 5;
 chrome.storage.sync.get("TRAN_LEVEL", function (limit) {
 	if(limit["TRAN_LEVEL"]) {
@@ -26,13 +25,8 @@ chrome.storage.sync.get("TRAN_LEVEL", function (limit) {
 	    counts[num] = counts[num] ? counts[num] + 1 : 1;
 	}
 
-	console.log(counts);
-
 	var unique_numbers = Object.keys(counts).length; // number unique words that
 														// appear on page
-
-	console.log(unique_numbers); 
-
 	// orders words from most occurring to least
 	var counts_new = [];
 	for (var key in counts)
@@ -41,11 +35,9 @@ chrome.storage.sync.get("TRAN_LEVEL", function (limit) {
 	    return b[1] - a[1]
 	});
 
-	console.log(counts_new);
-
-	var arrays_to = counts_new.splice(0, 4); // four most occurring words
+	//var arrays_to = counts_new.splice(0, 4); // four most occurring words
 												// (temporary)
-
+	var arrays_to = counts_new.splice(0, tranLimit-1);
 	// Extracts the most frequently occurring words from the arrays_to dictionary and places them in a list
 	words_to = [];
 	for (var key in arrays_to)
@@ -53,7 +45,6 @@ chrome.storage.sync.get("TRAN_LEVEL", function (limit) {
 	var to_Translate = [].concat.apply([], words_to);
 
 	//CONJUGATION CODE:
-	
 	
 	//Regex for finding sentences:
 
