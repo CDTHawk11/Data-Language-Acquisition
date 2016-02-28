@@ -217,7 +217,7 @@ function replaceText(jsonArr) {
 		        // Create a document fragment to hold the new nodes.
 		        var fragment = document.createDocumentFragment();
 
-		        // Create a new text node for any preceding text.
+		        // Create a new text node for any preceding text.  consoless
 		        if (match.index > 0)
 		        	fragment.appendChild(document.createTextNode(match.input.substr(0, match.index)));
 		        	console.log(match.index);
