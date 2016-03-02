@@ -77,7 +77,7 @@ chrome.storage.sync.get("TRAN_LEVEL", function (limit) {
 	for (i in cleanArray){
 		cleanArray[i]=cleanArray[i].split(/\s+/);
 	};
-
+	
 	// find collocated words for translation and group them together for proper
 	// conjugation
 	var mergedConsPlus=[];
@@ -147,38 +147,38 @@ loop5:
 	});
 	
 	// send to background scripts/server
-	
+	console.log(uniqueTrans);
 	var json_to_Translate = JSON.stringify(uniqueTrans),
 	        json_parse = JSON.parse(json_to_Translate);
 
 
-	chrome.runtime.sendMessage({json_parse}, function(response) {  
-	    replaceText(response.merged_words);
+	chrome.runtime.sendMessage({json_parse}, function(response) { 
+		var jsonArr = response.merged_words;
+		
+		// change jsonArr from object to array in order to enable sorting
+		var makeArray = Object.keys(jsonArr).map(function(index){
+	        return [index,jsonArr[index]];
+		});
+		
+		// sort array from longest string to shortest string thereby ensuring the
+		// longest strings are replaced first
+		
+		makeArray.sort(function (a, b) {
+			return b[0].length - a[0].length;
+		});
+		console.log(makeArray);
+	    replaceText(makeArray);
 	});
 });
 
 // replace function
 
-function replaceText(jsonArr) {
-	
-	// change jsonArr from object to array in order to enable sorting
-	
-	var makeArray = Object.keys(jsonArr).map(function(index){
-        return [index,jsonArr[index]];
-	});
-	
-	// sort array from longest string to shortest string thereby ensuring the
-	// longest strings are replaced first
-	
-	makeArray.sort(function (a, b) {
-		return b[0].length - a[0].length;
-	});
-	
+function replaceText(makeArray) {
 	$("body :not(iframe)").textFinder(function() {
 		for (d in makeArray){				
 			if(this.nodeType === 3) { // first pass of the iteration
 				findAndReplace(this, makeArray[d][0], makeArray[d][1]);
-			} else if(this.nodeType === 1) { // all other passes after the first iteration
+			} else if(this.nodeType === 1 && this.childNodes && this.childNodes[0]) { // all other passes after the first iteration
 				$(this).textFinder(function() {
 					findAndReplace(this, makeArray[d][0], makeArray[d][1]);
 				});
@@ -189,9 +189,10 @@ function replaceText(jsonArr) {
 
 function findAndReplace(node, matcher, replacement) {
 	matcher = matcher.trim();
-	var pattern = new RegExp('\\b' + matcher.replace(" ", "\\s") + '\\b', "gi");
+	var pattern = new RegExp('\\b' + matcher.replace(" ", "\\s") + '\\b', "i");
     var match;
-    while (match = pattern.exec(node.data)) {
+    var curNode = node;
+    while (match = pattern.exec(curNode.data)) {
         // Create the wrapper span and add the matched text to it.
 		var span = document.createElement('span');
 		$(span).attr("title", matcher);
@@ -210,13 +211,11 @@ function findAndReplace(node, matcher, replacement) {
 	        }
 		});
 
-		var middlebit = node.splitText(match.index);
+		var middlebit = curNode.splitText(match.index);
         var endbit = middlebit.splitText(match[0].length);
-        var middleclone = middlebit.cloneNode(true);
-        
         span.appendChild(document.createTextNode(replacement));
-        
         middlebit.parentNode.replaceChild(span, middlebit);
+        curNode = endbit;
     }
 }
 
