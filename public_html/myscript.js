@@ -11,7 +11,8 @@ chrome.storage.sync.get("TRAN_LEVEL", function (limit) {
 	}
 	
 	var allText = getText(); // stores into browser text into variable
-	var words = allText.match((/\b[a-zA-Z]+\b/g)); // filter all text to only words
+	var words = allText.match((/\b[a-zA-Z]+\b/g)); // filter all text to only
+													// words
 	
 	if(!words || words.length == 0) {
 		return;
@@ -25,7 +26,8 @@ chrome.storage.sync.get("TRAN_LEVEL", function (limit) {
 	    counts[num] = counts[num] ? counts[num] + 1 : 1;
 	}
 
-	var unique_numbers = Object.keys(counts).length; // number unique words that
+	var unique_numbers = Object.keys(counts).length; // number unique words
+														// that
 														// appear on page
 	// orders words from most occurring to least
 	var counts_new = [];
@@ -35,24 +37,25 @@ chrome.storage.sync.get("TRAN_LEVEL", function (limit) {
 	    return b[1] - a[1]
 	});
 
-	//var arrays_to = counts_new.splice(0, 4); // four most occurring words
+	// var arrays_to = counts_new.splice(0, 4); // four most occurring words
 												// (temporary)
 	var arrays_to = counts_new.splice(0, tranLimit-1);
-	// Extracts the most frequently occurring words from the arrays_to dictionary and places them in a list
+	// Extracts the most frequently occurring words from the arrays_to
+	// dictionary and places them in a list
 	words_to = [];
 	for (var key in arrays_to)
 	    words_to.push([arrays_to[key][0]]);
 	var to_Translate = [].concat.apply([], words_to);
 
-	//CONJUGATION CODE:
+	// CONJUGATION CODE:
 	
-	//Regex for finding sentences:
+	// Regex for finding sentences:
 
 	var result1= allText.match( /["']?[A-Z][^.?!]+((?![.?!]['"]?\s\n["']?[A-Z][^.?!]).)+[.?!'"]+/g );
 	
 	var res_split=[];
 	
-	//Regex for creating variables based upon line breaks:
+	// Regex for creating variables based upon line breaks:
 	
 	for (i in result1) {
 	    res_split.push(result1[i].split(/(\r\n|\n|\r)/gm));
@@ -60,7 +63,7 @@ chrome.storage.sync.get("TRAN_LEVEL", function (limit) {
 		
 	cleanArray=[];
 	
-	//Clean-up excess spaces and line breaks:
+	// Clean-up excess spaces and line breaks:
 	
 	for (i in res_split) {
 		for (t in res_split[i]) {
@@ -75,7 +78,8 @@ chrome.storage.sync.get("TRAN_LEVEL", function (limit) {
 		cleanArray[i]=cleanArray[i].split(/\s+/);
 	};
 
-	//find collocated words for translation and group them together for proper conjugation
+	// find collocated words for translation and group them together for proper
+	// conjugation
 	var mergedConsPlus=[];
 
 loop1:	
@@ -126,23 +130,23 @@ loop5:
 		};	
 	};
 	
-	//Array consisting of all collections that require conjugation:
-	//console.log(mergedConsPlus);
+	// Array consisting of all collections that require conjugation:
 	
-	//CONJUGATION CODE END
+	// CONJUGATION CODE END
 
-	// packaging list of words to be translated in JSON for transfer to background scripts
+	// packaging list of words to be translated in JSON for transfer to
+	// background scripts
 	
 	forTranslation=[];
 	forTranslation=mergedConsPlus.concat(to_Translate);
 	
-	//delete duplicates
+	// delete duplicates
 	var uniqueTrans = [];
 	$.each(forTranslation, function(i, el){
 	    if($.inArray(el, uniqueTrans) === -1) uniqueTrans.push(el);
 	});
 	
-	//send to background scripts/server
+	// send to background scripts/server
 	
 	var json_to_Translate = JSON.stringify(uniqueTrans),
 	        json_parse = JSON.parse(json_to_Translate);
@@ -153,77 +157,70 @@ loop5:
 	});
 });
 
-//replace function
+// replace function
 
 function replaceText(jsonArr) {
 	
-	//change jsonArr from object to array in order to enable sorting
+	// change jsonArr from object to array in order to enable sorting
 	
 	var makeArray = Object.keys(jsonArr).map(function(index){
         return [index,jsonArr[index]];
 	});
 	
-	//sort array from longest string to shortest string thereby ensuring the longest strings are replaced first
+	// sort array from longest string to shortest string thereby ensuring the
+	// longest strings are replaced first
 	
 	makeArray.sort(function (a, b) {
-		  return b[0].length - a[0].length;
-		});
-	
-	//replace with translations .....
-	
-	$("body :not(iframe)").textFinder(function() {
-		for (d in makeArray){	
-			var matcher = new RegExp('\\b' + makeArray[d][0] + '\\b', "gi");
-			
-			this.data = this.data.replace(matcher, makeArray[d][1]);
-		}
+		return b[0].length - a[0].length;
 	});
 	
-	function findText(element, pattern, callback) {
-	    for (var childi= element.childNodes.length; childi-->0;) {
-	        var child= element.childNodes[childi];
-	        if (child.nodeType==1) {
-	            findText(child, pattern, callback);
-	        } else if (child.nodeType==3) {
-	            var matches= [];
-	            var match;
-	            while (match= pattern.exec(child.data))
-	                matches.push(match);
-	            for (var i= matches.length; i-->0;)
-	                callback.call(window, child, matches[i]);
-	        }
-	    }
-	}
-
-	for (d in makeArray){
-		var highlighter = new RegExp('\\b' + makeArray[d][1] + '\\b', "g");
-		findText(document.body, highlighter, function(node, match) {
-			var span= document.createElement('span');
-
-			$(span).attr("title", makeArray[d][0]);
-			$(span).tooltip({
-		      position: {
-		          my: "center bottom-15",
-		          at: "center top",
-		          using: function( position, feedback ) {
-		            $( this ).css( position );
-		            $( "<div>" )
-		              .addClass( "arrow" )
-		              .addClass( feedback.vertical )
-		              .addClass( feedback.horizontal )
-		              .appendTo( this );
-		          	}
-		        }
-			});
-			
-			node.splitText(match.index+makeArray[d][1].length);
-			span.appendChild(node.splitText(match.index));
-			node.parentNode.insertBefore(span, node.nextSibling);
-		});
-	}
+	$("body :not(iframe)").textFinder(function() {
+		for (d in makeArray){				
+			if(this.nodeType === 3) { // first pass of the iteration
+				findAndReplace(this, makeArray[d][0], makeArray[d][1]);
+			} else if(this.nodeType === 1) { // all other passes after the first iteration
+				$(this).textFinder(function() {
+					findAndReplace(this, makeArray[d][0], makeArray[d][1]);
+				});
+			}
+		}
+	});
 }
 
-//jQuery plugin to find and replace text
+function findAndReplace(node, matcher, replacement) {
+	matcher = matcher.trim();
+	var pattern = new RegExp('\\b' + matcher.replace(" ", "\\s") + '\\b', "gi");
+    var match;
+    while (match = pattern.exec(node.data)) {
+        // Create the wrapper span and add the matched text to it.
+		var span = document.createElement('span');
+		$(span).attr("title", matcher);
+		$(span).tooltip({
+	      position: {
+	          my: "center bottom-15",
+	          at: "center top",
+	          using: function( position, feedback ) {
+	            $( this ).css( position );
+	            $( "<div>" )
+	              .addClass( "arrow" )
+	              .addClass( feedback.vertical )
+	              .addClass( feedback.horizontal )
+	              .appendTo( this );
+	          	}
+	        }
+		});
+
+		var middlebit = node.splitText(match.index);
+        var endbit = middlebit.splitText(match[0].length);
+        var middleclone = middlebit.cloneNode(true);
+        
+        span.appendChild(document.createTextNode(replacement));
+        
+        middlebit.parentNode.replaceChild(span, middlebit);
+    }
+}
+
+// jQuery plugin to find and replace text
 jQuery.fn.textFinder = function( fn ) {
     this.contents().each( scan );
     // callback function to scan through the child nodes recursively
