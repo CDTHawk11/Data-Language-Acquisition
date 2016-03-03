@@ -86,12 +86,15 @@
 				<div style="height:25px;">What is your primary language?</div>
 	        	<select name="current" id="current">
 		        	<option value="" selected="selected">Select your primary language</option>
+					<option value="zh-CN">Chinese</option>
 					<option value="nl">Dutch</option>
 					<option value="en">English</option>
+					<option value="tl">Filipino</option>
 					<option value="fr">French</option>
 					<option value="de">German</option>
 					<option value="el">Greek</option>
 					<option value="it">Italian</option>
+					<option value="ko">Korean</option>
 					<option value="la">Latin</option>
 					<option value="pt">Portugese</option>
 					<option value="ru">Russian</option>
