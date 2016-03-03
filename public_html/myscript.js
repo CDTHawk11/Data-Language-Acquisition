@@ -1,6 +1,10 @@
 // This function gets all the text in browser
 function getText() {
-    return document.body.innerText;
+	var a = [];
+	$("body :not(iframe)").textFinder(function() {
+		a.push(this.data.replace(/\s+/gm, " "));
+	});
+    return a.join("");
 }
 
 // Get the saved translation level.
