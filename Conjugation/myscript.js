@@ -1,18 +1,26 @@
 // This function gets all the text in browser
 function getText() {
-    return document.body.innerText;
+	var a = [];
+	$("body :not(iframe)").textFinder(function() {
+		a.push(this.data.replace(/\s+/gm, " "));
+	});
+    return a.join("");
 }
 
-// Get the saved limit of translation that has been configured through slider
-// and saved within user's computer.
-var tranLimit = 10;
-chrome.storage.sync.get("TRAN_LIMIT", function (limit) {
-	if(limit["TRAN_LIMIT"]) {
-		tranLimit = parseInt(limit["TRAN_LIMIT"]);
+// Get the saved translation level.
+var tranLimit = 5;
+chrome.storage.sync.get("TRAN_LEVEL", function (limit) {
+	if(limit["TRAN_LEVEL"]) {
+		tranLimit = parseInt(limit["TRAN_LEVEL"]);
 	}
 	
 	var allText = getText(); // stores into browser text into variable
-	var words = allText.match((/\b[a-zA-Z]+\b/g)); // filter all text to only words
+	var words = allText.match((/\b[a-zA-Z]+\b/g)); // filter all text to only
+													// words
+	
+	if(!words || words.length == 0) {
+		return;
+	}
 	
 	var counts = [];
 
@@ -22,13 +30,9 @@ chrome.storage.sync.get("TRAN_LIMIT", function (limit) {
 	    counts[num] = counts[num] ? counts[num] + 1 : 1;
 	}
 
-	//console.log(counts);
-
-	var unique_numbers = Object.keys(counts).length; // number unique words that
+	var unique_numbers = Object.keys(counts).length; // number unique words
+														// that
 														// appear on page
-
-	//console.log(unique_numbers); 
-
 	// orders words from most occurring to least
 	var counts_new = [];
 	for (var key in counts)
@@ -37,28 +41,25 @@ chrome.storage.sync.get("TRAN_LIMIT", function (limit) {
 	    return b[1] - a[1]
 	});
 
-	//console.log(counts_new);
-
-	var arrays_to = counts_new.splice(0, 5); // four most occurring words
+	// var arrays_to = counts_new.splice(0, 4); // four most occurring words
 												// (temporary)
-
-	// Extracts the most frequently occurring words from the arrays_to dictionary and places them in a list
+	var arrays_to = counts_new.splice(0, tranLimit-1);
+	// Extracts the most frequently occurring words from the arrays_to
+	// dictionary and places them in a list
 	words_to = [];
 	for (var key in arrays_to)
 	    words_to.push([arrays_to[key][0]]);
 	var to_Translate = [].concat.apply([], words_to);
 
-    
-	//CONJUGATION CODE:
+	// CONJUGATION CODE:
 	
-	
-	//Regex for finding sentences:
+	// Regex for finding sentences:
 
 	var result1= allText.match( /["']?[A-Z][^.?!]+((?![.?!]['"]?\s\n["']?[A-Z][^.?!]).)+[.?!'"]+/g );
 	
 	var res_split=[];
 	
-	//Regex for creating variables based upon line breaks:
+	// Regex for creating variables based upon line breaks:
 	
 	for (i in result1) {
 	    res_split.push(result1[i].split(/(\r\n|\n|\r)/gm));
@@ -66,7 +67,7 @@ chrome.storage.sync.get("TRAN_LIMIT", function (limit) {
 		
 	cleanArray=[];
 	
-	//Clean-up excess spaces and line breaks:
+	// Clean-up excess spaces and line breaks:
 	
 	for (i in res_split) {
 		for (t in res_split[i]) {
@@ -80,8 +81,9 @@ chrome.storage.sync.get("TRAN_LIMIT", function (limit) {
 	for (i in cleanArray){
 		cleanArray[i]=cleanArray[i].split(/\s+/);
 	};
-
-	//find collocated words for translation and group them together for proper conjugation
+	
+	// find collocated words for translation and group them together for proper
+	// conjugation
 	var mergedConsPlus=[];
 
 loop1:	
@@ -132,133 +134,93 @@ loop5:
 		};	
 	};
 	
-	//Array consisting of all collections that require conjugation:
-	//console.log(mergedConsPlus);
+	// Array consisting of all collections that require conjugation:
 	
-	//CONJUGATION CODE END
-	
-	
-	// packaging list of words to be translated in JSON for transfer to background scripts
+	// CONJUGATION CODE END
+
+	// packaging list of words to be translated in JSON for transfer to
+	// background scripts
 	
 	forTranslation=[];
 	forTranslation=mergedConsPlus.concat(to_Translate);
 	
-	//delete duplicates
+	// delete duplicates
 	var uniqueTrans = [];
 	$.each(forTranslation, function(i, el){
 	    if($.inArray(el, uniqueTrans) === -1) uniqueTrans.push(el);
 	});
 	
-	//send to background scripts/server
-	
+	// send to background scripts/server
+	console.log(uniqueTrans);
 	var json_to_Translate = JSON.stringify(uniqueTrans),
 	        json_parse = JSON.parse(json_to_Translate);
 
-	chrome.runtime.sendMessage({json_parse}, function(response) {  
-	    replaceText(response.merged_words);
+
+	chrome.runtime.sendMessage({json_parse}, function(response) { 
+		var jsonArr = response.merged_words;
+		
+		// change jsonArr from object to array in order to enable sorting
+		var makeArray = Object.keys(jsonArr).map(function(index){
+	        return [index,jsonArr[index]];
+		});
+		
+		// sort array from longest string to shortest string thereby ensuring the
+		// longest strings are replaced first
+		
+		makeArray.sort(function (a, b) {
+			return b[0].length - a[0].length;
+		});
+		console.log(makeArray);
+	    replaceText(makeArray);
 	});
 });
 
+// replace function
 
-//replace function
-
-function replaceText(jsonArr) {
-	
-	//change jsonArr from object to array in order to enable sorting
-	
-	var makeArray = Object.keys(jsonArr).map(function(index){
-        return [index,jsonArr[index]];
-	});
-	
-	//sort array from longest string to shortest string thereby ensuring the longest strings are replaced first
-	
-	makeArray.sort(function (a, b) {
-		  return b[0].length - a[0].length;
-		});
-	
-	//replace with translations .....
-	
+function replaceText(makeArray) {
 	$("body :not(iframe)").textFinder(function() {
-		for (d in makeArray){	
-			var matcher = new RegExp('\\b' + makeArray[d][0] + '\\b', "gi");
-			
-			this.data = this.data.replace(matcher, makeArray[d][1]);
+		for (d in makeArray){				
+			if(this.nodeType === 3) { // first pass of the iteration
+				findAndReplace(this, makeArray[d][0], makeArray[d][1]);
+			} else if(this.nodeType === 1 && this.childNodes && this.childNodes[0]) { // all other passes after the first iteration
+				$(this).textFinder(function() {
+					findAndReplace(this, makeArray[d][0], makeArray[d][1]);
+				});
+			}
 		}
 	});
-	
-	for (d in makeArray){
-	
-	wrapText(document.body, makeArray[d][1]);
+}
 
-	function wrapText(container, text) {
-		  // Construct a regular expression that matches text at the start or end of a string or surrounded by non-word characters.
-		  // Escape any special regex characters in text.
-		  var textRE = new RegExp('(^|\\W)' + text.replace(/[\\^$*+.?[\]{}()|]/, '\\$&') + '($|\\W)', 'm');
-		  var nodeText;
-		  var nodeStack = [];
+function findAndReplace(node, matcher, replacement) {
+	matcher = matcher.trim();
+	var pattern = new RegExp('\\b' + matcher.replace(" ", "\\s") + '\\b', "i");
+    var match;
+    var curNode = node;
+    while (match = pattern.exec(curNode.data)) {
+        // Create the wrapper span and add the matched text to it.
+		var span = document.createElement('span');
+		$(span).attr("title", matcher);
+		$(span).tooltip({
+	      position: {
+	          my: "center bottom-15",
+	          at: "center top",
+	          using: function( position, feedback ) {
+	            $( this ).css( position );
+	            $( "<div>" )
+	              .addClass( "arrow" )
+	              .addClass( feedback.vertical )
+	              .addClass( feedback.horizontal )
+	              .appendTo( this );
+	          	}
+	        }
+		});
 
-		  // Remove empty text nodes and combine adjacent text nodes.
-		  container.normalize();
-
-		  // Iterate through the container's child elements, looking for text nodes.
-		  var curNode = container.firstChild;
-
-		  while (curNode != null) {
-		    if (curNode.nodeType == Node.TEXT_NODE) {
-		      // Get node text in a cross-browser compatible fashion.
-		      if (typeof curNode.textContent == 'string')
-		        nodeText = curNode.textContent;
-		      else
-		        nodeText = curNode.innerText;
-
-		      // Use a regular expression to check if this text node contains the target text.
-		      var match = textRE.exec(nodeText);
-		      if (match != null) {
-		        // Create a document fragment to hold the new nodes.
-		        var fragment = document.createDocumentFragment();
-
-		        // Create a new text node for any preceding text.  consoless
-		        if (match.index > 0)
-		        	fragment.appendChild(document.createTextNode(match.input.substr(0, match.index)));
-		        	console.log(match.index);
-		        	console.log(match);
-		        	console.log(match.input.substr(0));
-		        	console.log(match.input.substr(0, match.index));
-		        	console.log(match[0]);
-		        // Create the wrapper span and add the matched text to it.
-		        var spanNode = document.createElement('span');
-		        spanNode.style.backgroundColor = "blue";
-		        spanNode.appendChild(document.createTextNode(match[0]));
-		        //console.log(spanNode.appendChild(document.createTextNode(match[0])));
-		        fragment.appendChild(spanNode);
-		        //console.log(fragment.appendChild(spanNode));
-		        // Create a new text node for any following text.
-		        if (match.index + match[0].length < match.input.length)
-		          fragment.appendChild(document.createTextNode(match.input.substr(match.index + match[0].length)));
-
-		        // Replace the existing text node with the fragment.
-		        curNode.parentNode.replaceChild(fragment, curNode);
-
-		        curNode = spanNode;
-		      }
-		    } else if (curNode.nodeType == Node.ELEMENT_NODE && curNode.firstChild != null) {
-		      nodeStack.push(curNode);
-		      curNode = curNode.firstChild;
-		      // Skip the normal node advancement code.
-		      continue;
-		    }
-
-		    // If there's no more siblings at this level, pop back up the stack until we find one.
-		    while (curNode != null && curNode.nextSibling == null)
-		      curNode = nodeStack.pop();
-
-		    // If curNode is null, that means we've completed our scan of the DOM tree.
-		    // If not, we need to advance to the next sibling.
-		    if (curNode != null)
-		      curNode = curNode.nextSibling;
-		  }
-		}
-	}
+		var middlebit = curNode.splitText(match.index);
+        var endbit = middlebit.splitText(match[0].length);
+        span.appendChild(document.createTextNode(replacement));
+        middlebit.parentNode.replaceChild(span, middlebit);
+        curNode = endbit;
+    }
 }
 
 // jQuery plugin to find and replace text
@@ -267,16 +229,11 @@ jQuery.fn.textFinder = function( fn ) {
     // callback function to scan through the child nodes recursively
     function scan() {
         var node = this.nodeName.toLowerCase();
-        
         if( node === '#text' ) {
-        	
-        	fn.call(this);
+            fn.call(this);
         } else if( this.nodeType === 1 && this.childNodes && this.childNodes[0] && node !== 'script' && node !== 'textarea' && node !== 'iframe' ) {
             $(this).contents().each( scan );
         }
     }
     return this;
 };
-
-
-
