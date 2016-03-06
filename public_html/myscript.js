@@ -1,9 +1,9 @@
 // This function gets all the text in browser
 function getText(words, sentences) {
 	$("body :not(iframe)").textFinder(function() {
-		var str = this.data.replace(/\s+/gm, " ");
+		var str = this.data.replace(/\s{2,}/gm, " ").replace(/(\D*)(\d+)(\D*)/gi,"");
 		Array.prototype.push.apply(words, str.match(/([^\u0000-\u007F]|\w)+/g));
-		Array.prototype.push.apply(sentences, str.match(/[^\r\n.!?:,"]+(:?(:?\r\n|[\r\n]|[.!?:,"])+|$)/gm));
+		Array.prototype.push.apply(sentences, str.split(/[\u2000-\u206F\u2E00-\u2E7F\\!"#$%&()*+,\-.\/:;<=>?@\[\]^_`{|}~]+/));
 	});
 }
 
@@ -16,7 +16,7 @@ chrome.storage.sync.get("TRAN_LEVEL", function (limit) {
 	
 	var words = [], sentences = [];
 	getText(words, sentences); // gets browser text into words and sentences
-		
+	console.log(words);
 	if(sentences.length == 0 || words.length == 0) {
 		return;
 	}
@@ -79,16 +79,11 @@ chrome.storage.sync.get("TRAN_LEVEL", function (limit) {
 	*/
 	var cleanArray = [];
 	for (i in sentences){
-		if(sentences[i].trim() === "") {
-			continue;
-		}
-		
-		cleanArray.push(sentences[i].trim());
+		if(sentences[i].trim() !== "") cleanArray.push(sentences[i].trim());
 	};
-	
 	console.log(cleanArray);	
-	// find collocated words for translation and group them together for proper
-	// conjugation
+	
+	// find collocated words for translation and group them together for proper conjugation
 	var mergedConsPlus=[];
 	
 loop1:	
