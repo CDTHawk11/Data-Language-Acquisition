@@ -1,38 +1,36 @@
 $(document).ready(function() {
-
-	var tranLimit = "10%";
-
-	chrome.storage.sync.get("TRAN_LIMIT", function(limit) {
-
-		if (!(limit["TRAN_LIMIT"])) {
-			chrome.storage.sync.set({
-				'TRAN_LIMIT' : tranLimit
-			}, function() {
-			});
+	
+    chrome.storage.sync.get("TRAN_TARGET", function (obj) {
+		if (!obj["TRAN_TARGET"] || obj["TRAN_TARGET"] == "") {
+			$("#setupTarget").css("display", "block");
+			$("#regularTarget").css("display", "none");
 		} else {
-			tranLimit = limit["TRAN_LIMIT"];
+			$("#setupTarget").css("display", "none");
+			$("#regularTarget").css("display", "block");
+			$("#target").val(obj["TRAN_TARGET"]);
 		}
+    });
 
-		$('#application-progress').slider({
-			range : "min",
-			min : 0,
-			value : parseInt(tranLimit),
-			max : 100,
-			animate : true,
-			slide : function(event, ui) {
-				$("#progress").val(ui.value + "%");
-			},
-			change : function(event, ui) {
-				var translationLimit = $("#progress").val();
-				chrome.storage.sync.set({
-					'TRAN_LIMIT' : translationLimit
-				}, function() {
-				});
-			}
+    chrome.storage.sync.get("TRAN_LEVEL", function (obj) {
+		if (!obj["TRAN_LEVEL"] || obj["TRAN_LEVEL"] == "") {
+			$("#setupLevel").css("display", "block");
+			$("#regularLevel").css("display", "none");
+		} else {
+			$("#setupLevel").css("display", "none");
+			$("#regularLevel").css("display", "block");
+			$("#difficulty").val(obj["TRAN_LEVEL"]);
+		}
+    });
+	
+	// Save the selected target language on user's PC
+	$("#target").change(function() {
+		chrome.storage.sync.set({"TRAN_TARGET":$("#target option:selected").val()}, function() {
 		});
+	});
 
-		$("#progress").val($("#application-progress").slider("value") + "%");
-
+	$("#difficulty").change(function() {
+		chrome.storage.sync.set({"TRAN_LEVEL":$("#difficulty option:selected").val()}, function() {
+		});
 	});
 
 	// Attach a submit handler to feedback form
@@ -61,4 +59,24 @@ $(document).ready(function() {
 	        }
 		});
 	});
+
+	$("#feedbackButton").click(function() {
+		$("#languageDiv").hide("slide", { direction: "left" }, 400);
+	    $("#feedbackDiv").show("slide", { direction: "right" }, 400);
+	});
+	
+	$(".difficultyDescription").tooltip({
+	      position: {
+	          my: "center bottom-15",
+	          at: "center top",
+	          using: function( position, feedback ) {
+	            $( this ).css( position );
+	            $( "<div>" )
+	              .addClass( "arrow" )
+	              .addClass( feedback.vertical )
+	              .addClass( feedback.horizontal )
+	              .appendTo( this );
+	          	}
+	        }
+		});
 });
