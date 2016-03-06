@@ -1,10 +1,10 @@
 // This function gets all the text in browser
-function getText() {
-	var a = [];
+function getText(words, sentences) {
 	$("body :not(iframe)").textFinder(function() {
-		a.push(this.data.replace(/\s+/gm, " "));
+		var str = this.data.replace(/\s{2,}/gm, " ").replace(/(\D*)(\d+)(\D*)/gi,"");
+		Array.prototype.push.apply(words, str.match(/([^\u0000-\u007F]|\w)+/g));
+		Array.prototype.push.apply(sentences, str.split(/[\u2000-\u206F\u2E00-\u2E7F\\!"#$%&()*+,\-.\/:;<=>?@\[\]^_`{|}~]+/));
 	});
-    return a.join("");
 }
 
 // Get the saved translation level.
@@ -14,11 +14,10 @@ chrome.storage.sync.get("TRAN_LEVEL", function (limit) {
 		tranLimit = parseInt(limit["TRAN_LEVEL"]);
 	}
 	
-	var allText = getText(); // stores into browser text into variable
-	var words = allText.match((/\b[a-zA-Z]+\b/g)); // filter all text to only
-													// words
-	
-	if(!words || words.length == 0) {
+	var words = [], sentences = [];
+	getText(words, sentences); // gets browser text into words and sentences
+	console.log(words);
+	if(sentences.length == 0 || words.length == 0) {
 		return;
 	}
 	
@@ -54,7 +53,7 @@ chrome.storage.sync.get("TRAN_LEVEL", function (limit) {
 	// CONJUGATION CODE:
 	
 	// Regex for finding sentences:
-
+	/*
 	var result1= allText.match( /["']?[A-Z][^.?!]+((?![.?!]['"]?\s\n["']?[A-Z][^.?!]).)+[.?!'"]+/g );
 	
 	var res_split=[];
@@ -77,15 +76,16 @@ chrome.storage.sync.get("TRAN_LEVEL", function (limit) {
 		      }		
 		};
 	}
-	
-	for (i in cleanArray){
-		cleanArray[i]=cleanArray[i].split(/\s+/);
+	*/
+	var cleanArray = [];
+	for (i in sentences){
+		if(sentences[i].trim() !== "") cleanArray.push(sentences[i].trim());
 	};
+	console.log(cleanArray);	
 	
-	// find collocated words for translation and group them together for proper
-	// conjugation
+	// find collocated words for translation and group them together for proper conjugation
 	var mergedConsPlus=[];
-
+	
 loop1:	
 	for (i in cleanArray){
 loop2:
