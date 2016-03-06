@@ -83,14 +83,26 @@ chrome.storage.sync.get("TRAN_LEVEL", function (limit) {
 	};
 	console.log(cleanArray);	
 	
+	//split each "sentence" on space
+	cleanSplit=[];
+	for (i in cleanArray){
+		cleanSplit.push(cleanArray[i].split(" "));
+	}
+	console.log(cleanSplit);
+	
+	
+	
 	// find collocated words for translation and group them together for proper conjugation
 	var mergedConsPlus=[];
 	
+	
 loop1:	
-	for (i in cleanArray){
+	for (i in cleanSplit){
+		//console.log(cleanArray[i]);
 loop2:
 		t=0;
-		for (t; t<=cleanArray[i].length; t++){
+		for (t; t<=cleanSplit[i].length; t++){
+			//console.log(cleanArray[i].length);
 			var joinedCons=[];
 			var conjugs=[];
 			var z=0;
@@ -98,8 +110,8 @@ loop2:
 			var mergedCons=[];
 loop3:
 			for (word in to_Translate){
-				if (cleanArray[i][t]===to_Translate[word]){
-					var limit=cleanArray[i].length-1;
+				if (cleanSplit[i][t]===to_Translate[word]){
+					var limit=cleanSplit[i].length-1;
 					if (t < limit){
 						t=parseInt(t);
 						var a=t+1;
@@ -108,20 +120,20 @@ loop4:
 						for (a; a<=limit; a++){
 loop5:
 							for (w in to_Translate){
-								if (to_Translate[w]===cleanArray[i][a]){
+								if (to_Translate[w]===cleanSplit[i][a]){
 									z=z+1;
 								};
 							};	
 							if(z>x){
 								x=x+1;
 							} else {break loop4;}
-						conjugsPlus.push(cleanArray[i][a]);
+						conjugsPlus.push(cleanSplit[i][a]);
 						};
 					};	
 				};					
 			};
 		if (z>0){
-			conjugs.push(cleanArray[i][t]);
+			conjugs.push(cleanSplit[i][t]);
 			conjugs.push(conjugsPlus);
 			mergedCons.push(conjugs);
 			mergedCons = [].concat.apply([], conjugs);
