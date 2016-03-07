@@ -2,8 +2,8 @@
 function getText(words, sentences) {
 	$("body :not(iframe)").textFinder(function() {
 		var str = this.data.replace(/\s{2,}/gm, " ").replace(/(\D*)(\d+)(\D*)/gi,"");
-		Array.prototype.push.apply(words, str.match(/([^\u0000-\u007F]|\w)+/g));
-		Array.prototype.push.apply(sentences, str.split(/[\u2000-\u206F\u2E00-\u2E7F\\!"#$%&()*+,\-.\/:;<=>?@\[\]^_`{|}~]+/));
+		Array.prototype.push.apply(words, str.split(/[\u0000-\u0026\u0028-\u0040\u005B-\u0060\u007B-\u00BF\u2000-\u206F\u2E00-\u2E7F\s]+/));
+		Array.prototype.push.apply(sentences, str.split(/[\u0000-\u0026\u0028-\u0040\u005B-\u0060\u007B-\u00BF\u2000-\u206F\u2E00-\u2E7F]+/));
 	});
 }
 
@@ -14,13 +14,18 @@ chrome.storage.sync.get("TRAN_LEVEL", function (limit) {
 		tranLimit = parseInt(limit["TRAN_LEVEL"]);
 	}
 	
-	var words = [], sentences = [];
-	getText(words, sentences); // gets browser text into words and sentences
-	console.log(words);
-	if(sentences.length == 0 || words.length == 0) {
+	var alltext = [], sentences = [];
+	getText(alltext, sentences); // gets browser text into words and sentences
+	
+	if(sentences.length == 0 || alltext.length == 0) {
 		return;
 	}
 	
+	var words = [];
+	for (i in alltext){
+		if(alltext[i].trim() !== "") words.push(alltext[i].trim());
+	};
+
 	var counts = [];
 
 	// counts number of words
@@ -43,6 +48,7 @@ chrome.storage.sync.get("TRAN_LEVEL", function (limit) {
 	// var arrays_to = counts_new.splice(0, 4); // four most occurring words
 												// (temporary)
 	var arrays_to = counts_new.splice(0, tranLimit-1);
+	console.log(arrays_to);
 	// Extracts the most frequently occurring words from the arrays_to
 	// dictionary and places them in a list
 	words_to = [];
@@ -52,45 +58,27 @@ chrome.storage.sync.get("TRAN_LEVEL", function (limit) {
 
 	// CONJUGATION CODE:
 	
-	// Regex for finding sentences:
-	/*
-	var result1= allText.match( /["']?[A-Z][^.?!]+((?![.?!]['"]?\s\n["']?[A-Z][^.?!]).)+[.?!'"]+/g );
-	
-	var res_split=[];
-	
-	// Regex for creating variables based upon line breaks:
-	
-	for (i in result1) {
-	    res_split.push(result1[i].split(/(\r\n|\n|\r)/gm));
-	};
-		
-	cleanArray=[];
-	
-	// Clean-up excess spaces and line breaks:
-	
-	for (i in res_split) {
-		for (t in res_split[i]) {
-			res_split[i][t]=res_split[i][t].replace(/(\r\n|\n|\r)/gm,"")
-			if (res_split[i][t]) {
-		       	cleanArray.push(res_split[i][t]);
-		      }		
-		};
-	}
-	*/
 	var cleanArray = [];
 	for (i in sentences){
 		if(sentences[i].trim() !== "") cleanArray.push(sentences[i].trim());
 	};
-	console.log(cleanArray);	
+		
+	//split each "sentence" on space
+	cleanSplit=[];
+	for (i in cleanArray){
+		cleanSplit.push(cleanArray[i].split(" "));
+	}
 	
 	// find collocated words for translation and group them together for proper conjugation
 	var mergedConsPlus=[];
 	
+	
 loop1:	
-	for (i in cleanArray){
+	for (i in cleanSplit){
 loop2:
 		t=0;
-		for (t; t<=cleanArray[i].length; t++){
+		for (t; t<=cleanSplit[i].length; t++){
+			//console.log(cleanArray[i].length);
 			var joinedCons=[];
 			var conjugs=[];
 			var z=0;
@@ -98,8 +86,8 @@ loop2:
 			var mergedCons=[];
 loop3:
 			for (word in to_Translate){
-				if (cleanArray[i][t]===to_Translate[word]){
-					var limit=cleanArray[i].length-1;
+				if (cleanSplit[i][t]===to_Translate[word]){
+					var limit=cleanSplit[i].length-1;
 					if (t < limit){
 						t=parseInt(t);
 						var a=t+1;
@@ -108,20 +96,20 @@ loop4:
 						for (a; a<=limit; a++){
 loop5:
 							for (w in to_Translate){
-								if (to_Translate[w]===cleanArray[i][a]){
+								if (to_Translate[w]===cleanSplit[i][a]){
 									z=z+1;
 								};
 							};	
 							if(z>x){
 								x=x+1;
 							} else {break loop4;}
-						conjugsPlus.push(cleanArray[i][a]);
+						conjugsPlus.push(cleanSplit[i][a]);
 						};
 					};	
 				};					
 			};
 		if (z>0){
-			conjugs.push(cleanArray[i][t]);
+			conjugs.push(cleanSplit[i][t]);
 			conjugs.push(conjugsPlus);
 			mergedCons.push(conjugs);
 			mergedCons = [].concat.apply([], conjugs);
@@ -193,7 +181,7 @@ function replaceText(makeArray) {
 
 function findAndReplace(node, matcher, replacement) {
 	matcher = matcher.trim();
-	var pattern = new RegExp('\\b' + matcher.replace(" ", "\\s") + '\\b', "i");
+	var pattern = new RegExp("(^\|[\\u0000-\\u0026\\u0028-\\u0040\\u005B-\\u0060\\u007B-\\u00BF\\u2000-\\u206F\\u2E00-\\u2E7F\\s])" + matcher + "(?=[\\u0000-\\u0026\\u0028-\\u0040\\u005B-\\u0060\\u007B-\\u00BF\\u2000-\\u206F\\u2E00-\\u2E7F\\s]\|$)", "i");
     var match;
     var curNode = node;
     while (match = pattern.exec(curNode.data)) {
@@ -214,9 +202,14 @@ function findAndReplace(node, matcher, replacement) {
 	          	}
 	        }
 		});
-
-		var middlebit = curNode.splitText(match.index);
-        var endbit = middlebit.splitText(match[0].length);
+		var middlebit, endbit;
+		if(match[0].search(/[\u0000-\u0026\u0028-\u0040\u005B-\u0060\u007B-\u00BF\u2000-\u206F\u2E00-\u2E7F]/g) == 0) {
+			middlebit = curNode.splitText(match.index + 1);
+			endbit = middlebit.splitText(match[0].length - 1);
+		} else {
+			middlebit = curNode.splitText(match.index);
+			endbit = middlebit.splitText(match[0].length);
+		}
         span.appendChild(document.createTextNode(replacement));
         middlebit.parentNode.replaceChild(span, middlebit);
         curNode = endbit;
