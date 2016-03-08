@@ -20,7 +20,7 @@
     "content_scripts": [
         {
             "matches": ["http://*/*", "https://*/*"],
-            "exclude_matches": ["*://*/translator/rest/user/profile"],
+            "exclude_matches": ["*://*/translator/rest/user/profile", "*://spkeasy.weebly.com/help-page.html"],
             "css": ["jquery-ui.css", "spkeasy.css"],
             "js": ["jquery-1.11.3.min.js", "jquery-ui.min.js", "myScript.js"],
             "run_at": "document_end"

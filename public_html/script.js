@@ -22,6 +22,21 @@ $(document).ready(function() {
 		}
     });
 	
+    chrome.storage.sync.get("SPKESY_TRAN", function (obj) {
+    	if (!obj["TRAN_LEVEL"] || obj["TRAN_LEVEL"] === "") {
+    		chrome.storage.sync.set({"SPKESY_TRAN":"ON"}, function() {
+    		});
+			$("#off").css("display", "block");
+			$("#on").css("display", "none");
+		} else if (obj["TRAN_LEVEL"] && obj["TRAN_LEVEL"] === "ON") {
+			$("#off").css("display", "block");
+			$("#on").css("display", "none");
+		} else if (obj["TRAN_LEVEL"] && obj["TRAN_LEVEL"] === "OFF") {
+			$("#on").css("display", "block");
+			$("#off").css("display", "none");
+		}
+    });
+	
 	// Save the selected target language on user's PC
 	$("#target").change(function() {
 		chrome.storage.sync.set({"TRAN_TARGET":$("#target option:selected").val()}, function() {
@@ -63,6 +78,24 @@ $(document).ready(function() {
 	$("#feedbackButton").click(function() {
 		$("#languageDiv").hide("slide", { direction: "left" }, 400);
 	    $("#feedbackDiv").show("slide", { direction: "right" }, 400);
+	});
+	
+	$("#off").click(function() {
+		$("#off").hide();
+	    $("#on").show();
+		chrome.storage.sync.set({"SPKESY_TRAN":"OFF"}, function() {
+		});
+	});
+	
+	$("#on").click(function() {
+		$("#on").hide();
+	    $("#off").show();
+		chrome.storage.sync.set({"SPKESY_TRAN":"ON"}, function() {
+		});
+	});
+	
+	$("#help").click(function() {
+		window.open("http://spkeasy.weebly.com/help-page.html","_blank");
 	});
 	
 	$(".difficultyDescription").tooltip({

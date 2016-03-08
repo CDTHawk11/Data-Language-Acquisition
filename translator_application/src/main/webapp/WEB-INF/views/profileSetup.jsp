@@ -103,12 +103,15 @@
 				<div style="height:25px;padding-top:20px;">Which foreign language do you want to learn?</div>
 		        <select name="target" id="target">
 		        	<option value="" selected="selected">Select your target language</option>
+					<option value="zh-CN">Chinese</option>
 					<option value="nl">Dutch</option>
 					<option value="en">English</option>
+					<option value="tl">Filipino</option>
 					<option value="fr">French</option>
 					<option value="de">German</option>
 					<option value="el">Greek</option>
 					<option value="it">Italian</option>
+					<option value="ko">Korean</option>
 					<option value="la">Latin</option>
 					<option value="pt">Portugese</option>
 					<option value="ru">Russian</option>

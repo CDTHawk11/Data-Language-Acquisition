@@ -33,7 +33,17 @@ chrome.runtime.onMessage.addListener(
             var deferred = $.Deferred();
             translate(request.json_parse, deferred);
             deferred.done(function (merged) {
-                sendResponse({merged_words: merged});
+                chrome.storage.sync.get("SPKESY_TRAN", function (obj) {
+                	if (!(obj["SPKESY_TRAN"]) || obj["SPKESY_TRAN"] == "") {
+                		chrome.storage.sync.set({"SPKESY_TRAN":"ON"}, function() {
+                		});
+                        sendResponse({merged_words: merged});
+                	} else if (obj["SPKESY_TRAN"] === "ON") {
+                		sendResponse({merged_words: merged});
+                	} else if (obj["SPKESY_TRAN"] === "OFF") {
+                		return false;
+                	}    
+                });
             });
 
             return true;
