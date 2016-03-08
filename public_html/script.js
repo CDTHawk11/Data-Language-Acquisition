@@ -23,15 +23,15 @@ $(document).ready(function() {
     });
 	
     chrome.storage.sync.get("SPKESY_TRAN", function (obj) {
-    	if (!obj["TRAN_LEVEL"] || obj["TRAN_LEVEL"] === "") {
+    	if (!obj["SPKESY_TRAN"] || obj["SPKESY_TRAN"] === "") {
     		chrome.storage.sync.set({"SPKESY_TRAN":"ON"}, function() {
     		});
 			$("#off").css("display", "block");
 			$("#on").css("display", "none");
-		} else if (obj["TRAN_LEVEL"] && obj["TRAN_LEVEL"] === "ON") {
+		} else if (obj["SPKESY_TRAN"] && obj["SPKESY_TRAN"] === "ON") {
 			$("#off").css("display", "block");
 			$("#on").css("display", "none");
-		} else if (obj["TRAN_LEVEL"] && obj["TRAN_LEVEL"] === "OFF") {
+		} else if (obj["SPKESY_TRAN"] && obj["SPKESY_TRAN"] === "OFF") {
 			$("#on").css("display", "block");
 			$("#off").css("display", "none");
 		}
