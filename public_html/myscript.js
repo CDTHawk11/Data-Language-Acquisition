@@ -2,8 +2,8 @@
 function getText(words, sentences) {
 	$("body :not(iframe)").textFinder(function() {
 		var str = this.data.replace(/\s{2,}/gm, " ").replace(/(\D*)(\d+)(\D*)/gi,"");
-		Array.prototype.push.apply(words, str.split(/[\u0000-\u0026\u0028-\u0040\u005B-\u0060\u007B-\u00BF\u2000-\u206F\u2E00-\u2E7F\s]+/));
-		Array.prototype.push.apply(sentences, str.split(/[\u0000-\u0026\u0028-\u0040\u005B-\u0060\u007B-\u00BF\u2000-\u206F\u2E00-\u2E7F]+/));
+		Array.prototype.push.apply(words, str.split(/[\u0000-\u001F\u0021-\u0026\u0028-\u0040\u005B-\u0060\u007B-\u00BF\u2000-\u206F\u2E00-\u2E7F\s]+/));
+		Array.prototype.push.apply(sentences, str.split(/[\u0000-\u001F\u0021-\u0026\u0028-\u0040\u005B-\u0060\u007B-\u00BF\u2000-\u206F\u2E00-\u2E7F]+/));
 	});
 }
 
@@ -62,7 +62,7 @@ chrome.storage.sync.get("TRAN_LEVEL", function (limit) {
 	for (i in sentences){
 		if(sentences[i].trim() !== "") cleanArray.push(sentences[i].trim());
 	};
-		
+	
 	//split each "sentence" on space
 	cleanSplit=[];
 	for (i in cleanArray){
@@ -181,7 +181,7 @@ function replaceText(makeArray) {
 
 function findAndReplace(node, matcher, replacement) {
 	matcher = matcher.trim();
-	var pattern = new RegExp("(^\|[\\u0000-\\u0026\\u0028-\\u0040\\u005B-\\u0060\\u007B-\\u00BF\\u2000-\\u206F\\u2E00-\\u2E7F\\s])" + matcher + "(?=[\\u0000-\\u0026\\u0028-\\u0040\\u005B-\\u0060\\u007B-\\u00BF\\u2000-\\u206F\\u2E00-\\u2E7F\\s]\|$)", "i");
+	var pattern = new RegExp("(^\|[\\u0000-\\u001F\\u0021-\\u0026\\u0028-\\u0040\\u005B-\\u0060\\u007B-\\u00BF\\u2000-\\u206F\\u2E00-\\u2E7F\\s])" + matcher + "(?=[\\u0000-\\u001F\\u0021-\\u0026\\u0028-\\u0040\\u005B-\\u0060\\u007B-\\u00BF\\u2000-\\u206F\\u2E00-\\u2E7F\\s]\|$)", "i");
     var match;
     var curNode = node;
     while (match = pattern.exec(curNode.data)) {
@@ -203,7 +203,7 @@ function findAndReplace(node, matcher, replacement) {
 	        }
 		});
 		var middlebit, endbit;
-		if(match[0].search(/[\u0000-\u0026\u0028-\u0040\u005B-\u0060\u007B-\u00BF\u2000-\u206F\u2E00-\u2E7F]/g) == 0) {
+		if(match[0].search(/[\u0000-\u001F\u0021-\u0026\u0028-\u0040\u005B-\u0060\u007B-\u00BF\u2000-\u206F\u2E00-\u2E7F\s]/g) == 0) {
 			middlebit = curNode.splitText(match.index + 1);
 			endbit = middlebit.splitText(match[0].length - 1);
 		} else {
