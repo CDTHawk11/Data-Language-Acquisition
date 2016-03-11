@@ -46,10 +46,10 @@
 				height: 100px;
 			}
 			#on, #off {
-				height:64px;
-				width:64px;
+				height:33px;
+				width:77px;
 				cursor:pointer;
-				padding: 25px;
+				float: right;
 			}
         </style>
     </head>
@@ -70,7 +70,7 @@
         	</div>	        
         </div>
         <div id="languageDiv" style="display: block;">
-        	<div style="float: left; padding: 5px; height: 85px;">
+        	<div style="float: left; padding: 5px; height: 85px; width: 465px;">
         	<div align="left" style="display: none; padding: 5px;" id="setupTarget">
         		<font size="4" color="blue">Which foreign language do you want to learn?</font>
         	</div>
@@ -79,6 +79,8 @@
         	</div>
         	<select name="target" id="target" style="padding: 5px;">
 	        	<option value="" selected="selected">Select your target language</option>
+				<option value="af">Afrikaans</option>
+				<option value="ar">Arabic</option>
 				<option value="zh-CN">Chinese</option>
 				<option value="nl">Dutch</option>
 				<option value="en">English</option>
@@ -92,12 +94,12 @@
 				<option value="pt">Portugese</option>
 				<option value="ru">Russian</option>
 				<option value="es">Spanish</option>
+				<option value="tr">Turkish</option>
 			</select>
-			</div>
-			<div style="float: right; height: 70px;">
 			<img id="on" title="Turn on translations" alt="Turn on translations" src="on.png" style="display: none;"/>
 			<img id="off" title="Turn off translations" alt="Turn off translations" src="off.png" style="display: block;"/>
 			</div>
+			
 			<div style="clear:both;">
         	<div align="left" style="display: none; padding: 5px;" id="setupLevel">
         		<font size="4" color="blue">What is your expertise in the foreign language?</font>

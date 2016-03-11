@@ -86,6 +86,8 @@
 				<div style="height:25px;">What is your primary language?</div>
 	        	<select name="current" id="current">
 		        	<option value="" selected="selected">Select your primary language</option>
+					<option value="af">Afrikaans</option>
+					<option value="ar">Arabic</option>
 					<option value="zh-CN">Chinese</option>
 					<option value="nl">Dutch</option>
 					<option value="en">English</option>
@@ -99,10 +101,13 @@
 					<option value="pt">Portugese</option>
 					<option value="ru">Russian</option>
 					<option value="es">Spanish</option>
+					<option value="tr">Turkish</option>
 				</select>
 				<div style="height:25px;padding-top:20px;">Which foreign language do you want to learn?</div>
 		        <select name="target" id="target">
 		        	<option value="" selected="selected">Select your target language</option>
+					<option value="af">Afrikaans</option>
+					<option value="ar">Arabic</option>
 					<option value="zh-CN">Chinese</option>
 					<option value="nl">Dutch</option>
 					<option value="en">English</option>
@@ -116,6 +121,7 @@
 					<option value="pt">Portugese</option>
 					<option value="ru">Russian</option>
 					<option value="es">Spanish</option>
+					<option value="tr">Turkish</option>
 				</select>
 				<div style="height:25px;padding-top:20px;">What is your level of expertise in the foreign language you want to learn?</div>
 	 	    	<select name="difficulty" id="difficulty">
