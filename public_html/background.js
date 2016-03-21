@@ -34,7 +34,7 @@ chrome.runtime.onMessage.addListener(
             translate(request.json_parse, deferred);
             deferred.done(function (merged) {
                 chrome.storage.sync.get("SPKESY_TRAN", function (obj) {
-                	if (!(obj["SPKESY_TRAN"]) || obj["SPKESY_TRAN"] == "") {
+                	if (!(obj["SPKESY_TRAN"]) || obj["SPKESY_TRAN"] === "") {
                 		chrome.storage.sync.set({"SPKESY_TRAN":"ON"}, function() {
                 		});
                         sendResponse({merged_words: merged});
