@@ -26,14 +26,14 @@ $(document).ready(function() {
     	if (!obj["SPKESY_TRAN"] || obj["SPKESY_TRAN"] === "") {
     		chrome.storage.sync.set({"SPKESY_TRAN":"ON"}, function() {
     		});
-			$("#off").css("display", "block");
-			$("#on").css("display", "none");
-		} else if (obj["SPKESY_TRAN"] && obj["SPKESY_TRAN"] === "ON") {
-			$("#off").css("display", "block");
-			$("#on").css("display", "none");
-		} else if (obj["SPKESY_TRAN"] && obj["SPKESY_TRAN"] === "OFF") {
 			$("#on").css("display", "block");
 			$("#off").css("display", "none");
+		} else if (obj["SPKESY_TRAN"] && obj["SPKESY_TRAN"] === "ON") {
+			$("#on").css("display", "block");
+			$("#off").css("display", "none");
+		} else if (obj["SPKESY_TRAN"] && obj["SPKESY_TRAN"] === "OFF") {
+			$("#off").css("display", "block");
+			$("#on").css("display", "none");
 		}
     });
 	
@@ -83,14 +83,14 @@ $(document).ready(function() {
 	$("#off").click(function() {
 		$("#off").hide();
 	    $("#on").show();
-		chrome.storage.sync.set({"SPKESY_TRAN":"OFF"}, function() {
+		chrome.storage.sync.set({"SPKESY_TRAN":"ON"}, function() {
 		});
 	});
 	
 	$("#on").click(function() {
 		$("#on").hide();
 	    $("#off").show();
-		chrome.storage.sync.set({"SPKESY_TRAN":"ON"}, function() {
+		chrome.storage.sync.set({"SPKESY_TRAN":"OFF"}, function() {
 		});
 	});
 	

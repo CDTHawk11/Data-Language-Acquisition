@@ -81,16 +81,16 @@ $(document).ready(function() {
 	});
 	
 	$("#off").click(function() {
-		$("#off").show();
-	    $("#on").hide();
-		chrome.storage.sync.set({"SPKESY_TRAN":"OFF"}, function() {
+		$("#off").hide();
+	    $("#on").show();
+		chrome.storage.sync.set({"SPKESY_TRAN":"ON"}, function() {
 		});
 	});
 	
 	$("#on").click(function() {
-		$("#on").show();
-	    $("#off").hide();
-		chrome.storage.sync.set({"SPKESY_TRAN":"ON"}, function() {
+		$("#on").hide();
+	    $("#off").show();
+		chrome.storage.sync.set({"SPKESY_TRAN":"OFF"}, function() {
 		});
 	});
 	
