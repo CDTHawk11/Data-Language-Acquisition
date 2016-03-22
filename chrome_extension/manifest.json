@@ -1,15 +1,17 @@
 {
     "manifest_version": 2,
-    "name": "Trial",
-    "description": "Slowly",
-    "version": "1.0",
+    "name": "Speak Easy",
+    "description": "An immersive foreign language learning experience",
+    "version": "1.7",
     "browser_action": {
         "default_icon": "icon.png",
         "default_popup": "popup.html",
-        "default_title": "Click here!"
+        "default_title": "Speak Easy"
     },
     "icons": {
-        "64": "icon.png"
+        "16": "icon16.png",
+        "48": "icon48.png",
+        "128": "icon128.png"
     },
     "background": {
         "scripts": ["jquery-1.11.3.min.js", "background.js"],
@@ -18,14 +20,23 @@
     "content_scripts": [
         {
             "matches": ["http://*/*", "https://*/*"],
-            "js": ["jquery-1.11.3.min.js", "myScript.js"],
+            "exclude_matches": ["*://*/translator/rest/user/profile", "*://spkeasy.weebly.com/help-page.html"],
+            "css": ["jquery-ui.css", "spkeasy.css"],
+            "js": ["jquery-1.11.3.min.js", "jquery-ui.min.js", "myScript.js"],
+            "run_at": "document_end"
+        },
+        {
+            "matches": ["*://*/translator/rest/user/profile"],
+            "js": ["jquery-1.11.3.min.js", "setup.js"],
             "run_at": "document_end"
         }
     ],
     "permissions": [
-        "https://www.googleapis.com/language/translate/*",
+        "http://*/*",
+        "https://*/*",
         "notifications",
-        "storage"
+        "storage",
+        "tabs"
     ]
 
 }
