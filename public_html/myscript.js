@@ -143,8 +143,8 @@ loop5:
 	var json_to_Translate = JSON.stringify(uniqueTrans),
 	        json_parse = JSON.parse(json_to_Translate);
 
-
-	chrome.runtime.sendMessage({json_parse}, function(response) { 
+	var translationReq = {type: "translation", requestObj: {json_parse}};
+	chrome.runtime.sendMessage(translationReq, function(response) { 
 		var jsonArr = response.merged_words;
 		
 		// change jsonArr from object to array in order to enable sorting
@@ -200,6 +200,9 @@ function findAndReplace(node, matcher, replacement) {
 	              .addClass( feedback.horizontal )
 	              .appendTo( this );
 	          	}
+	        },
+	        open: function( event, ui ) {
+	        	chrome.runtime.sendMessage({type: "tts", requestObj: replacement});
 	        }
 		});
 		var middlebit, endbit;

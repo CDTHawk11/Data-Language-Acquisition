@@ -2,7 +2,7 @@
     "manifest_version": 2,
     "name": "Speak Easy",
     "description": "An immersive foreign language learning experience",
-    "version": "1.8",
+    "version": "1.9",
     "browser_action": {
         "default_icon": "icon.png",
         "default_popup": "popup.html",
@@ -36,7 +36,8 @@
         "https://*/*",
         "notifications",
         "storage",
-        "tabs"
+        "tabs",
+        "tts"
     ]
 
 }
