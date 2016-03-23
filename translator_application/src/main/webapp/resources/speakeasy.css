@@ -11,40 +11,61 @@ body {
 .page {
 	display: inline-block;
 	position: fixed;
-    width: 590px;
-    height: 350px;
+    height: 100%;
+    width: 100%;
+}
+
+
+#page1 {
+  color: #ffff90;
+  padding-bottom: 180px;
+  background-image:url(/translator/resources/words-bg.png);
 }
 
 .page .content {
-	background: linear-gradient(to bottom, #ffffb3, white);
 	padding-left: 10px;
 }
 
 #icon {
-	float: left; 
-	height:67px;
-	width:168px;
-	padding:10px; 
+	height:80%;
 }
 
 #banner {
-	background: #ffffb3;
-	height: 100px;
+	height: 40%;
 }
 
 #banner #heading {
-	height: 50px;
-	font: normal 45px Arial;
-	text-align: left;
-	padding-top: 30px;
+	font: normal 15px 'Arial';
 }
 
-#fullName, #email, select {
-	width: 350px;
+input, select {
+	width: 200px;
 	font-size: 15px;
-	border-radius: 10px;
+	border-radius: 5px;
 	border: 2px solid #00b3b3;
 	padding: 5px;
+}
+table {
+  text-align:center;
+  display:inline-block;
+
+}
+#userDiv {
+	height: 50%;
+}
+tr {
+  margin:auto;
+}
+td {
+  text-align:left;
+  height:25px;
+  padding-top:20px;
+  width:40%;
+  padding-right:10px;
+}
+select {
+  height: 35px;
+  width: 213px;
 }
 
 .errorSelect {
@@ -53,14 +74,16 @@ body {
 }
 
 .button {
-	font-size: 16px;
+	font-size: 20px;
 	color: #ffffb3;
-	border-radius: 15px;
+	border-radius: 10px;
 	border: 2px solid black;
-	font-weight: bold;
 	background: #00b3b3;
 	cursor: pointer;
 	padding: 8px;
+  margin-top: 20px;
+  margin-bottom:20px;
+  width: 35%;
 }
 
 .ui-tooltip, .arrow:after {

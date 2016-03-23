@@ -8,8 +8,8 @@ chrome.runtime.onInstalled.addListener(function(details) {
 				var topPos = win.top + 70;
 		        chrome.windows.create({
 		            type: "popup",
-		            width: 610,
-		            height: 440,
+		            width: 400,
+		            height: 640,
 		            top: topPos,
 		            left: leftPos,
 		            focused: true
