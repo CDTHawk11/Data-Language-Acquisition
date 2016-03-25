@@ -4,12 +4,8 @@ $(document).ready(function() {
 			$("#email").css("border-color", "red");
 			return false;
 		}
-		if($("#occupation option:selected").val() === "") {
-			$("#occupation").addClass("errorSelect");
-			return false;
-		}
-		$("#page1").hide("slide", { direction: "left" }, 350);
-		$("#page2").show("slide", { direction: "right" }, 350);
+		$("#page1").fadeOut(1000);
+		$("#page2").fadeIn(1000);
 	});
 
 	$("#completeSetup").click(function() {
@@ -34,7 +30,7 @@ $(document).ready(function() {
 	    });
 		
 		$.ajax({
-			url : "http://ec2-52-35-34-105.us-west-2.compute.amazonaws.com:8080/translator/rest/user/save",
+			url : "http://localhost:8080/translator/rest/user/save",
 			type : "POST",
 	        data: JSON.stringify(jsonParameter),
 	        contentType: "application/json",

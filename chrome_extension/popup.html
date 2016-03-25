@@ -12,65 +12,89 @@
 	        table {
 			  text-align:center;
 			  display:inline-block;
-			  width:320px;
+			  width:480px;
 			}
 			td {
 			  text-align:left;
 			  height:25px;
-			  padding-top:20px;
-			  width:40%;
-			  padding-right:10px;
+			  padding:15px;
+			  font: normal 11pt 'Lucida Sans';
 			}
-			select {
-			  height: 35px;
-			  width: 213px;
-			}
-
 	        *:focus {
 			    outline: none;
 			}       
 			.button {
-				font-size: 13px;
-				color: #ffffb3;
-				border-radius: 10px;
-				/*border: 2px solid #00b3b3;
-				background: #00b3b3;*/
-				background:transparent;
+				font: normal 10pt 'Lucida Sans';
+				color: #ffff90;
+				border-radius: 5px;
+				border: 2px solid #00b3b3;
+				background: #00b3b3;
 				cursor: pointer;
-			  margin-bottom:20px;
-			  width: 30%;
-			  margin-left:25%;
-			  margin-top:4%;
-			  float:left;
+			    margin-bottom:10px;
+			    padding: 5px;
+			    width: 265px;
 			}
 			select {
-				width: 200px;
-				font-size: 15px;
-				border-radius: 10px;
+				width: 320px;
+				font-size: 10pt;
+				border-radius: 5px;
 				border: 2px solid #00b3b3;
 				padding: 5px;
+				font: normal 10pt 'Lucida Sans';
 			}            
 			#help {
-				height:60px;
-				width:107px;
+				height:38px;
+				width:38px;
+				border: 2px solid #00b3b3;
+				border-radius: 5px;
 				cursor:pointer; 
+				margin-left: 170px;
+				margin-top: 20px;
 			}
-			#banner {
-				height: 200px;
+			#heading {
+				padding-top: 22px;
+				font: normal 11pt 'Lucida Sans';
+				width: 100px;
+				float: left;
 			}
 			#icon {
-				height:80%;
+				height:150px;
+				width:150px;
+				float: left;
+			}
+			#heading div {
+				padding-bottom: 6px;
 			}
 			#on, #off {
-				height:33px;
-				width:77px;
+				height:35px;
+				width:80px;
 				cursor:pointer;
 				margin:auto;
-				padding-top:25px;
+				padding-bottom:20px;
+			}
+			#on {
+				padding-top:20px;
+			}
+			#off {
+				padding-top:17px;
+			}
+			#banner {
+				height:150px;
+			}
+			.question {
+				font: normal 9pt 'Lucida Sans';
+				float: left;
+				margin-left: 30px;
 			}
 			body {
 				color: #ffff90;
 				background-image: url("/words-bg.png");
+			}
+			#facebook, #twitter {
+				width: 122px;
+				height: 30px;
+				padding: 5px;
+				cursor:pointer; 
 			}
         </style>
     </head>
@@ -83,14 +107,15 @@
         <div id="application-progress"></div>
          -->
 
-         <div id="popup" class="page" style="text-align:center;">
+         <div id="popup" class="page">
 	    	<div id="banner">
-	           	<img id="icon" alt="speakeasy" src="/logo.png"/>     
-	    		<div id="heading"><strong>Effortless Language Learning </strong></div>
+	           	<img id="icon" alt="speakeasy" src="logo.png"/>     
+	    		<div id="heading"><div>Effortless</div><div>Language</div><div>Learning</div></div>
+	    		<img id="help" title="Help" alt="Help" src="help.png"/>
 	        </div>
 	        <div id="languageDiv" class="content">
 	        	<table border="0" cellspacing="0" cellpadding="0" class="form-table"><tbody>
-		        	<tr><td><strong>I'm learning</strong></td>
+		        	<tr><td>Now learning</td>
 		        		<td>
 		        <select name="target" id="target">
 		        	<option value="" selected="selected">Select target language</option>
@@ -103,7 +128,9 @@
 					<option value="fr">French</option>
 					<option value="de">German</option>
 					<option value="el">Greek</option>
+					<option value="hi">Hindi</option>
 					<option value="it">Italian</option>
+					<option value="ja">Japanese</option>
 					<option value="ko">Korean</option>
 					<option value="la">Latin</option>
 					<option value="pt">Portugese</option>
@@ -114,9 +141,9 @@
 				</select>
 				</td></tr>
 				
-				<tr><td><strong>At difficult level</strong></td><td>
+				<tr><td>At skill level</td><td>
 				<select name="difficulty" id="difficulty">
-		        	<option value="" selected="selected"></option>
+		        	<option value="" selected="selected">Select your expertise in target language</option>
 					<option class="difficultyDescription" title="No practical understanding of the language" value=3>No Proficiency - No practical understanding</option>
 					<option class="difficultyDescription" title="Understand familiar everyday expressions and very basic phrases in areas of immediate needs" value=7>Beginner - Understand very basic phrases</option>
 					<option class="difficultyDescription" title="Understand short conversations about basic survival needs and minimum courtesy" value=10>Elementary - Comprehend up to basic survival needs</option>
@@ -127,67 +154,72 @@
 				</select> </td></tr>
 
 	        	</tbody></table>
-<div style="text-align:center;">
-					<img id="on" title="Turn on translations" alt="Turn on translations" src="on.png" style="display: none;"/>
-					<img id="off" title="Turn off translations" alt="Turn off translations" src="off.png" style="display: inline-block;"/>
+				<div style="text-align:center;">
+					<img id="on" title="Turn off translations" alt="Turn on translations" src="on.png" style="display: none;"/>
+					<img id="off" title="Turn on translations" alt="Turn off translations" src="off.png" style="display: inline-block;"/>
 				</div>
+				<div style="text-align: center;">
+					<br/><br/> 
+					<input type="button" value="Tell us what you think" id="feedbackButton" class="button" />
+					<br/>
+					<img id="facebook" title="Share on Facebook" alt="Share on Facebook" src="facebook-share-button.png"/>
+					<img id="twitter" title="Share on Twitter" alt="Share on Twitter" src="twitter-share-button.png"/>
+					<br>			
+		        </div> 
 	    	</div>
-				
-		</div style="text-align:center">
-			
-			<br/><br/> 
-			<input type="button" value="Tell us what you think" id="feedbackButton" class="button" />
-			<img id="help" title="Help" alt="Help" src="help.png"/>
-			<br>			
-        </div> 
-        
- 	    <div id="feedbackDiv" style="display: none;">
- 	    <form name="feedbackForm" id="feedbackForm"> 	    
-    	<div class="question"> 1. Gender</p>
-			<ul class="answers">
-				<input type="radio" name="q1" value="a" id="q1a"><label for="q1a">Male</label><br/>
-				<input type="radio" name="q1" value="b" id="q1b"><label for="q1b">Female</label><br/>
-			</ul>
-		<div class="question">2. Age</div>
-			<ul class="answers">
-				<input type="radio" name="q2" value="a" id="q2a"><label for="q2a">18-29</label><br/>
-				<input type="radio" name="q2" value="b" id="q2b"><label for="q2b">30-49</label><br/>
-				<input type="radio" name="q2" value="c" id="q2c"><label for="q2c">50+</label><br/>
-			</ul>
-		<div class="question">3. Education</div>
-			<ul class="answers">
-				<input type="radio" name="q3" value="a" id="q3a"><label for="q3a">No College</label><br/>
-				<input type="radio" name="q3" value="b" id="q3b"><label for="q3b">Some College</label><br/>
-				<input type="radio" name="q3" value="c" id="q3c"><label for="q3c">Advanced Degree</label><br/>
-			</ul>
-		
-		<div class="question">4. Are the foreign words distracting?</div>
-			<ul class="answers">
-				<input type="radio" name="q4" value="a" id="q4a"><label for="q4a">Yes, very</label><br/>
-				<input type="radio" name="q4" value="b" id="q4b"><label for="q4b">A little, but manageable</label><br/>
-				<input type="radio" name="q4" value="c" id="q4c"><label for="q4c">Not distracting</label><br/>
-			</ul>
-		<div class="question">5. Are you able to determine the meaning of the new words?</div>
-			<ul class="answers">
-				<input type="radio" name="q5" value="a" id="q5a"><label for="q5a">Yes, with ease</label><br/>
-				<input type="radio" name="q5" value="b" id="q5b"><label for="q5b">Sort of--takes time</label><br/>
-				<input type="radio" name="q5" value="c" id="q5c"><label for="q5c">Not at all</label><br/>
-			</ul>
-		<div class="question">6. When would you prefer to use a learning technique like this?</div>
-			<ul class="answers">
-				<input type="radio" name="q6" value="a" id="q6a"><label for="q6a">From my desktop</label><br/>
-				<input type="radio" name="q6" value="b" id="q6b"><label for="q6b">From my phone</label><br/>
-				<input type="radio" name="q6" value="c" id="q6c"><label for="q6c">While reading an eBook</label><br/>	
-			</ul>
-		<div class="question">7. What do you like about this product?</div>
-			<textarea name='q7' id='q7' rows="4" cols="50" maxlength="100" wrap="soft"></textarea><br />
-  		<div class="question">8. What do you not like about this product?</div>
-			<textarea name='q8' id='q8' rows="4" cols="50" maxlength="100" wrap="soft"></textarea><br />		
-		<div class="question">9. How would you improve this product?</div>
-			<textarea name='q9' id='q9' rows="4" cols="50" maxlength="100" wrap="soft"></textarea><br />	
-		<br>
-		<input type="submit" value="Submit" class="button" /> 
-		</form>
+
+	 	    <div id="feedbackDiv" style="display: none;">
+		 	    <form name="feedbackForm" id="feedbackForm"> 	    
+		    	<div class="question"> 1. Gender
+					<ul class="answers">
+						<input type="radio" name="q1" value="a" id="q1a"><label for="q1a">Male</label><br/>
+						<input type="radio" name="q1" value="b" id="q1b"><label for="q1b">Female</label><br/>
+					</ul>
+				</div>
+				<div class="question">2. Age
+					<ul class="answers">
+						<input type="radio" name="q2" value="a" id="q2a"><label for="q2a">18-29</label><br/>
+						<input type="radio" name="q2" value="b" id="q2b"><label for="q2b">30-49</label><br/>
+						<input type="radio" name="q2" value="c" id="q2c"><label for="q2c">50+</label><br/>
+					</ul>
+				</div>
+				<div class="question">3. Education
+					<ul class="answers">
+						<input type="radio" name="q3" value="a" id="q3a"><label for="q3a">No College</label><br/>
+						<input type="radio" name="q3" value="b" id="q3b"><label for="q3b">Some College</label><br/>
+						<input type="radio" name="q3" value="c" id="q3c"><label for="q3c">Advanced Degree</label><br/>
+					</ul>
+				</div>
+				<div class="question">4. Are the foreign words distracting?
+					<ul class="answers">
+						<input type="radio" name="q4" value="a" id="q4a"><label for="q4a">Yes, very</label><br/>
+						<input type="radio" name="q4" value="b" id="q4b"><label for="q4b">A little, but manageable</label><br/>
+						<input type="radio" name="q4" value="c" id="q4c"><label for="q4c">Not distracting</label><br/>
+					</ul>
+				</div>
+				<div class="question">5. Are you able to determine the meaning of the new words?
+					<ul class="answers">
+						<input type="radio" name="q5" value="a" id="q5a"><label for="q5a">Yes, with ease</label><br/>
+						<input type="radio" name="q5" value="b" id="q5b"><label for="q5b">Sort of--takes time</label><br/>
+						<input type="radio" name="q5" value="c" id="q5c"><label for="q5c">Not at all</label><br/>
+					</ul>
+				</div>
+				<div class="question">6. When would you prefer to use a learning technique like this?
+					<ul class="answers">
+						<input type="radio" name="q6" value="a" id="q6a"><label for="q6a">From my desktop</label><br/>
+						<input type="radio" name="q6" value="b" id="q6b"><label for="q6b">From my phone</label><br/>
+						<input type="radio" name="q6" value="c" id="q6c"><label for="q6c">While reading an eBook</label><br/>	
+					</ul>
+				</div>
+				<div class="question" style="padding-bottom: 5px;">7. What do you like about this product?
+					<textarea name='q7' id='q7' rows="2" cols="50" maxlength="100" wrap="soft"></textarea></div>
+		  		<div class="question" style="padding-bottom: 5px;">8. What do you not like about this product?
+					<textarea name='q8' id='q8' rows="2" cols="50" maxlength="100" wrap="soft"></textarea></div>		
+				<div class="question">9. How would you improve this product?
+					<textarea name='q9' id='q9' rows="2" cols="50" maxlength="100" wrap="soft"></textarea></div>	
+				<input type="submit" value="Submit" class="button" style="margin-top: 15px; margin-left: 100px;" />
+				</form>
+			</div>
 		</div>
 	</body>
 </html>
