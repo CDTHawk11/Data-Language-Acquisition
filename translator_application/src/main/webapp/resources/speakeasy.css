@@ -14,7 +14,7 @@ body {
     height: 100%;
     width: 100%;
     background-image:url(/translator/resources/words-bg.png);
-    color: #ffff90;
+    color: #CFFFFF;
 }
 
 #page1 #icon {
@@ -44,6 +44,7 @@ body {
 
 #banner #heading {
 	font: normal 11pt 'Lucida Sans';
+	color: #ffff90;
 }
 
 input, select {
@@ -83,7 +84,7 @@ select {
 .button {
 	font: normal 13pt 'Lucida Sans';
 	width: 300px;
-	color: #ffffb3;
+	color: #ffff90;
 	border-radius: 10px;
 	border: 2px solid black;
 	background: #00b3b3;
@@ -99,7 +100,7 @@ select {
   }
   .ui-tooltip {
     padding: 10px 20px;
-    color: #ffffb3;
+    color: #ffff90;
     border-radius: 15px;
     font: bold 15px Sans-Serif, Arial;
     text-transform: inherit;
