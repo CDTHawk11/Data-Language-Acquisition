@@ -7,7 +7,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
-@DynamoDBTable(tableName="UserProfile")
+@DynamoDBTable(tableName="user")
 public class UserProfile implements Serializable {
 	private static final long serialVersionUID = 123456897L;
 	
@@ -51,7 +51,7 @@ public class UserProfile implements Serializable {
 	/**
 	 * @return the occupation
 	 */
-	@DynamoDBRangeKey(attributeName="occupation")
+	@DynamoDBAttribute(attributeName="occupation")
 	public String getOccupation() {
 		return occupation;
 	}
@@ -105,6 +105,8 @@ public class UserProfile implements Serializable {
 	public void setDifficulty(String difficulty) {
 		this.difficulty = difficulty;
 	}
+	
+	
 
 	@Override
 	public String toString() {

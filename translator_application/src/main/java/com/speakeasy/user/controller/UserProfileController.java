@@ -38,7 +38,8 @@ public class UserProfileController {
 	public @ResponseBody Map<String, String> saveProfile(
 			@RequestBody UserProfile userProfile) {
 		logger.info("Start saveProfile.");
-		UserProfileManager.createOrUpdateUser(userProfile);
+		UserProfileManager userProfileManager = new UserProfileManager();
+		userProfileManager.createOrUpdateUser(userProfile);
 		logger.info("Completed saveProfile.");
 		Map<String, String> returnMap = new HashMap<String, String>();
 		returnMap.put("message", "done");

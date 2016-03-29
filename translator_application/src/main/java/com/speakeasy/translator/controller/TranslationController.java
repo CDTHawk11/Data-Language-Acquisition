@@ -21,16 +21,25 @@ import com.speakeasy.translator.model.FeedbackRequest;
 import com.speakeasy.translator.model.TranslationRequest;
 import com.speakeasy.translator.service.FeedbackManager;
 import com.speakeasy.translator.service.TranslationManager;
+import com.speakeasy.translator.service.UserProfileManager;
 
 /**
  * Handles requests for the Translation service.
  * 
  * @author Suman Majumder
+ *  any request comes, come here.
+ *  a pool of thread 
+ *  need to test if each 
+ *  make sure no object 
  *
  */
 @Controller
 public class TranslationController {
 
+	//UserProfileManager userProfileManager = new UserProfileManager();
+	// Declear it in a new thread, not outside of the thread.
+	
+	
 	private static final Logger logger = LoggerFactory.getLogger(TranslationController.class);
 
 	// Map to store employees, ideally we should use database
@@ -49,27 +58,65 @@ public class TranslationController {
 		return translationData;
 	}
 
+	
 	@RequestMapping(value = TranslatorRestURIConstants.GET_TRANSLATION, method = RequestMethod.GET)
 	public @ResponseBody Map<String, String> getTranslation(
 			@PathVariable("word") String q,
 			@PathVariable("target") String target) {
+		
+		//Thread thread = new Thread();
+		
 		logger.info("Start getTranslation. Word=" + q);
+		System.out.println("Start getTranslation. Word=" + q);
 		List<String> wordsToTranslate = new ArrayList<String>();
 		wordsToTranslate.add(q);
 		translationData = TranslationManager.translate(wordsToTranslate, target);
 		return translationData;
 	}
-
+	
+	// search translation
+	// call method in uerprofileManager in separate thread
+	// UserProfileManager.
+	
+	// changed it to final
 	@RequestMapping(value = TranslatorRestURIConstants.TRANSLATE, method = RequestMethod.POST)
 	public @ResponseBody Map<String, String> searchTranslations(
-			@RequestBody TranslationRequest request,
-			@PathVariable("target") String target) {
+			@RequestBody final TranslationRequest request,
+			@PathVariable("target") final String target) {
+		
+		
+
+		Thread insertUserOrigThread = new Thread() {
+		    public void run() {
+		    	String email = "ilyliberty@gmail.com";
+		    	String origLang = "en";
+		    	UserProfileManager userProfileManager = new UserProfileManager();
+		    	userProfileManager.createOrUpdateUserOrig(email, request.getQ(), origLang);
+		    }
+		};
+		insertUserOrigThread.start();
+
+		
 		logger.info("Start searchTranslations.");
+		System.out.println("Start searchTranslations.");
 		translationData = TranslationManager.translate(request.getQ(), target);
 		logger.info("Obtained translationsin searchTranslations." + translationData.toString());
+	
+		
+		Thread insertUserTransThread = new Thread(){
+			public void run(){
+				String email = "email";
+				String origLang = "target";
+				UserProfileManager userProfileManager = new UserProfileManager();
+				userProfileManager.createOrUpdateUserTrans(email, translationData, target);
+			}
+		};
+		insertUserTransThread.start();
+		
 		return translationData;
 	}
-	
+
+
 	@RequestMapping(value = TranslatorRestURIConstants.SUBMIT_FEEDBACK, method = RequestMethod.POST)
 	public @ResponseBody Map<String, String> submitFeedback(
 			@RequestBody FeedbackRequest feedbackForm) {
@@ -81,3 +128,11 @@ public class TranslationController {
 		return returnMap;
 	}
 }
+
+/*
+class OperateTalbes{
+	
+}*/
+
+
+

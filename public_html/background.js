@@ -15,7 +15,7 @@ chrome.runtime.onInstalled.addListener(function(details) {
 		            focused: true
 		        }, function(window) {
 		        	chrome.tabs.create({
-		                url: "http://ec2-52-35-34-105.us-west-2.compute.amazonaws.com:8080/translator/rest/user/profile",
+		                url: "http://localhost:8080/translator/rest/user/profile",
 		                windowId: window.id
 		            });
 		        });
@@ -72,7 +72,8 @@ function getTranslations(request, sender, sendResponse) {
 
 function translate(original_text, dfrd) {
 	var jsonParameter = {"q":original_text};
-	var targetURL = "http://ec2-52-35-34-105.us-west-2.compute.amazonaws.com:8080/translator/rest/trans/";
+	//var targetURL = "http://ec2-52-35-34-105.us-west-2.compute.amazonaws.com:8080/translator/rest/trans/";
+	var targetURL = "http://localhost:8080/translator/rest/trans/";
 	
     chrome.storage.sync.get("TRAN_TARGET", function (obj) {
     	if (!(obj["TRAN_TARGET"]) || obj["TRAN_TARGET"] == "") {
