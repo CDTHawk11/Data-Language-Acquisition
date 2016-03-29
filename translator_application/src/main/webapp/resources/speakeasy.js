@@ -1,13 +1,4 @@
 $(document).ready(function() {
-	$("#next").click(function() {
-		if($("#email").val() === "") {
-			$("#email").css("border-color", "red");
-			return false;
-		}
-		$("#page1").fadeOut(1000);
-		$("#page2").fadeIn(1000);
-	});
-
 	$("#completeSetup").click(function() {
 		if($("#current option:selected").val() === "") {
 			$("#current").addClass("errorSelect");

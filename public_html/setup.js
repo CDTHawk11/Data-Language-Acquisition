@@ -19,4 +19,17 @@ $(document).ready(function() {
 		chrome.storage.sync.set({"TRAN_LEVEL":$("#difficulty option:selected").val()}, function() {
 		});
 	});
+
+	// Save the Email ID on user's PC
+	$("#next").click(function() {
+		if($("#email").val() === "") {
+			$("#email").css("border-color", "red");
+			return false;
+		}
+		chrome.storage.sync.set({"TRAN_USER_EMAIL":$("#email").val()}, function() {
+		});
+		$("#page1").fadeOut(1000);
+		$("#page2").fadeIn(1000);
+	});
+
 });

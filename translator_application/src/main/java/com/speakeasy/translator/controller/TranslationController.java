@@ -83,39 +83,31 @@ public class TranslationController {
 	public @ResponseBody Map<String, String> searchTranslations(
 			@RequestBody final TranslationRequest request,
 			@PathVariable("target") final String target) {
-		
-		
 
 		Thread insertUserOrigThread = new Thread() {
 		    public void run() {
-		    	String email = "ilyliberty@gmail.com";
-		    	String origLang = "en";
+		    	String origLang = "en"; 
 		    	UserProfileManager userProfileManager = new UserProfileManager();
-		    	userProfileManager.createOrUpdateUserOrig(email, request.getQ(), origLang);
+		    	userProfileManager.createOrUpdateUserOrig(request.getEmail(), request.getQ(), origLang);
 		    }
 		};
 		insertUserOrigThread.start();
-
 		
 		logger.info("Start searchTranslations.");
 		System.out.println("Start searchTranslations.");
 		translationData = TranslationManager.translate(request.getQ(), target);
 		logger.info("Obtained translationsin searchTranslations." + translationData.toString());
-	
 		
 		Thread insertUserTransThread = new Thread(){
 			public void run(){
-				String email = "email";
-				String origLang = "target";
 				UserProfileManager userProfileManager = new UserProfileManager();
-				userProfileManager.createOrUpdateUserTrans(email, translationData, target);
+				userProfileManager.createOrUpdateUserTrans(request.getEmail(), translationData, target);
 			}
 		};
 		insertUserTransThread.start();
 		
 		return translationData;
 	}
-
 
 	@RequestMapping(value = TranslatorRestURIConstants.SUBMIT_FEEDBACK, method = RequestMethod.POST)
 	public @ResponseBody Map<String, String> submitFeedback(

@@ -71,8 +71,17 @@ function getTranslations(request, sender, sendResponse) {
 }
 
 function translate(original_text, dfrd) {
-	var jsonParameter = {"q":original_text};
-	//var targetURL = "http://ec2-52-35-34-105.us-west-2.compute.amazonaws.com:8080/translator/rest/trans/";
+	var jsonParameter = {};
+	
+    chrome.storage.sync.get("TRAN_USER_EMAIL", function (emailObj) {
+    	if (!(emailObj["TRAN_USER_EMAIL"]) || emailObj["TRAN_USER_EMAIL"] == "") {
+    		return false;
+    	} else {
+    		userEmail = emailObj["TRAN_USER_EMAIL"];
+    		jsonParameter = {"q":original_text, "email":userEmail};
+    	}
+    });
+    
 	var targetURL = "http://localhost:8080/translator/rest/trans/";
 	
     chrome.storage.sync.get("TRAN_TARGET", function (obj) {
@@ -80,7 +89,9 @@ function translate(original_text, dfrd) {
     		return false;
     	} else {
     		targetURL = targetURL + obj["TRAN_TARGET"];
+    		
     		setVoice(obj["TRAN_TARGET"]);
+
     	    $.ajax({
     	        type: "POST",
     	        url: targetURL,
@@ -96,8 +107,7 @@ function translate(original_text, dfrd) {
     	        }
     	    });
     	}
-    });
-	
+    });	
 }
 
 function setVoice(targetLang) {
