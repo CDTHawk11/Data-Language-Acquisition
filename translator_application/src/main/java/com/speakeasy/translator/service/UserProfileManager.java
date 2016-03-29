@@ -158,9 +158,4 @@ public class UserProfileManager {
 		}
 		return wordCount;
 	}
-	
-	
-	// write operation, inseration, update, reading, 
-	
-	//two method, write operations, 
 }
