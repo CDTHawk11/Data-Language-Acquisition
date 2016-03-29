@@ -4,12 +4,8 @@ $(document).ready(function() {
 			$("#email").css("border-color", "red");
 			return false;
 		}
-		if($("#occupation option:selected").val() === "") {
-			$("#occupation").addClass("errorSelect");
-			return false;
-		}
-		$("#page1").hide("slide", { direction: "left" }, 350);
-		$("#page2").show("slide", { direction: "right" }, 350);
+		$("#page1").fadeOut(1000);
+		$("#page2").fadeIn(1000);
 	});
 
 	$("#completeSetup").click(function() {

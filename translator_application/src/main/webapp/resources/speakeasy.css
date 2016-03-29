@@ -1,7 +1,7 @@
 body {
 	border: 0;
 	margin: 0;
-    font: normal normal 17px Arial;
+    font: normal normal 11pt 'Lucida Sans';
 }
 
 *:focus {
@@ -13,45 +13,54 @@ body {
 	position: fixed;
     height: 100%;
     width: 100%;
+    background-image:url(/translator/resources/words-bg.png);
+    color: #CFFFFF;
 }
 
-
-#page1 {
-  color: #ffff90;
-  padding-bottom: 180px;
-  background-image:url(/translator/resources/words-bg.png);
+#page1 #icon {
+	height:300px;
+	width:300px;
 }
 
-.page .content {
-	padding-left: 10px;
+#page2 #icon {
+	height:150px;
+	width:150px;
+	float: left;
+	padding-left: 125px;
 }
 
-#icon {
-	height:80%;
+#page1 #banner {
+	height: 375px;
 }
 
-#banner {
-	height: 40%;
+#page2 #heading {
+	text-align: left;
+	padding-top: 20px;
+}
+
+#page2 #heading div {
+	padding-bottom: 6px;
 }
 
 #banner #heading {
-	font: normal 15px 'Arial';
+	font: normal 11pt 'Lucida Sans';
+	color: #ffff90;
 }
 
 input, select {
-	width: 200px;
-	font-size: 15px;
+	font: normal 10pt 'Lucida Sans';
 	border-radius: 5px;
 	border: 2px solid #00b3b3;
 	padding: 5px;
+	width: 250px;
 }
 table {
   text-align:center;
   display:inline-block;
 
 }
-#userDiv {
-	height: 50%;
+#userDiv div {
+	padding-top: 10px;
 }
 tr {
   margin:auto;
@@ -60,12 +69,11 @@ td {
   text-align:left;
   height:25px;
   padding-top:20px;
-  width:40%;
   padding-right:10px;
 }
 select {
   height: 35px;
-  width: 213px;
+  width: 265px;
 }
 
 .errorSelect {
@@ -74,16 +82,16 @@ select {
 }
 
 .button {
-	font-size: 20px;
-	color: #ffffb3;
+	font: normal 13pt 'Lucida Sans';
+	width: 300px;
+	color: #ffff90;
 	border-radius: 10px;
 	border: 2px solid black;
 	background: #00b3b3;
 	cursor: pointer;
-	padding: 8px;
-  margin-top: 20px;
-  margin-bottom:20px;
-  width: 35%;
+	padding: 10px;
+	margin-top: 25px;
+	margin-bottom:20px;
 }
 
 .ui-tooltip, .arrow:after {
@@ -92,7 +100,7 @@ select {
   }
   .ui-tooltip {
     padding: 10px 20px;
-    color: #ffffb3;
+    color: #ffff90;
     border-radius: 15px;
     font: bold 15px Sans-Serif, Arial;
     text-transform: inherit;

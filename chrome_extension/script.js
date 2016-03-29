@@ -98,6 +98,14 @@ $(document).ready(function() {
 		window.open("http://spkeasy.weebly.com/help-page.html","_blank");
 	});
 	
+	$("#facebook").click(function() {
+		window.open("http://facebook.com/speakeasylanguagelearning","_blank");
+	});
+
+	$("#twitter").click(function() {
+		window.open("http://twitter.com/speakeasyell","_blank");
+	});
+
 	$(".difficultyDescription").tooltip({
 	      position: {
 	          my: "center bottom-15",
