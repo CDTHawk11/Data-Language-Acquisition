@@ -72,22 +72,7 @@ function getTranslations(request, sender, sendResponse) {
 
 function translate(original_text, dfrd) {
 	var jsonParameter = {};
-	
-    chrome.storage.sync.get("TRAN_USER_EMAIL", function (emailObj) {
-    	if (!(emailObj["TRAN_USER_EMAIL"]) || emailObj["TRAN_USER_EMAIL"] == "") {
-    		return false;
-    	} else {
-    		userEmail = emailObj["TRAN_USER_EMAIL"];
-    		var sourceLang;
-    		chrome.tabs.getSelected(null, function(tab) {
-    			  chrome.tabs.detectLanguage(tab.id, function(language) {
-    				  sourceLang = language;
-    			  });
-    		});
-    		jsonParameter = {"q":original_text, "email":userEmail, "sourceLang":sourceLang};
-    	}
-    });
-    
+	    
 	var targetURL = "http://ec2-52-35-34-105.us-west-2.compute.amazonaws.com:8080/translator/rest/trans/";
 	
     chrome.storage.sync.get("TRAN_TARGET", function (obj) {
@@ -97,21 +82,38 @@ function translate(original_text, dfrd) {
     		targetURL = targetURL + obj["TRAN_TARGET"];
     		
     		setVoice(obj["TRAN_TARGET"]);
-    		
-    	    $.ajax({
-    	        type: "POST",
-    	        url: targetURL,
-    	        data: JSON.stringify(jsonParameter),
-    	        contentType: "application/json",
-    	        headers: {"Accept": "application/json"},
-    	        dataType: "json",
-    	        success: function (result, status, xhr) {
-    	               dfrd.resolve(result);
-    	        },
-    	        error: function (xhr, status, errorMsg) {
-    	            console.log(xhr.status + "::" + xhr.statusText + "::" + xhr.responseText);
-    	        }
+
+    	    chrome.storage.sync.get("TRAN_USER_EMAIL", function (emailObj) {
+    	    	if (!(emailObj["TRAN_USER_EMAIL"]) || emailObj["TRAN_USER_EMAIL"] == "") {
+    	    		return false;
+    	    	} else {
+    	    		userEmail = emailObj["TRAN_USER_EMAIL"];
+    	    		var sourceLang;
+    	    		chrome.tabs.getSelected(null, function(tab) {
+    	    			  chrome.tabs.detectLanguage(tab.id, function(language) {
+    	    		    		console.log(language);
+    	    				  	jsonParameter = {"q":original_text, "email":userEmail, "sourceLang":language};
+ 
+    	    		    		$.ajax({
+    	    		    	        type: "POST",
+    	    		    	        url: targetURL,
+    	    		    	        data: JSON.stringify(jsonParameter),
+    	    		    	        contentType: "application/json",
+    	    		    	        headers: {"Accept": "application/json"},
+    	    		    	        dataType: "json",
+    	    		    	        success: function (result, status, xhr) {
+    	    		    	               dfrd.resolve(result);
+    	    		    	        },
+    	    		    	        error: function (xhr, status, errorMsg) {
+    	    		    	            console.log(xhr.status + "::" + xhr.statusText + "::" + xhr.responseText);
+    	    		    	        }
+    	    		    	    });
+
+    	    			  });
+    	    		});
+    	    	}
     	    });
+
     	}
     });	
 }
