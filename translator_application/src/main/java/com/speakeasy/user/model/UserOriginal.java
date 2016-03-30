@@ -8,12 +8,12 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
 @DynamoDBTable(tableName="user_orig")
-public class UserOriginal implements Serializable {
+public class UserOriginal implements Serializable, Comparable<UserOriginal> {
 	private static final long serialVersionUID = 999000000L;
 	
 	private String email;
 	private String langWord;
-	private Integer count;
+	private Integer freq;
 
 	/**
 	 * @return the email
@@ -48,20 +48,32 @@ public class UserOriginal implements Serializable {
 	/**
 	 * @return the count
 	 */
-	@DynamoDBAttribute(attributeName="count")
-	public int getCount() {
-		return count;
+	@DynamoDBAttribute(attributeName="freq")
+	public int getFreq() {
+		return freq;
 	}
 
 	/**
 	 * @param count
 	 */
-	public void setCount(int count) {
-		this.count = new Integer(count);
+	public void setFreq(int freq) {
+		this.freq = new Integer(freq);
 	}
 
 	@Override
 	public String toString() {
-		return "UserOriginal [email=" + email + ", langWord=" + langWord + ", count=" + count + "]";
+		return "UserOriginal [email=" + email + ", langWord=" + langWord + ", freq=" + freq + "]";
+	}
+
+	@Override
+	public int compareTo(UserOriginal arg0) {
+		// TODO Auto-generated method stub
+		if(this.getFreq() > arg0.getFreq()){
+			return 1;
+		}else if(this.getFreq() == arg0.getFreq()){
+			return -1;
+		}else{
+			return 0;
+		}
 	}
 }

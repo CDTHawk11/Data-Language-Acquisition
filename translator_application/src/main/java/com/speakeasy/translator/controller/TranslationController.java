@@ -17,11 +17,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.speakeasy.translator.model.FeedbackRequest;
 import com.speakeasy.translator.model.TranslationRequest;
 import com.speakeasy.translator.service.FeedbackManager;
 import com.speakeasy.translator.service.TranslationManager;
 import com.speakeasy.translator.service.UserProfileManager;
+import com.speakeasy.user.model.UserOriginal;
 
 /**
  * Handles requests for the Translation service.
@@ -84,6 +87,8 @@ public class TranslationController {
 			@RequestBody final TranslationRequest request,
 			@PathVariable("target") final String target) {
 
+		
+		
 		Thread insertUserOrigThread = new Thread() {
 		    public void run() {
 		    	String origLang = "en"; 
@@ -93,9 +98,22 @@ public class TranslationController {
 		};
 		insertUserOrigThread.start();
 		
+		for(String str : request.getQ()){
+			System.out.println(str + "request");
+		}
+		
+		
 		logger.info("Start searchTranslations.");
 		System.out.println("Start searchTranslations.");
-		translationData = TranslationManager.translate(request.getQ(), target);
+		
+		UserProfileManager userProfileManager = new UserProfileManager();
+		List<String> wordsToTranslate = userProfileManager.getWordsToTranslate(30, 5);
+		for(String str : wordsToTranslate){
+			System.out.println(str + "\t");
+		}
+		
+		//translationData = TranslationManager.translate(request.getQ(), target);
+		translationData = TranslationManager.translate(wordsToTranslate, target);
 		logger.info("Obtained translationsin searchTranslations." + translationData.toString());
 		
 		Thread insertUserTransThread = new Thread(){

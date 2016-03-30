@@ -1,8 +1,10 @@
 package com.speakeasy.translator.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +14,8 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperConfig;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.speakeasy.user.model.UserOriginal;
 import com.speakeasy.user.model.UserProfile;
 import com.speakeasy.user.model.UserTrans;
@@ -47,7 +51,7 @@ public class UserProfileManager {
 		if(item == null){
 			dynamoDBMapper.save(userOriginal);
 		}else{
-			userOriginal.setCount(userOriginal.getCount() + item.getCount());
+			userOriginal.setFreq(userOriginal.getFreq() + item.getFreq());
 			dynamoDBMapper.save(userOriginal);
 		}
 	}
@@ -62,7 +66,7 @@ public class UserProfileManager {
 		for(String str : wordCount.keySet()){
 			userOriginal.setEmail(email);
 			userOriginal.setLangWord(origLang + "_" + str);
-			userOriginal.setCount(wordCount.get(str));
+			userOriginal.setFreq(wordCount.get(str));
 			createOrUpdateUserOrig(userOriginal);
 		}
 	}
@@ -89,7 +93,7 @@ public class UserProfileManager {
 		if(item == null){
 			dynamoDBMapper.save(userTrans);
 		}else{
-			userTrans.setCount(userTrans.getCount() + item.getCount());
+			userTrans.setFreq(userTrans.getFreq() + item.getFreq());
 			dynamoDBMapper.save(userTrans);
 		}
 	}
@@ -105,7 +109,7 @@ public class UserProfileManager {
 		for(String str : wordCount.keySet()){
 			userTrans.setEmail(email);
 			userTrans.setLangWord(transLang + "_" + str);
-			userTrans.setCount(wordCount.get(str));
+			userTrans.setFreq(wordCount.get(str));
 			createOrUpdateUserTrans(userTrans);
 		}
 	}
@@ -131,6 +135,41 @@ public class UserProfileManager {
 		return dynamoDBMapper;
 	}
 	 
+	
+	/*
+	 * return words in the user_orig to be translated
+	 */
+	public List<String> getWordsToTranslate(int threshold, int extra){
+		DynamoDBMapper dynamoDBMapper = getMapper();
+
+    	HashMap<String, AttributeValue> eav = new HashMap<String, AttributeValue>();
+    	eav.put(":v1", new AttributeValue().withN("1"));
+    	       
+    	DynamoDBScanExpression scanExpression = new DynamoDBScanExpression();
+    	/*
+    	    .withFilterExpression("freq >= :v1")
+    	    .withExpressionAttributeValues(eav);*/
+    	List<UserOriginal> replies =  dynamoDBMapper.scan(UserOriginal.class, scanExpression);
+    	
+    	List<String> result = new ArrayList<String>();
+    	
+    	PriorityQueue<UserOriginal> backup = new PriorityQueue<UserOriginal>();
+    	for(UserOriginal uo : replies){
+    		if(uo.getFreq() >= threshold){
+    			result.add(uo.getLangWord().split("_")[1]);
+    		}else{
+    			backup.offer(uo);
+    		}
+    	}
+    	while(!backup.isEmpty() && extra > 0){
+    		System.out.println("extra: " + extra + "\t" + backup.peek().getLangWord());
+    		result.add(backup.poll().getLangWord().split("_")[1]);
+    		--extra;
+    	}
+		return result;
+	}
+
+	
 	
 	/*
 	 * count occurrence of each word

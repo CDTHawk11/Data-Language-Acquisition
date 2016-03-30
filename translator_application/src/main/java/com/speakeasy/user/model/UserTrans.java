@@ -13,7 +13,7 @@ public class UserTrans implements Serializable {
 	
 	private String email;
 	private String langWord;
-	private Integer count;
+	private Integer freq;
 
 	/**
 	 * @return the email
@@ -48,20 +48,20 @@ public class UserTrans implements Serializable {
 	/**
 	 * @return the count
 	 */
-	@DynamoDBAttribute(attributeName="count")
-	public int getCount() {
-		return count;
+	@DynamoDBAttribute(attributeName="freq")
+	public int getFreq() {
+		return freq;
 	}
 
 	/**
 	 * @param count
 	 */
-	public void setCount(int count) {
-		this.count = new Integer(count);
+	public void setFreq(int freq) {
+		this.freq = new Integer(freq);
 	}
 
 	@Override
 	public String toString() {
-		return "UserTrans [email=" + email + ", langWord=" + langWord + ", count=" + count + "]";
+		return "UserTrans [email=" + email + ", langWord=" + langWord + ", freq=" + freq + "]";
 	}
 }
