@@ -12,8 +12,6 @@ import org.slf4j.LoggerFactory;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperConfig;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.speakeasy.user.model.UserOriginal;
@@ -58,7 +56,6 @@ public class UserProfileManager {
 	
 	
 	public void createOrUpdateUserOrig(String email, List<String> origList, String origLang){
-		DynamoDBMapper dynamoDBMapper = getMapper();
 		logger.info("Saving in createUpdateUserOrig .. " + "request list");
 		Map<String, Integer> wordCount = countWordNumber(origList);
 		UserOriginal userOriginal = new UserOriginal();
@@ -100,7 +97,6 @@ public class UserProfileManager {
 	
 	
 	public void createOrUpdateUserTrans(String email, Map<String, String> transList, String transLang){
-		DynamoDBMapper dynamoDBMapper = getMapper();
 		Map<String, Integer> wordCount = countWordNumber(transList);
 		logger.info("Saving in createUpdateUserTrans .. " + "request list");
 		
@@ -128,9 +124,9 @@ public class UserProfileManager {
 	 * get mapper instance
 	 */
 	public DynamoDBMapper getMapper(){
-		//AmazonDynamoDBClient client = new AmazonDynamoDBClient().withRegion(Regions.US_WEST_2);
-		AmazonDynamoDBClient client = new AmazonDynamoDBClient();
-		client.setEndpoint("http://localhost:8000");
+		AmazonDynamoDBClient client = new AmazonDynamoDBClient().withRegion(Regions.US_WEST_2);
+		//AmazonDynamoDBClient client = new AmazonDynamoDBClient();
+		//client.setEndpoint("http://localhost:8000");
 		DynamoDBMapper dynamoDBMapper = new DynamoDBMapper(client);
 		return dynamoDBMapper;
 	}

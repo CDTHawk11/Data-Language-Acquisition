@@ -78,7 +78,13 @@ function translate(original_text, dfrd) {
     		return false;
     	} else {
     		userEmail = emailObj["TRAN_USER_EMAIL"];
-    		jsonParameter = {"q":original_text, "email":userEmail};
+    		var sourceLang;
+    		chrome.tabs.getSelected(null, function(tab) {
+    			  chrome.tabs.detectLanguage(tab.id, function(language) {
+    				  sourceLang = language;
+    			  });
+    		});
+    		jsonParameter = {"q":original_text, "email":userEmail, "sourceLang":sourceLang};
     	}
     });
     
@@ -91,7 +97,7 @@ function translate(original_text, dfrd) {
     		targetURL = targetURL + obj["TRAN_TARGET"];
     		
     		setVoice(obj["TRAN_TARGET"]);
-
+    		
     	    $.ajax({
     	        type: "POST",
     	        url: targetURL,

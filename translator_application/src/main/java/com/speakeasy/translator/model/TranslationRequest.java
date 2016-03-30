@@ -15,6 +15,8 @@ public class TranslationRequest implements Serializable {
     
     private List<String> q;
     private String email;
+    private String sourceLang;
+    
     
     public List<String> getQ() {
         return q;
@@ -33,5 +35,17 @@ public class TranslationRequest implements Serializable {
 	 */
 	public void setEmail(String email) {
 		this.email = email;
+	}
+	/**
+	 * @return the sourceLang
+	 */
+	public String getSourceLang() {
+		return sourceLang;
+	}
+	/**
+	 * @param sourceLang the sourceLang to set
+	 */
+	public void setSourceLang(String sourceLang) {
+		this.sourceLang = sourceLang;
 	}
 }
