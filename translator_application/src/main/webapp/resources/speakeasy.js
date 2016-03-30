@@ -13,13 +13,15 @@ $(document).ready(function() {
 			return false;
 		}
 
+		window.open("http://spkeasy.weebly.com/help-page.html");
+
 		var array = $("#userProfileForm").serializeArray();
 		var jsonParameter = {};
 		
 		jQuery.each(array, function() {
 			jsonParameter[this.name] = this.value || '';
 	    });
-		
+
 		$.ajax({
 			url : "http://ec2-52-35-34-105.us-west-2.compute.amazonaws.com:8080/translator/rest/user/save",
 			type : "POST",
@@ -29,7 +31,6 @@ $(document).ready(function() {
 			success: function(result, status, xhr) {
 				if(result["message"] && result["message"] == "done") {
 					window.close();
-					window.open("http://spkeasy.weebly.com/help-page.html");
 				}
 			},
 			error: function (xhr, status, errorMsg) {
