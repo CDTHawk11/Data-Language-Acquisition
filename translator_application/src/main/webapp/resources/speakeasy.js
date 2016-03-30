@@ -1,6 +1,5 @@
 $(document).ready(function() {
 	$("#completeSetup").click(function() {
-		window.open("http://spkeasy.weebly.com/help-page.html");
 		if($("#current option:selected").val() === "") {
 			$("#current").addClass("errorSelect");
 			return false;
@@ -30,6 +29,7 @@ $(document).ready(function() {
 			success: function(result, status, xhr) {
 				if(result["message"] && result["message"] == "done") {
 					window.close();
+					window.open("http://spkeasy.weebly.com/help-page.html");
 				}
 			},
 			error: function (xhr, status, errorMsg) {
