@@ -1,5 +1,9 @@
 $(document).ready(function() {
 	$("#completeSetup").click(function() {
+		if($("#occupation option:selected").val() === "") {
+			$("#occupation").addClass("errorSelect");
+			return false;
+		}
 		if($("#current option:selected").val() === "") {
 			$("#current").addClass("errorSelect");
 			return false;
