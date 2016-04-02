@@ -98,6 +98,12 @@ public class TranslationController {
 		UserProfileManager userProfileManager = new UserProfileManager();
 		List<String> wordsToTranslate = userProfileManager.getWordsToTranslate(30, 5);
 		
+		if(wordsToTranslate.size() == 0){
+			wordsToTranslate.addAll(request.getQ());
+		}
+		if(wordsToTranslate.size() == 0){
+			wordsToTranslate.add("a");
+		}
 		//translationData = TranslationManager.translate(request.getQ(), target);
 		translationData = TranslationManager.translate(wordsToTranslate, target);
 		logger.info("Obtained translationsin searchTranslations." + translationData.toString());
