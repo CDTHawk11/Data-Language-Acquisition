@@ -93,10 +93,10 @@ public class TranslationController {
 		};
 		insertUserOrigThread.start();
 				
-		logger.info("Start searchTranslations.");
+		logger.info("Start searchTranslations with language immersion limit .. " + request.getTranLimit());
 		
 		UserProfileManager userProfileManager = new UserProfileManager();
-		List<String> wordsToTranslate = userProfileManager.getWordsToTranslate(30, 5);
+		List<String> wordsToTranslate = userProfileManager.getWordsToTranslate(30, request.getTranLimit());
 		
 		//translationData = TranslationManager.translate(request.getQ(), target);
 		translationData = TranslationManager.translate(wordsToTranslate, target);

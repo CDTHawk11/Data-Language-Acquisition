@@ -16,6 +16,7 @@ public class TranslationRequest implements Serializable {
     private List<String> q;
     private String email;
     private String sourceLang;
+    private int tranLimit;
     
     
     public List<String> getQ() {
@@ -47,5 +48,17 @@ public class TranslationRequest implements Serializable {
 	 */
 	public void setSourceLang(String sourceLang) {
 		this.sourceLang = sourceLang;
+	}
+	/**
+	 * @return the tranLimit
+	 */
+	public int getTranLimit() {
+		return tranLimit;
+	}
+	/**
+	 * @param tranLimit the tranLimit to set
+	 */
+	public void setTranLimit(int tranLimit) {
+		this.tranLimit = tranLimit;
 	}
 }

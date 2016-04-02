@@ -6,7 +6,6 @@
         <script type="text/javascript" src="jquery-1.11.3.min.js"></script>
         <script type="text/javascript" src="jquery-ui.min.js"></script>
         <script type="text/javascript" src="script.js"></script>
-        <!-- <script type="text/javascript" src="slider-bar.js"></script> -->
         <link rel="stylesheet" href="jquery-ui.css">
         <style>
 	        table {
@@ -98,17 +97,32 @@
 				padding: 5px;
 				cursor:pointer; 
 			}
+			#application-progress {
+			    float: left;
+			    clear: left;
+			    width: 437px;
+			    height: 10px; 
+			    margin-top: 10px;
+			    margin-bottom: 10px;
+			    border-radius: 5px;
+			    border: 1px solid #00b3b3;
+			    background-color: #00b3b3;
+			}
+			#application-progress .ui-slider-handle { 
+				background: #ffff90;
+				cursor: pointer; 
+			}
+			#progress {
+				font: bold 11pt 'Lucida Sans';
+				border: none;
+				padding-left: 15px;
+				width: 40px;
+				background: transparent;
+				color: #ffff90;
+			}
         </style>
     </head>
     <body>
-    	<!-- 
-        <div>
-            <label for="progress">Limit Translation</label>
-            <input type="text" id="progress" readonly style="border:0; color:#9e3f1a; font-weight:bold;">
-        </div>
-        <div id="application-progress"></div>
-         -->
-
          <div id="popup" class="page">
 	    	<div id="banner">
 	           	<img id="icon" alt="speakeasy" src="logo.png"/>     
@@ -176,17 +190,14 @@
 					</td>
 				</tr>
 				
-				<tr><td>At skill level</td><td>
-				<select name="difficulty" id="difficulty">
-		        	<option value="" selected="selected">Select your expertise in target language</option>
-					<option class="difficultyDescription" title="No practical understanding of the language" value=3>No Proficiency - No practical understanding</option>
-					<option class="difficultyDescription" title="Understand familiar everyday expressions and very basic phrases in areas of immediate needs" value=7>Beginner - Understand very basic phrases</option>
-					<option class="difficultyDescription" title="Understand short conversations about basic survival needs and minimum courtesy" value=10>Elementary - Comprehend up to basic survival needs</option>
-					<option class="difficultyDescription" title="Can deal with most situations likely to arise while traveling in area where the language is spoken" value=15>Threshold - Understand matters regularly encountered</option>
-					<option class="difficultyDescription" title="Understand the essentials of all speech, including technical discussions in one's field of specialization" value=20>Intermediate - Conversational in face-to-face dialogue</option> 	
-					<option class="difficultyDescription" title="Express fluently and spontaneously without much obvious searching for expressions" value=30>Operational - Use language flexibly and effectively</option> 	
-					<option class="difficultyDescription" title="Can understand virtually everything heard or read" value=50>Advanced - Expert comprehension proficiency</option> 	
-				</select> </td></tr>
+				<tr><td colspan="2">
+			        <div>
+			            <label for="progress">At a language immersion throughput</label>
+			            <input type="text" id="progress" readonly />
+			        </div>
+			        <div id="application-progress"></div>
+			        <div style="clear:both; font-size: 7pt;">Change the number of unique words that will be introduced as you advance in your learning path</div>
+				</td></tr>
 
 	        	</tbody></table>
 				<div style="text-align:center;">

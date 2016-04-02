@@ -1,5 +1,38 @@
 $(document).ready(function() {
-	
+
+	var tranLimit = 5;
+
+	chrome.storage.sync.get("TRAN_LIMIT", function(limit) {
+
+		if (!(limit["TRAN_LIMIT"])) {
+			chrome.storage.sync.set({
+				'TRAN_LIMIT' : tranLimit
+			}, function() {
+			});
+		} else {
+			tranLimit = limit["TRAN_LIMIT"];
+		}
+
+		$('#application-progress').slider({
+			step : 5,
+			min : 0,
+			value : tranLimit,
+			max : 100,
+			animate : true,
+			slide : function(event, ui) {
+				$("#progress").val(ui.value);
+				var translationLimit = $("#progress").val();
+				chrome.storage.sync.set({
+					'TRAN_LIMIT' : translationLimit
+				}, function() {
+				});
+			},
+		});
+
+		$("#progress").val($("#application-progress").slider("value"));
+
+	});
+
     chrome.storage.sync.get("TRAN_TARGET", function (obj) {
 		if (!obj["TRAN_TARGET"] || obj["TRAN_TARGET"] == "") {
 			$("#setupTarget").css("display", "block");

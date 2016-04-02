@@ -27,7 +27,8 @@
         },
         {
             "matches": ["*://*/translator/rest/user/profile"],
-            "js": ["jquery-1.11.3.min.js", "setup.js"],
+            "css": ["jquery-ui.css"],
+            "js": ["jquery-1.11.3.min.js", "jquery-ui.min.js", "setup.js"],
             "run_at": "document_end"
         }
     ],

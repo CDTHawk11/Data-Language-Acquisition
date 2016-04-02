@@ -27,7 +27,7 @@ $(document).ready(function() {
 	    });
 
 		$.ajax({
-			url : "http://ec2-52-35-34-105.us-west-2.compute.amazonaws.com:8080/translator/rest/user/save",
+			url : "http://localhost:8080/translator/rest/user/save",
 			type : "POST",
 	        data: JSON.stringify(jsonParameter),
 	        contentType: "application/json",
@@ -45,6 +45,10 @@ $(document).ready(function() {
 
 	$("#occupation").change(function() {
 		$("#occupation").removeClass("errorSelect");
+	});
+
+	$("#current").change(function() {
+		$("#current").removeClass("errorSelect");
 	});
 
 	$("#email").change(function() {

@@ -15,7 +15,7 @@
      		window.onbeforeunload = function() {
      			if($("#current option:selected").val() === "" ||
 				   $("#target option:selected").val() === "" ||
-     			   $("#difficulty option:selected").val() === "") {
+     			   $("#occupation option:selected").val() === "") {
      				return "Your Speak Easy profile setup isn't complete!";
      			}
      		}
@@ -201,19 +201,16 @@
 						<option value="zu">Zulu</option>
 					</select>
 				</td></tr>
-				
-				<tr><td>Proficiency</td><td>
-				<select name="difficulty" id="difficulty">
-		        	<option value="" selected="selected">Select your expertise in target language</option>
-					<option class="difficultyDescription" title="No practical understanding of the language" value=3>No Proficiency - No practical understanding</option>
-					<option class="difficultyDescription" title="Understand familiar everyday expressions and very basic phrases in areas of immediate needs" value=7>Beginner - Understand very basic phrases</option>
-					<option class="difficultyDescription" title="Understand short conversations about basic survival needs and minimum courtesy" value=10>Elementary - Comprehend up to basic survival needs</option>
-					<option class="difficultyDescription" title="Can deal with most situations likely to arise while traveling in area where the language is spoken" value=15>Threshold - Understand matters regularly encountered</option>
-					<option class="difficultyDescription" title="Understand the essentials of all speech, including technical discussions in one's field of specialization" value=20>Intermediate - Conversational in face-to-face dialogue</option> 	
-					<option class="difficultyDescription" title="Express fluently and spontaneously without much obvious searching for expressions" value=30>Operational - Use language flexibly and effectively</option> 	
-					<option class="difficultyDescription" title="Can understand virtually everything heard or read" value=50>Advanced - Expert comprehension proficiency</option> 	
-				</select> </td></tr>
-				
+
+				<tr><td colspan="2">
+			        <div style="padding-top: 0; margin-top: 0;">
+					  <label for="amount">Language immersion throughput</label>
+					  <input type="text" id="amount" readonly />
+			        </div>
+			        <div id="slider"></div>
+			        <div style="clear:both; font-size: 7pt">The number of unique words that will be introduced as you advance in your learning path</div>
+					</td></tr>
+								
 	        	</tbody></table>
 	        	<div><input type="button" value="Start learning!" id="completeSetup" class="button"/></div>
 	    	</div>
