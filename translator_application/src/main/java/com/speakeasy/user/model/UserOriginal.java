@@ -2,8 +2,8 @@ package com.speakeasy.user.model;
 
 import java.io.Serializable;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBIndexRangeKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
@@ -48,7 +48,7 @@ public class UserOriginal implements Serializable, Comparable<UserOriginal> {
 	/**
 	 * @return the count
 	 */
-	@DynamoDBAttribute(attributeName="freq")
+	@DynamoDBIndexRangeKey(attributeName="freq", localSecondaryIndexName="OrigCountIndex")
 	public int getFreq() {
 		return freq;
 	}

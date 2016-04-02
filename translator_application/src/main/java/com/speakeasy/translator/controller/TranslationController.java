@@ -22,6 +22,7 @@ import com.speakeasy.translator.model.TranslationRequest;
 import com.speakeasy.translator.service.FeedbackManager;
 import com.speakeasy.translator.service.TranslationManager;
 import com.speakeasy.translator.service.UserProfileManager;
+import com.speakeasy.user.model.UserLevel;
 
 /**
  * Handles requests for the Translation service.
@@ -67,7 +68,6 @@ public class TranslationController {
 		//Thread thread = new Thread();
 		
 		logger.info("Start getTranslation. Word=" + q);
-		System.out.println("Start getTranslation. Word=" + q);
 		List<String> wordsToTranslate = new ArrayList<String>();
 		wordsToTranslate.add(q);
 		translationData = TranslationManager.translate(wordsToTranslate, target);
@@ -96,7 +96,7 @@ public class TranslationController {
 		logger.info("Start searchTranslations with language immersion limit .. " + request.getTranLimit());
 		
 		UserProfileManager userProfileManager = new UserProfileManager();
-		List<String> wordsToTranslate = userProfileManager.getWordsToTranslate(30, request.getTranLimit());
+		List<String> wordsToTranslate = userProfileManager.getWordsToTranslate(25, request.getTranLimit());
 		
 		if(wordsToTranslate.size() == 0){
 			wordsToTranslate.addAll(request.getQ());
@@ -115,6 +115,12 @@ public class TranslationController {
 			}
 		};
 		insertUserTransThread.start();
+		
+		UserLevel userLevel = userProfileManager.checkUserLevel(request.getEmail());
+		logger.info("Obtained userLevel in searchTranslations." + userLevel);
+		
+		translationData.put("LearnedWordCount", String.valueOf(userLevel.getLearnedCount()));
+		translationData.put("LearningWordCount", String.valueOf(userLevel.getLearningCount()));
 		
 		return translationData;
 	}

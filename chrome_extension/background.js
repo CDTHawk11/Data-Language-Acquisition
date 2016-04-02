@@ -15,7 +15,7 @@ chrome.runtime.onInstalled.addListener(function(details) {
 		            focused: true
 		        }, function(window) {
 		        	chrome.tabs.create({
-		                url: "http://localhost:8080/translator/rest/user/profile",
+		                url: "http://ec2-52-35-34-105.us-west-2.compute.amazonaws.com:8080/translator/rest/user/profile",
 		                windowId: window.id
 		            });
 		        });
@@ -54,6 +54,14 @@ function getTranslations(request, sender, sendResponse) {
     var deferred = $.Deferred();
     translate(request.json_parse, deferred);
     deferred.done(function (merged) {
+    	var learnedWords = merged.LearnedWordCount;
+    	var learningWords = merged.LearningWordCount;
+		chrome.storage.sync.set({"SPKESY_LRND":learnedWords}, function() {
+		});
+		chrome.storage.sync.set({"SPKESY_LRNG":learningWords}, function() {
+		});
+    	delete merged.LearnedWordCount;
+    	delete merged.LearningWordCount;
         chrome.storage.sync.get("SPKESY_TRAN", function (obj) {
         	if (!(obj["SPKESY_TRAN"]) || obj["SPKESY_TRAN"] === "") {
         		chrome.storage.sync.set({"SPKESY_TRAN":"ON"}, function() {
@@ -72,7 +80,7 @@ function getTranslations(request, sender, sendResponse) {
 
 function translate(original_text, dfrd) {
 	var jsonParameter = {};
-	var targetURL = "http://localhost:8080/translator/rest/trans/";
+	var targetURL = "http://ec2-52-35-34-105.us-west-2.compute.amazonaws.com:8080/translator/rest/trans/";
 	var tran_data = ["TRAN_TARGET", "TRAN_LIMIT", "TRAN_USER_EMAIL"];
 	
     chrome.storage.sync.get(tran_data, function (obj) {
@@ -107,7 +115,6 @@ function translate(original_text, dfrd) {
     		    	            console.log(xhr.status + "::" + xhr.statusText + "::" + xhr.responseText);
     		    	        }
     		    	    });
-
     			  });
     		});
     	}

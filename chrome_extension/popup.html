@@ -112,7 +112,7 @@
 				background: #ffff90;
 				cursor: pointer; 
 			}
-			#progress {
+			#progress, #wordsLearned, #wordsLearning {
 				font: bold 11pt 'Lucida Sans';
 				border: none;
 				padding-left: 15px;
@@ -127,6 +127,16 @@
 	    	<div id="banner">
 	           	<img id="icon" alt="speakeasy" src="logo.png"/>     
 	    		<div id="heading"><div>Effortless Language Learning</div></div>
+	    		<div style="float: left; margin-top: 20px; margin-left: 10px; font-size: 11pt;">
+	    		<div>
+	    			<label style="padding-right: 0;" for="wordsLearning">Words Learning</label>
+			        <input type="text" id="wordsLearning" readonly />
+	    		</div>
+	    		<div>
+	    			<label  style="padding-right: 10px;" for="wordsLearned">Words Learned</label>
+			        <input type="text" id="wordsLearned" readonly/>
+	    		</div>
+	    		</div>
 	    		<img id="help" title="Help" alt="Help" src="help.png"/>
 	        </div>
 	        <div id="languageDiv" class="content">
@@ -196,7 +206,7 @@
 			            <input type="text" id="progress" readonly />
 			        </div>
 			        <div id="application-progress"></div>
-			        <div style="clear:both; font-size: 7pt;">Change the number of unique words that will be introduced as you advance in your learning path</div>
+			        <div style="clear:both; font-size: 8pt;">The number of unique words to be introduced as you advance in your learning path</div>
 				</td></tr>
 
 	        	</tbody></table>

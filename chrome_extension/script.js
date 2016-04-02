@@ -33,6 +33,22 @@ $(document).ready(function() {
 
 	});
 
+    chrome.storage.sync.get("SPKESY_LRND", function (obj) {
+		if (!obj["SPKESY_LRND"] || obj["SPKESY_LRND"] == "") {
+			$("#wordsLearned").val(0);
+		} else {
+			$("#wordsLearned").val(obj["SPKESY_LRND"]);
+		}
+    });
+
+    chrome.storage.sync.get("SPKESY_LRNG", function (obj) {
+		if (!obj["SPKESY_LRNG"] || obj["SPKESY_LRNG"] == "") {
+			$("#wordsLearning").val(0);
+		} else {
+			$("#wordsLearning").val(obj["SPKESY_LRNG"]);
+		}
+    });
+
     chrome.storage.sync.get("TRAN_TARGET", function (obj) {
 		if (!obj["TRAN_TARGET"] || obj["TRAN_TARGET"] == "") {
 			$("#setupTarget").css("display", "block");

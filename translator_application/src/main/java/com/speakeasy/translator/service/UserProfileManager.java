@@ -12,8 +12,12 @@ import org.slf4j.LoggerFactory;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
+import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
+import com.amazonaws.services.dynamodbv2.model.Condition;
+import com.speakeasy.user.model.UserLevel;
 import com.speakeasy.user.model.UserOriginal;
 import com.speakeasy.user.model.UserProfile;
 import com.speakeasy.user.model.UserTrans;
@@ -192,5 +196,60 @@ public class UserProfileManager {
 			}
 		}
 		return wordCount;
+	}
+
+	public UserLevel checkUserLevel(String email){
+		logger.info("In updateUserLevel with email " + email);
+		DynamoDBMapper dynamoDBMapper = getMapper();
+		UserLevel userLevel = new UserLevel();
+				
+		Condition rangeKeyConditionLearned = new Condition();
+		rangeKeyConditionLearned.withComparisonOperator(ComparisonOperator.GE)
+		     .withAttributeValueList(new AttributeValue().withN(String.valueOf(25)));
+
+		Condition rangeKeyConditionLearning = new Condition();
+		rangeKeyConditionLearning.withComparisonOperator(ComparisonOperator.LT)
+		     .withAttributeValueList(new AttributeValue().withN(String.valueOf(25)));
+
+		UserTrans learnedWordKey = new UserTrans();
+		learnedWordKey.setEmail(email);
+		
+		DynamoDBQueryExpression<UserTrans> queryExpressionLearned = new DynamoDBQueryExpression<UserTrans>()
+		     .withHashKeyValues(learnedWordKey)
+		     .withRangeKeyCondition("freq", rangeKeyConditionLearned);
+		
+		DynamoDBQueryExpression<UserTrans> queryExpressionLearning = new DynamoDBQueryExpression<UserTrans>()
+			     .withHashKeyValues(learnedWordKey)
+			     .withRangeKeyCondition("freq", rangeKeyConditionLearning);
+
+		int resultCount = dynamoDBMapper.count(UserTrans.class, queryExpressionLearned);
+		userLevel.setLearnedCount(resultCount);
+		userLevel.setLearningCount(dynamoDBMapper.count(UserTrans.class, queryExpressionLearning));
+		
+		String level = "No Proficiency - No practical understanding of the language";
+		
+		if(resultCount > 75 && resultCount <= 200) {
+			level = "Beginner - Understand familiar everyday expressions and very basic phrases in areas of immediate needs";
+		} else if(resultCount > 200 && resultCount <= 500) {
+			level = "Elementary - Comprehend upto short conversations about basic survival needs and minimum courtesy";
+		} else if(resultCount > 500 && resultCount <= 1250) {
+			level = "Conversational - Understand matters regularly encountered and conversational in face-to-face dialogue";
+		} else if(resultCount > 1250 && resultCount <= 2500) {
+			level = "Threshold - Can deal with most situations likely to arise while traveling in area where the language is spoken";
+		} else if(resultCount > 2500 && resultCount <= 5000) {
+			level = "Intermediate - Understand the essentials of all speech, including technical discussions in one's field of specialization";
+		} else if(resultCount > 7000 && resultCount <= 12000) {
+			level = "Operational - Use language flexibly and effectively without much obvious searching for expressions";
+		} else if(resultCount > 12000 && resultCount <= 20000) {
+			level = "Fluent - Express fluently and spontaneously in face-to-face dialogue or social gathering";
+		} else if(resultCount > 20000) {
+			level = "Advanced - Can understand virtually everything heard or read with expert comprehension proficiency";
+		} 
+		
+		userLevel.setLevel(level);
+		
+		logger.info("Returning from updateUserLevel, resultCount .. " + resultCount);
+		
+		return userLevel;
 	}
 }
