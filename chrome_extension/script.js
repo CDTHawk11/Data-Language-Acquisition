@@ -97,7 +97,7 @@ $(document).ready(function() {
 		});
 	});
 
-	// Attach a submit handler to feedback form
+	// Attach a submit handler to check progress form
 	$('#feedbackForm').submit(function(event) {
 		
 		event.preventDefault();
@@ -122,6 +122,34 @@ $(document).ready(function() {
 	            alert(xhr.status + "::" + xhr.statusText + "::" + xhr.responseText);
 	        }
 		});
+	});
+
+	// Attach a submit handler to feedback form
+	$('#checkProgress').click(function(event) {
+		
+		event.preventDefault();
+				
+	    chrome.storage.sync.get("TRAN_USER_EMAIL", function (obj) {
+	    	var tran_user_email = obj["TRAN_USER_EMAIL"];
+			var jsonParameter = {"email":tran_user_email};
+
+			$.ajax({
+				url : "http://localhost:8080/translator/rest/view/progress",
+				type : "POST",
+		        data: JSON.stringify(jsonParameter),
+		        contentType: "application/json",
+		        headers: {"Accept": "application/json"},
+				success: function(result, status, xhr) {
+					$("#languageDiv").hide("slide", { direction: "left" }, 400);
+				    $("#feedbackDiv").show("slide", { direction: "right" }, 400);
+				    $("#feedbackDiv").html(result);
+				   
+				},
+				error: function (xhr, status, errorMsg) {
+		            alert(xhr.status + "::" + xhr.statusText + "::" + xhr.responseText);
+		        }
+			});
+	    });
 	});
 
 	$("#feedbackButton").click(function() {

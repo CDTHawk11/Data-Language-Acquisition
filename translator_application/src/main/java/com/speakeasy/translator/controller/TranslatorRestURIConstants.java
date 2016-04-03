@@ -12,4 +12,5 @@ public class TranslatorRestURIConstants {
 	public static final String GET_TRANSLATION = "/rest/trans/{target}/{word}";
 	public static final String TRANSLATE = "/rest/trans/{target}";
 	public static final String SUBMIT_FEEDBACK = "/rest/submit/feedback";
+	public static final String VIEW_PROGRESS = "/rest/view/progress";
 }

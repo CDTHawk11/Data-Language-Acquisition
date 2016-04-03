@@ -5,6 +5,7 @@
         <title>Speak Easy</title>
         <script type="text/javascript" src="jquery-1.11.3.min.js"></script>
         <script type="text/javascript" src="jquery-ui.min.js"></script>
+        <script type="text/javascript" src="jqBarGraph.1.1.min.js"></script>
         <script type="text/javascript" src="script.js"></script>
         <link rel="stylesheet" href="jquery-ui.css">
         <style>
@@ -120,6 +121,23 @@
 				background: transparent;
 				color: #ffff90;
 			}
+			#arrow {
+				height: 40px;
+				width: 40px;
+				cursor: pointer;
+				float: left;
+				padding-left: 10px;
+			}
+			#checkProgress {
+				width: 150px;
+				border: none;
+				cursor: pointer;
+				color: #ffff90;
+				font: bold 10pt 'Lucida Sans';
+				float: left;
+				margin-top: 20px;
+				margin-left: 50px;
+			}
         </style>
     </head>
     <body>
@@ -127,16 +145,10 @@
 	    	<div id="banner">
 	           	<img id="icon" alt="speakeasy" src="logo.png"/>     
 	    		<div id="heading"><div>Effortless Language Learning</div></div>
-	    		<div style="float: left; margin-top: 20px; margin-left: 10px; font-size: 11pt;">
-	    		<div>
-	    			<label style="padding-right: 0;" for="wordsLearning">Words Learning</label>
-			        <input type="text" id="wordsLearning" readonly />
-	    		</div>
-	    		<div>
-	    			<label  style="padding-right: 10px;" for="wordsLearned">Words Learned</label>
-			        <input type="text" id="wordsLearned" readonly/>
-	    		</div>
-	    		</div>
+				<div style="text-align:center; float: left; margin-left: 35px; margin-top: 5px;">
+					<img id="on" src="on.png" style="display: none;"/>
+					<img id="off" src="off.png" style="display: inline-block;"/>
+				</div>
 	    		<img id="help" title="Help" alt="Help" src="help.png"/>
 	        </div>
 	        <div id="languageDiv" class="content">
@@ -210,11 +222,21 @@
 				</td></tr>
 
 	        	</tbody></table>
-				<div style="text-align:center;">
-					<img id="on" src="on.png" style="display: none;"/>
-					<img id="off" src="off.png" style="display: inline-block;"/>
-				</div>
-				<div style="text-align: center;">
+	    		<div style="float: left; margin-top: 20px; margin-left: 80px; font-size: 11pt;">
+	    		<div>
+	    			<label style="padding-right: 0;" for="wordsLearning">Words Learning</label>
+			        <input type="text" id="wordsLearning" readonly />
+	    		</div>
+	    		<div>
+	    			<label  style="padding-right: 10px;" for="wordsLearned">Words Learned</label>
+			        <input type="text" id="wordsLearned" readonly/>
+	    		</div>
+	    		</div>
+	    		<div id="checkProgress">
+	    			<div style="float: left; padding-top: 5px;"><div>Check</div><div>Progress</div></div>
+	    			<img id="arrow" src="arrow.png"/>
+	    		</div>
+				<div style="text-align: center; clear: both;">
 					<br/><br/> 
 					<input type="button" value="Tell us what you think" id="feedbackButton" class="button" />
 					<br/>

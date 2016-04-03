@@ -11,6 +11,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -125,6 +126,19 @@ public class TranslationController {
 		return translationData;
 	}
 
+	@RequestMapping(value = TranslatorRestURIConstants.VIEW_PROGRESS, method = RequestMethod.POST)
+	public String viewProgress(@RequestBody TranslationRequest request, Model model) {
+		logger.info("Start viewProgress.");
+		
+		UserProfileManager userProfileManager = new UserProfileManager();
+		UserLevel userLevel = userProfileManager.checkUserLevel(request.getEmail());
+		logger.info("Obtained userLevel in searchTranslations." + userLevel);
+		
+		model.addAttribute("progressInfo", userLevel);
+		
+		return "progressChart";
+	}
+	
 	@RequestMapping(value = TranslatorRestURIConstants.SUBMIT_FEEDBACK, method = RequestMethod.POST)
 	public @ResponseBody Map<String, String> submitFeedback(
 			@RequestBody FeedbackRequest feedbackForm) {

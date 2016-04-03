@@ -236,9 +236,9 @@ public class UserProfileManager {
 			level = "Conversational - Understand matters regularly encountered and conversational in face-to-face dialogue";
 		} else if(resultCount > 1250 && resultCount <= 2500) {
 			level = "Threshold - Can deal with most situations likely to arise while traveling in area where the language is spoken";
-		} else if(resultCount > 2500 && resultCount <= 5000) {
+		} else if(resultCount > 2500 && resultCount <= 6000) {
 			level = "Intermediate - Understand the essentials of all speech, including technical discussions in one's field of specialization";
-		} else if(resultCount > 7000 && resultCount <= 12000) {
+		} else if(resultCount > 6000 && resultCount <= 12000) {
 			level = "Operational - Use language flexibly and effectively without much obvious searching for expressions";
 		} else if(resultCount > 12000 && resultCount <= 20000) {
 			level = "Fluent - Express fluently and spontaneously in face-to-face dialogue or social gathering";
