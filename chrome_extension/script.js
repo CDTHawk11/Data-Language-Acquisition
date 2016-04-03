@@ -134,7 +134,7 @@ $(document).ready(function() {
 			var jsonParameter = {"email":tran_user_email};
 
 			$.ajax({
-				url : "http://localhost:8080/translator/rest/view/progress",
+				url : "http://ec2-52-35-34-105.us-west-2.compute.amazonaws.com:8080/translator/rest/view/progress",
 				type : "POST",
 		        data: JSON.stringify(jsonParameter),
 		        contentType: "application/json",
