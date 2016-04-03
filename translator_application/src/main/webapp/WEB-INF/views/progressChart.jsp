@@ -14,8 +14,8 @@
     switch(levelName) {
 	    case "No Proficiency":
 	    	arrayOfData = new Array(
-	    		   	[[learned,learning,((learned+learning)>75)?0:(75-learned-learning)],'Beginner'],
-	    		   	[[0,0,200],'Elementary'],
+	    		   	[[learned,((learned+learning)>75)?75-learned:learning,((learned+learning)>75)?0:(75-learned-learning)],'Beginner'],
+	    		   	[[0,((learned+learning)>75)?learning+learned-75:0,((learned+learning)>75)?200-(learning+learned-75):200],'Elementary'],
 	    		   	['Conversation'],
 	    		   	['Threshold'],
 	    		   	['Intermediate'],
@@ -26,9 +26,9 @@
 	    	break;
 	    case "Beginner":
 	    	arrayOfData = new Array(
-	    		   	[[75,0,75],'Beginner'],
-	    		   	[[learned,learning,((learned+learning)>200)?0:(200-learned-learning)],'Elementary'],
-	    		   	[[0,0,500],'Conversation'],
+	    		   	[[75],'Beginner'],
+	    		   	[[learned,((learned+learning)>200)?200-learned:learning,((learned+learning)>200)?0:(200-learned-learning)],'Elementary'],
+	    		   	[[0,((learned+learning)>200)?learning+learned-200:0,((learned+learning)>200)?500-(learning+learned-200):500],'Conversation'],
 	    		   	['Threshold'],
 	    		   	['Intermediate'],
 	    		   	['Operational'],
@@ -38,10 +38,10 @@
 	    	break;
 	    case "Elementary":
 	    	arrayOfData = new Array(
-	    		   	[[75,0,75],'Beginner'],
-	    		   	[[200,0,200],'Elementary'],
-	    		   	[[learned,learning,((learned+learning)>500)?0:(500-learned-learning)],'Conversation'],
-	    		   	[[0,0,1250],'Threshold'],
+	    		   	[[75],'Beginner'],
+	    		   	[[200],'Elementary'],
+	    		   	[[learned,((learned+learning)>500)?500-learned:learning,((learned+learning)>500)?0:(500-learned-learning)],'Conversation'],
+	    		   	[[0,((learned+learning)>500)?learning+learned-500:0,((learned+learning)>500)?1250-(learning+learned-500):1250],'Threshold'],
 	    		   	['Intermediate'],
 	    		   	['Operational'],
 	    		   	['Fluent'],
@@ -50,11 +50,11 @@
 	    	break;
 	    case "Conversational":
 	    	arrayOfData = new Array(
-	    		   	[[75,0,75],'Beginner'],
-	    		   	[[200,0,200],'Elementary'],
-	    		   	[[500,0,500],'Conversation'],
-	    		   	[[learned,learning,((learned+learning)>1250)?0:(1250-learned-learning)],'Threshold'],
-	    		   	[[0,0,2500],'Intermediate'],
+	    		   	[[75],'Beginner'],
+	    		   	[[200],'Elementary'],
+	    		   	[[500],'Conversation'],
+	    		   	[[learned,((learned+learning)>1250)?1250-learned:learning,((learned+learning)>1250)?0:(1250-learned-learning)],'Threshold'],
+	    		   	[[0,((learned+learning)>1250)?learning+learned-1250:0,((learned+learning)>1250)?2500-(learning+learned-1250):2500],'Intermediate'],
 	    		   	['Operational'],
 	    		   	['Fluent'],
 	    		   	['Advanced']
@@ -62,50 +62,50 @@
 	    	break;
 	    case "Threshold":
 	    	arrayOfData = new Array(
-	    		   	[[75,0,75],'Beginner'],
-	    		   	[[200,0,200],'Elementary'],
-	    		   	[[500,0,500],'Conversation'],
-	    		   	[[1250,0,1250],'Threshold'],
-	    		   	[[learned,learning,((learned+learning)>2500)?0:(2500-learned-learning)],'Intermediate'],
-	    		   	[[0,0,6000],'Operational'],
+	    		   	[[75],'Beginner'],
+	    		   	[[200],'Elementary'],
+	    		   	[[500],'Conversation'],
+	    		   	[[1250],'Threshold'],
+	    		   	[[learned,((learned+learning)>2500)?2500-learned:learning,((learned+learning)>2500)?0:(2500-learned-learning)],'Intermediate'],
+	    		   	[[0,((learned+learning)>2500)?learning+learned-2500:0,((learned+learning)>2500)?6000-(learning+learned-2500):6000],'Operational'],
 	    		   	['Fluent'],
 	    		   	['Advanced']
 	    		); 
 	    	break;
 	    case "Intermediate":
 	    	arrayOfData = new Array(
-	    		   	[[75,0,75],'Beginner'],
-	    		   	[[200,0,200],'Elementary'],
-	    		   	[[500,0,500],'Conversation'],
-	    		   	[[1250,0,1250],'Threshold'],
-	    		   	[[2500,0,2500],'Intermediate'],
-	    		   	[[learned,learning,((learned+learning)>6000)?0:(6000-learned-learning)],'Operational'],
-	    		   	[[0,0,12000],'Fluent'],
+	    		   	[[75],'Beginner'],
+	    		   	[[200],'Elementary'],
+	    		   	[[500],'Conversation'],
+	    		   	[[1250],'Threshold'],
+	    		   	[[2500],'Intermediate'],
+	    		   	[[learned,((learned+learning)>6000)?6000-learned:learning,((learned+learning)>6000)?0:(6000-learned-learning)],'Operational'],
+	    		   	[[0,((learned+learning)>6000)?learning+learned-6000:0,((learned+learning)>6000)?12000-(learning+learned-6000):12000],'Fluent'],
 	    		   	['Advanced']
 	    		); 
 	    	break;
 	    case "Operational":
 	    	arrayOfData = new Array(
-	    		   	[[75,0,75],'Beginner'],
-	    		   	[[200,0,200],'Elementary'],
-	    		   	[[500,0,500],'Conversation'],
-	    		   	[[1250,0,1250],'Threshold'],
-	    		   	[[2500,0,2500],'Intermediate'],
-	    		   	[[6000,0,6000],'Operational'],
-	    		   	[[learned,learning,((learned+learning)>12000)?0:(12000-learned-learning)],'Fluent'],
-	    		   	[[0,0,20000],'Advanced']
+	    		   	[[75],'Beginner'],
+	    		   	[[200],'Elementary'],
+	    		   	[[500],'Conversation'],
+	    		   	[[1250],'Threshold'],
+	    		   	[[2500],'Intermediate'],
+	    		   	[[6000],'Operational'],
+	    		   	[[learned,((learned+learning)>12000)?12000-learned:learning,((learned+learning)>12000)?0:(12000-learned-learning)],'Fluent'],
+	    		   	[[0,((learned+learning)>12000)?learning+learned-12000:0,((learned+learning)>12000)?20000-(learning+learned-12000):20000],'Advanced']
 	    		); 
 	    	break;
 	    case "Fluent":
 	    	arrayOfData = new Array(
-	    		   	[[75,0,75],'Beginner'],
-	    		   	[[200,0,200],'Elementary'],
-	    		   	[[500,0,500],'Conversation'],
-	    		   	[[1250,0,1250],'Threshold'],
-	    		   	[[2500,0,2500],'Intermediate'],
-	    		   	[[6000,0,6000],'Operational'],
-	    		   	[[12000,0,12000],'Fluent'],
-	    		   	[[learned,learning,((learned+learning)>20000)?0:(20000-learned-learning)],'Advanced']
+	    		   	[[75],'Beginner'],
+	    		   	[[200],'Elementary'],
+	    		   	[[500],'Conversation'],
+	    		   	[[1250],'Threshold'],
+	    		   	[[2500],'Intermediate'],
+	    		   	[[6000],'Operational'],
+	    		   	[[12000],'Fluent'],
+	    		   	[[learned,((learned+learning)>20000)?20000-learned:learning,((learned+learning)>20000)?0:(20000-learned-learning)],'Advanced']
 	    		); 
 	    	break;
     }
