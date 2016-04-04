@@ -118,4 +118,9 @@
 		showValuesColor: 'black',
 		colors: ['#00b3b3','#ffff90','#E6EBEA']
 	});
+
+	chrome.storage.sync.set({"SPKESY_LRND":learned}, function() {
+	});
+	chrome.storage.sync.set({"SPKESY_LRNG":learning}, function() {
+	});
 	</script>
