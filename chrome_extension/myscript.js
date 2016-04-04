@@ -71,56 +71,59 @@ chrome.storage.sync.get("TRAN_LEVEL", function (limit) {
 	
 	// find collocated words for translation and group them together for proper conjugation
 	var mergedConsPlus=[];
-	
-	
-loop1:	
-	for (i in cleanSplit){
-loop2:
-		t=0;
-		for (t; t<=cleanSplit[i].length; t++){
-			//console.log(cleanArray[i].length);
-			var joinedCons=[];
-			var conjugs=[];
-			var z=0;
-			var x=0;
-			var mergedCons=[];
-loop3:
-			for (word in to_Translate){
-				if (cleanSplit[i][t]===to_Translate[word]){
-					var limit=cleanSplit[i].length-1;
-					if (t < limit){
-						t=parseInt(t);
-						var a=t+1;
-						var conjugsPlus=[];
-loop4:						
-						for (a; a<=limit; a++){
-loop5:
-							for (w in to_Translate){
-								if (to_Translate[w]===cleanSplit[i][a]){
-									z=z+1;
-								};
-							};	
-							if(z>x){
-								x=x+1;
-							} else {break loop4;}
-						conjugsPlus.push(cleanSplit[i][a]);
-						};
-					};	
-				};					
-			};
-		if (z>0){
-			conjugs.push(cleanSplit[i][t]);
-			conjugs.push(conjugsPlus);
-			mergedCons.push(conjugs);
-			mergedCons = [].concat.apply([], conjugs);
-			joinedCons=mergedCons.join(' ');
-			mergedConsPlus.push(joinedCons);
-			if (a<limit){
-				t=a+1;
+	function getPhrases(sentences){
+		var phrases = [];
+		var phrase = [];
+		var midphrase;
+
+		for (var s=0;s < sentences.length;s++){
+			sentence = sentences[s];
+			midphrase = 0;
+			for (var i=0;i<sentence.length;i++){
+				// if we're in the middle of a potential phrase:
+						//console.log("here");
+				if (midphrase === 1){
+					// check if it's to be translated
+					if (needsTranslation(sentence[i],to_Translate)){
+						phrase.push(sentence[i]);
+						// if we're at the end of the sentence
+						if (i === sentence.length-1){
+							if (phrase.length > 1){
+								phrases.push(phrase.join(" "));
+							}
+						}
+					}
+					else{
+						if (phrase.length > 1){
+							phrases.push(phrase.join(" "));
+						}
+
+						phrase = [];
+					}
 				}
+				// otherwise we are not midphrase, and we check if we need to start new phrase.
+				else {
+					phrase = [];
+					if (needsTranslation(sentence[i],to_Translate)){
+						phrase.push(sentence[i]);
+						midphrase = 1;
+					}
+				}
+
 			}
-		};	
-	};
+		}
+		return phrases;
+	}
+	// function to see if word needs to be translated; 
+	// I have put it as a separate function because efficiency should be improvable in the future.
+	function needsTranslation(word, words){
+		if ($.inArray(word,words) === -1){
+			return false;
+		}
+		return true;
+	}
+
+	mergedConsPlus = getPhrases(cleanSplit);
 	
 	// Array consisting of all collections that require conjugation:
 	
