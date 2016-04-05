@@ -224,24 +224,95 @@ public class UserProfileManager {
 
 		int resultCount = dynamoDBMapper.count(UserTrans.class, queryExpressionLearned);
 		userLevel.setLearnedCount(resultCount);
-		userLevel.setLearningCount(dynamoDBMapper.count(UserTrans.class, queryExpressionLearning));
+
+		int learningCount = dynamoDBMapper.count(UserTrans.class, queryExpressionLearning);
+		userLevel.setLearningCount(learningCount);
 		
-		String level = "No Proficiency - No practical understanding of the language";
+		String level = "";
 		
-		if(resultCount > 75 && resultCount <= 200) {
+		if(resultCount <= 75) {
+			level = "No Proficiency - No practical understanding of the language";
+			if((resultCount+learningCount)<=75){
+				userLevel.setLearningBeginner(learningCount);
+			} else if((resultCount+learningCount)<=200){
+				userLevel.setLearningBeginner(75-resultCount);
+				userLevel.setLearningElementary(resultCount+learningCount-75);
+			} else {
+				userLevel.setLearningBeginner(75-resultCount);
+				userLevel.setLearningElementary(200);
+				userLevel.setLearningConversational(resultCount+learningCount-275);				
+			}
+		} else if(resultCount > 75 && resultCount <= 200) {
 			level = "Beginner - Understand familiar everyday expressions and very basic phrases in areas of immediate needs";
+			if((resultCount+learningCount)<=200){
+				userLevel.setLearningElementary(learningCount);
+			} else if((resultCount+learningCount)<=500){
+				userLevel.setLearningElementary(200-resultCount);
+				userLevel.setLearningConversational(resultCount+learningCount-200);
+			} else {
+				userLevel.setLearningElementary(200-resultCount);
+				userLevel.setLearningConversational(500);
+				userLevel.setLearningThreshold(resultCount+learningCount-700);				
+			}
 		} else if(resultCount > 200 && resultCount <= 500) {
 			level = "Elementary - Comprehend upto short conversations about basic survival needs and minimum courtesy";
+			if((resultCount+learningCount)<=500){
+				userLevel.setLearningConversational(learningCount);
+			} else if((resultCount+learningCount)<=1250){
+				userLevel.setLearningConversational(500-resultCount);
+				userLevel.setLearningThreshold(resultCount+learningCount-500);
+			} else {
+				userLevel.setLearningConversational(500-resultCount);
+				userLevel.setLearningThreshold(1250);
+				userLevel.setLearningIntermediate(resultCount+learningCount-1750);				
+			}
 		} else if(resultCount > 500 && resultCount <= 1250) {
 			level = "Conversational - Understand matters regularly encountered and conversational in face-to-face dialogue";
+			if((resultCount+learningCount)<=1250){
+				userLevel.setLearningThreshold(learningCount);
+			} else if((resultCount+learningCount)<=2500){
+				userLevel.setLearningThreshold(1250-resultCount);
+				userLevel.setLearningIntermediate(resultCount+learningCount-1250);
+			} else {
+				userLevel.setLearningThreshold(1250-resultCount);
+				userLevel.setLearningIntermediate(2500);
+				userLevel.setLearningOperational(resultCount+learningCount-3750);				
+			}
 		} else if(resultCount > 1250 && resultCount <= 2500) {
 			level = "Threshold - Can deal with most situations likely to arise while traveling in area where the language is spoken";
+			if((resultCount+learningCount)<=2500){
+				userLevel.setLearningIntermediate(learningCount);
+			} else if((resultCount+learningCount)<=6000){
+				userLevel.setLearningIntermediate(2500-resultCount);
+				userLevel.setLearningOperational(resultCount+learningCount-2500);
+			} else {
+				userLevel.setLearningIntermediate(2500-resultCount);
+				userLevel.setLearningOperational(6000);
+				userLevel.setLearningFluent(resultCount+learningCount-8500);				
+			}
 		} else if(resultCount > 2500 && resultCount <= 6000) {
 			level = "Intermediate - Understand the essentials of all speech, including technical discussions in one's field of specialization";
+			if((resultCount+learningCount)<=6000){
+				userLevel.setLearningOperational(learningCount);
+			} else if((resultCount+learningCount)<=12000){
+				userLevel.setLearningOperational(6000-resultCount);
+				userLevel.setLearningFluent(resultCount+learningCount-6000);
+			} else {
+				userLevel.setLearningOperational(6000-resultCount);
+				userLevel.setLearningFluent(12000);
+				userLevel.setLearningAdvanced(resultCount+learningCount-18000);				
+			}
 		} else if(resultCount > 6000 && resultCount <= 12000) {
 			level = "Operational - Use language flexibly and effectively without much obvious searching for expressions";
+			if((resultCount+learningCount)<=12000){
+				userLevel.setLearningFluent(learningCount);
+			} else {
+				userLevel.setLearningFluent(20000-resultCount);
+				userLevel.setLearningAdvanced(resultCount+learningCount-20000);
+			}
 		} else if(resultCount > 12000 && resultCount <= 20000) {
 			level = "Fluent - Express fluently and spontaneously in face-to-face dialogue or social gathering";
+			userLevel.setLearningAdvanced(learningCount);
 		} else if(resultCount > 20000) {
 			level = "Advanced - Can understand virtually everything heard or read with expert comprehension proficiency";
 		} 

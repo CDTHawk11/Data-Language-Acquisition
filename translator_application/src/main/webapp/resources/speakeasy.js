@@ -27,7 +27,7 @@ $(document).ready(function() {
 	    });
 
 		$.ajax({
-			url : "http://ec2-52-35-34-105.us-west-2.compute.amazonaws.com:8080/translator/rest/user/save",
+			url : "http://localhost:8080/translator/rest/user/save",
 			type : "POST",
 	        data: JSON.stringify(jsonParameter),
 	        contentType: "application/json",
@@ -55,18 +55,4 @@ $(document).ready(function() {
 		$("#email").css("border-color", "#00b3b3");
 	});
 
-	$(".difficultyDescription").tooltip({
-      position: {
-          my: "center bottom-15",
-          at: "center top",
-          using: function( position, feedback ) {
-            $( this ).css( position );
-            $( "<div>" )
-              .addClass( "arrow" )
-              .addClass( feedback.vertical )
-              .addClass( feedback.horizontal )
-              .appendTo( this );
-          	}
-        }
-	});
 });

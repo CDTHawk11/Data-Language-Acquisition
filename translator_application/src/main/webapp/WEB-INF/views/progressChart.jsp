@@ -10,12 +10,20 @@
 	var learning = ${progressInfo.learningCount};
 	var level = "${progressInfo.level}";
 	var levelName = ((level.split("-"))[0]).trim();
+	var learningBeginner= ${progressInfo.learningBeginner};
+	var learningElementary= ${progressInfo.learningElementary};
+	var learningConversational= ${progressInfo.learningConversational};
+	var learningThreshold= ${progressInfo.learningThreshold};
+	var learningIntermediate= ${progressInfo.learningIntermediate};
+	var learningOperational= ${progressInfo.learningOperational};
+	var learningFluent= ${progressInfo.learningFluent};
+	var learningAdvanced= ${progressInfo.learningAdvanced};
 
     switch(levelName) {
 	    case "No Proficiency":
 	    	arrayOfData = new Array(
-	    		   	[[learned,((learned+learning)>75)?75-learned:learning,((learned+learning)>75)?0:(75-learned-learning)],'Beginner'],
-	    		   	[[0,((learned+learning)>75)?learning+learned-75:0,((learned+learning)>75)?200-(learning+learned-75):200],'Elementary'],
+	    		   	[[learned,learningBeginner,((learned+learning)>75)?0:(75-learned-learning)],'Beginner'],
+	    		   	[[0,learningElementary,((learned+learning)>75)?200-(learning+learned-75):200],'Elementary'],
 	    		   	['Conversation'],
 	    		   	['Threshold'],
 	    		   	['Intermediate'],
