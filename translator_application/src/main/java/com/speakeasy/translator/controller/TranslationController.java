@@ -112,7 +112,8 @@ public class TranslationController {
 					words.add(sentence.get(j));
 				}
 			}
-			wordsToTranslate.addAll(words);
+			// wordsToTranslate.addAll(words);
+			wordsToTranslate.add("a");
 		}
 		// translationData = TranslationManager.translate(request.getQ(),
 		// target);
