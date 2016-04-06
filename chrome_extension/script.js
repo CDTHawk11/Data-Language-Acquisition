@@ -14,10 +14,10 @@ $(document).ready(function() {
 		}
 
 		$('#application-progress').slider({
-			step : 5,
-			min : 0,
+			step : 15,
+			min : 5,
 			value : tranLimit,
-			max : 100,
+			max : 35,
 			animate : true,
 			slide : function(event, ui) {
 				$("#progress").val(ui.value);

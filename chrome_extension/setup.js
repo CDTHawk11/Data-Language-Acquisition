@@ -5,9 +5,9 @@ $(document).ready(function() {
 
     $( "#slider" ).slider({
         value:5,
-        min: 0,
-        max: 100,
-        step: 5,
+        min: 5,
+        max: 35,
+        step: 15,
         slide: function( event, ui ) {
           $( "#amount" ).val( ui.value );
 			var translationLimit = $("#amount").val();

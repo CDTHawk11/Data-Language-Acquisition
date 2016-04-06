@@ -203,14 +203,17 @@
 				</td></tr>
 
 				<tr><td colspan="2">
-			        <div style="padding-top: 0; margin-top: 0;">
-					  <label for="amount">Language immersion throughput</label>
-					  <input type="text" id="amount" readonly />
+			        <div style="padding-top: 0; margin-top: 0; float: left; width: 140px;">
+					  <label for="amount">Immersion rate</label>
 			        </div>
-			        <div id="slider"></div>
-			        <div style="clear:both; font-size: 7pt">The number of unique words that will be introduced as you advance in your learning path</div>
+			        <div style="width:260px; padding-left:0; margin-bottom: 0; padding-bottom:0; clear: none;" id="slider"></div>
+			        <input type="hidden" id="amount" />
+			        <div style="width:270px; margin-left: 140px; margin-top: 0; padding:0; font-size: 8pt; color: #ffffb3; clear: both;">
+			        	<div style="float: left;">Slow</div>
+			        	<div style="float: left; padding-left: 90px; padding-right: 80px;">Medium</div>
+			        	<div style="float: left;">Fast</div>
+			        </div>
 					</td></tr>
-								
 	        	</tbody></table>
 	        	<div><input type="button" value="Start learning!" id="completeSetup" class="button"/></div>
 	    	</div>

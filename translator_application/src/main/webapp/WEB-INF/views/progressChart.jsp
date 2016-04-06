@@ -18,13 +18,240 @@
 	var learningOperational= ${progressInfo.learningOperational};
 	var learningFluent= ${progressInfo.learningFluent};
 	var learningAdvanced= ${progressInfo.learningAdvanced};
+	var remainingBeginner= ${progressInfo.remainingBeginner};
+	var remainingElementary= ${progressInfo.remainingElementary};
+	var remainingConversational= ${progressInfo.remainingConversational};
+	var remainingThreshold= ${progressInfo.remainingThreshold};
+	var remainingIntermediate= ${progressInfo.remainingIntermediate};
+	var remainingOperational= ${progressInfo.remainingOperational};
+	var remainingFluent= ${progressInfo.remainingFluent};
+	var remainingAdvanced= ${progressInfo.remainingAdvanced};
 
+	function createBeginnerArray(levelName) {
+		var valueArr = new Array();
+		
+		valueArr.push(learned);
+		
+		if(learningBeginner > 0){
+			valueArr.push(learningBeginner);
+		}
+		if(remainingBeginner > 0){
+			valueArr.push(remainingBeginner);
+		}
+		if((valueArr.length == 0) || (valueArr.length == 1 && valueArr[0] == 0)){
+			return ['Beginner'];
+		}
+		return [valueArr,'Beginner'];
+	}
+
+	function createElementaryArray(levelName) {
+		var valueArr = new Array();
+
+		if (levelName === "No Proficiency" ) {
+			
+			valueArr.push(0);
+		} 
+		if (levelName === "Beginner") {
+			
+			valueArr.push(learned);
+		} 
+		if(learningElementary > 0){
+			valueArr.push(learningElementary);
+		}
+		if(remainingElementary > 0){
+			valueArr.push(remainingElementary);
+		}
+		if((valueArr.length == 0) || (valueArr.length == 1 && valueArr[0] == 0)){
+			return ['Elementary'];
+		}
+		return [valueArr,'Elementary'];
+	}
+	function createConversationArray(levelName) {
+		if (levelName !== "No Proficiency" && levelName !== "Beginner" && levelName !== "Elementary") {
+			return [500];
+		}
+		var valueArr = new Array();
+
+		if (levelName === "No Proficiency" ) {
+			
+			valueArr.push(0);
+		} 
+		if (levelName === "Beginner") {
+			
+			valueArr.push(0);
+		} 
+		if (levelName === "Elementary") {
+			
+			valueArr.push(learned);
+		} 
+		if(learningConversational > 0){
+			valueArr.push(learningConversational);
+		}
+		if(remainingConversational > 0){
+			valueArr.push(remainingConversational);
+		}
+		if((valueArr.length == 0) || (valueArr.length == 1 && valueArr[0] == 0)){
+			return ['Conversation'];
+		}
+		return [valueArr,'Conversation'];
+	}
+	
+	function createThresholdArray(levelName) {
+		if (levelName !== "No Proficiency" && levelName !== "Beginner" && levelName !== "Elementary" && levelName !== "Conversational") {
+			return [1250];
+		}
+		var valueArr = new Array();
+
+		if (levelName === "Beginner" ) {
+			
+			valueArr.push(0);
+		} 
+		if (levelName === "Elementary" ) {
+			
+			valueArr.push(0);
+		} 
+		if (levelName === "Conversational") {
+			
+			valueArr.push(learned);
+		} 
+		if(learningThreshold > 0){
+			valueArr.push(learningThreshold);
+		}
+		if(remainingThreshold > 0){
+			valueArr.push(remainingThreshold);
+		}
+		if((valueArr.length == 0) || (valueArr.length == 1 && valueArr[0] == 0)){
+			return ['Threshold'];
+		}
+		return [valueArr,'Threshold'];
+	}
+
+	function createIntermediateArray(levelName) {
+		if (levelName === "Intermediate" || levelName === "Operational" || levelName === "Fluent" || levelName === "Advanced") {
+			return [2500];
+		}
+		var valueArr = new Array();
+
+		if (levelName === "Elementary" ) {
+			
+			valueArr.push(0);
+		} 
+		if (levelName === "Conversational" ) {
+			
+			valueArr.push(0);
+		} 
+		if (levelName === "Threshold") {
+			
+			valueArr.push(learned);
+		} 
+		if(learningIntermediate > 0){
+			valueArr.push(learningIntermediate);
+		}
+		if(remainingIntermediate > 0){
+			valueArr.push(remainingIntermediate);
+		}
+		if((valueArr.length == 0) || (valueArr.length == 1 && valueArr[0] == 0)){
+			return ['Intermediate'];
+		}
+		return [valueArr,'Intermediate'];
+	}
+
+	function createOperationalArray(levelName) {
+		if (levelName === "Operational" || levelName === "Fluent" || levelName === "Advanced") {
+			return [6000];
+		}
+		var valueArr = new Array();
+
+		if (levelName === "Conversational" ) {
+			
+			valueArr.push(0);
+		} 
+		if (levelName === "Threshold" ) {
+			
+			valueArr.push(0);
+		} 
+		if (levelName === "Intermediate") {
+			
+			valueArr.push(learned);
+		} 
+		if(learningOperational > 0){
+			valueArr.push(learningOperational);
+		}
+		if(remainingOperational > 0){
+			valueArr.push(remainingOperational);
+		}
+		if((valueArr.length == 0) || (valueArr.length == 1 && valueArr[0] == 0)){
+			return ['Operational'];
+		}
+		return [valueArr,'Operational'];
+	}
+
+	function createFluentArray(levelName) {
+		if (levelName === "Fluent" || levelName === "Advanced") {
+			return [12000];
+		}
+		var valueArr = new Array();
+
+		if (levelName === "Threshold" ) {
+			
+			valueArr.push(0);
+		} 
+		if (levelName === "Intermediate" ) {
+			
+			valueArr.push(0);
+		} 
+		if (levelName === "Operational") {
+			
+			valueArr.push(learned);
+		} 
+		if(learningFluent > 0){
+			valueArr.push(learningFluent);
+		}
+		if(remainingFluent > 0){
+			valueArr.push(remainingFluent);
+		}
+		if((valueArr.length == 0) || (valueArr.length == 1 && valueArr[0] == 0)){
+			return ['Fluent'];
+		}
+		return [valueArr,'Fluent'];
+	}
+
+	function createAdvancedArray(levelName) {
+		if (levelName === "Advanced") {
+			return [20000];
+		}
+		var valueArr = new Array();
+
+		if (levelName === "Threshold" ) {
+			
+			valueArr.push(0);
+		} 
+		if (levelName === "Intermediate" ) {
+			
+			valueArr.push(0);
+		} 
+		if (levelName === "Operational") {
+			
+			valueArr.push(learned);
+		} 
+		if(learningFluent > 0){
+			valueArr.push(learningFluent);
+		}
+		if(remainingFluent > 0){
+			valueArr.push(remainingFluent);
+		}
+		if((valueArr.length == 0) || (valueArr.length == 1 && valueArr[0] == 0)){
+			return ['Fluent'];
+		}
+		return [valueArr,'Fluent'];
+	}
+	
     switch(levelName) {
 	    case "No Proficiency":
 	    	arrayOfData = new Array(
-	    		   	[[learned,learningBeginner,((learned+learning)>75)?0:(75-learned-learning)],'Beginner'],
-	    		   	[[0,learningElementary,((learned+learning)>75)?200-(learning+learned-75):200],'Elementary'],
-	    		   	['Conversation'],
+	    			createBeginnerArray(levelName),
+	    		   	createElementaryArray(levelName),
+	    		   	createConversationArray(levelName),
 	    		   	['Threshold'],
 	    		   	['Intermediate'],
 	    		   	['Operational'],
@@ -35,9 +262,9 @@
 	    case "Beginner":
 	    	arrayOfData = new Array(
 	    		   	[[75],'Beginner'],
-	    		   	[[learned,((learned+learning)>200)?200-learned:learning,((learned+learning)>200)?0:(200-learned-learning)],'Elementary'],
-	    		   	[[0,((learned+learning)>200)?learning+learned-200:0,((learned+learning)>200)?500-(learning+learned-200):500],'Conversation'],
-	    		   	['Threshold'],
+	    		   	createElementaryArray(levelName),
+	    		   	createConversationArray(levelName),
+	    		   	createThresholdArray(levelName),
 	    		   	['Intermediate'],
 	    		   	['Operational'],
 	    		   	['Fluent'],
@@ -48,9 +275,9 @@
 	    	arrayOfData = new Array(
 	    		   	[[75],'Beginner'],
 	    		   	[[200],'Elementary'],
-	    		   	[[learned,((learned+learning)>500)?500-learned:learning,((learned+learning)>500)?0:(500-learned-learning)],'Conversation'],
-	    		   	[[0,((learned+learning)>500)?learning+learned-500:0,((learned+learning)>500)?1250-(learning+learned-500):1250],'Threshold'],
-	    		   	['Intermediate'],
+	    		   	createConversationArray(levelName),
+	    		   	createThresholdArray(levelName),
+	    		   	createIntermediateArray(levelName),
 	    		   	['Operational'],
 	    		   	['Fluent'],
 	    		   	['Advanced']
@@ -61,9 +288,9 @@
 	    		   	[[75],'Beginner'],
 	    		   	[[200],'Elementary'],
 	    		   	[[500],'Conversation'],
-	    		   	[[learned,((learned+learning)>1250)?1250-learned:learning,((learned+learning)>1250)?0:(1250-learned-learning)],'Threshold'],
-	    		   	[[0,((learned+learning)>1250)?learning+learned-1250:0,((learned+learning)>1250)?2500-(learning+learned-1250):2500],'Intermediate'],
-	    		   	['Operational'],
+	    		   	createThresholdArray(levelName),
+	    		   	createIntermediateArray(levelName),
+	    		   	createOperationalArray(levelName),
 	    		   	['Fluent'],
 	    		   	['Advanced']
 	    		); 
@@ -74,9 +301,9 @@
 	    		   	[[200],'Elementary'],
 	    		   	[[500],'Conversation'],
 	    		   	[[1250],'Threshold'],
-	    		   	[[learned,((learned+learning)>2500)?2500-learned:learning,((learned+learning)>2500)?0:(2500-learned-learning)],'Intermediate'],
-	    		   	[[0,((learned+learning)>2500)?learning+learned-2500:0,((learned+learning)>2500)?6000-(learning+learned-2500):6000],'Operational'],
-	    		   	['Fluent'],
+	    		   	createIntermediateArray(levelName),
+	    		   	createOperationalArray(levelName),
+	    		   	createFluentArray(levelName),
 	    		   	['Advanced']
 	    		); 
 	    	break;
@@ -87,9 +314,9 @@
 	    		   	[[500],'Conversation'],
 	    		   	[[1250],'Threshold'],
 	    		   	[[2500],'Intermediate'],
-	    		   	[[learned,((learned+learning)>6000)?6000-learned:learning,((learned+learning)>6000)?0:(6000-learned-learning)],'Operational'],
-	    		   	[[0,((learned+learning)>6000)?learning+learned-6000:0,((learned+learning)>6000)?12000-(learning+learned-6000):12000],'Fluent'],
-	    		   	['Advanced']
+	    		   	createOperationalArray(levelName),
+	    		   	createFluentArray(levelName),
+	    		   	createAdvancedArray(levelName)
 	    		); 
 	    	break;
 	    case "Operational":
@@ -100,8 +327,8 @@
 	    		   	[[1250],'Threshold'],
 	    		   	[[2500],'Intermediate'],
 	    		   	[[6000],'Operational'],
-	    		   	[[learned,((learned+learning)>12000)?12000-learned:learning,((learned+learning)>12000)?0:(12000-learned-learning)],'Fluent'],
-	    		   	[[0,((learned+learning)>12000)?learning+learned-12000:0,((learned+learning)>12000)?20000-(learning+learned-12000):20000],'Advanced']
+	    		   	createFluentArray(levelName),
+	    		   	createAdvancedArray(levelName)
 	    		); 
 	    	break;
 	    case "Fluent":
@@ -113,7 +340,7 @@
 	    		   	[[2500],'Intermediate'],
 	    		   	[[6000],'Operational'],
 	    		   	[[12000],'Fluent'],
-	    		   	[[learned,((learned+learning)>20000)?20000-learned:learning,((learned+learning)>20000)?0:(20000-learned-learning)],'Advanced']
+	    		   	createAdvancedArray(levelName)
 	    		); 
 	    	break;
     }
