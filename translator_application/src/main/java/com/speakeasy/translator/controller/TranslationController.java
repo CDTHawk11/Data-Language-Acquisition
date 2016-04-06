@@ -28,20 +28,16 @@ import com.speakeasy.user.model.UserLevel;
 /**
  * Handles requests for the Translation service.
  * 
- * @author Suman Majumder
- *  any request comes, come here.
- *  a pool of thread 
- *  need to test if each 
- *  make sure no object 
+ * @author Suman Majumder any request comes, come here. a pool of thread need to
+ *         test if each make sure no object
  *
  */
 @Controller
 public class TranslationController {
 
-	//UserProfileManager userProfileManager = new UserProfileManager();
+	// UserProfileManager userProfileManager = new UserProfileManager();
 	// Declear it in a new thread, not outside of the thread.
-	
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(TranslationController.class);
 
 	// Map to store employees, ideally we should use database
@@ -60,88 +56,101 @@ public class TranslationController {
 		return translationData;
 	}
 
-	
 	@RequestMapping(value = TranslatorRestURIConstants.GET_TRANSLATION, method = RequestMethod.GET)
-	public @ResponseBody Map<String, String> getTranslation(
-			@PathVariable("word") String q,
+	public @ResponseBody Map<String, String> getTranslation(@PathVariable("word") String q,
 			@PathVariable("target") String target) {
-		
-		//Thread thread = new Thread();
-		
+
+		// Thread thread = new Thread();
+
 		logger.info("Start getTranslation. Word=" + q);
 		List<String> wordsToTranslate = new ArrayList<String>();
 		wordsToTranslate.add(q);
 		translationData = TranslationManager.translate(wordsToTranslate, target);
 		return translationData;
 	}
-	
+
 	// search translation
 	// call method in uerprofileManager in separate thread
 	// UserProfileManager.
-	
+
 	// changed it to final
 	@RequestMapping(value = TranslatorRestURIConstants.TRANSLATE, method = RequestMethod.POST)
-	public @ResponseBody Map<String, String> searchTranslations(
-			@RequestBody final TranslationRequest request,
+	public @ResponseBody Map<String, String> searchTranslations(@RequestBody final TranslationRequest request,
 			@PathVariable("target") final String target) {
-		
+
 		Thread insertUserOrigThread = new Thread() {
-		    public void run() {
-		    	String origLang = request.getSourceLang(); 
-		    	UserProfileManager userProfileManager = new UserProfileManager();
-		    	userProfileManager.createOrUpdateUserOrig(request.getEmail(), request.getQ(), origLang);
-		    }
+			public void run() {
+				List<List<String>> sentences = request.getQ(); // new
+																// List<List<String>>();
+				List<String> words = new ArrayList<String>();
+				for (int i = 0; i < sentences.size(); i++) {
+					List<String> sentence = sentences.get(i);
+					for (int j = 0; j < sentence.size(); j++) {
+						words.add(sentence.get(j));
+					}
+				}
+				String origLang = request.getSourceLang();
+				UserProfileManager userProfileManager = new UserProfileManager();
+				userProfileManager.createOrUpdateUserOrig(request.getEmail(), words, origLang);
+			}
 		};
 		insertUserOrigThread.start();
-				
+
 		logger.info("Start searchTranslations with language immersion limit .. " + request.getTranLimit());
-		
+
 		UserProfileManager userProfileManager = new UserProfileManager();
 		List<String> wordsToTranslate = userProfileManager.getWordsToTranslate(25, request.getTranLimit());
-		
-		if(wordsToTranslate.size() == 0){
-			wordsToTranslate.addAll(request.getQ());
+
+		if (wordsToTranslate.size() == 0) {
+			List<List<String>> sentences = request.getQ(); // new
+			// List<List<String>>();
+			List<String> words = new ArrayList<String>();
+			
+			for (int i = 0; i < sentences.size(); i++) {
+				List<String> sentence = sentences.get(i);
+				for (int j = 0; j < sentence.size(); j++) {
+					words.add(sentence.get(j));
+				}
+			}
+			wordsToTranslate.addAll(words);
 		}
-		if(wordsToTranslate.size() == 0){
-			wordsToTranslate.add("a");
-		}
-		//translationData = TranslationManager.translate(request.getQ(), target);
+		// translationData = TranslationManager.translate(request.getQ(),
+		// target);
 		translationData = TranslationManager.translate(wordsToTranslate, target);
 		logger.info("Obtained translationsin searchTranslations." + translationData.toString());
-		
-		Thread insertUserTransThread = new Thread(){
-			public void run(){
+
+		Thread insertUserTransThread = new Thread() {
+			public void run() {
 				UserProfileManager userProfileManager = new UserProfileManager();
 				userProfileManager.createOrUpdateUserTrans(request.getEmail(), translationData, target);
 			}
 		};
 		insertUserTransThread.start();
-		
+
 		UserLevel userLevel = userProfileManager.checkUserLevel(request.getEmail());
 		logger.info("Obtained userLevel in searchTranslations." + userLevel);
-		
+
 		translationData.put("LearnedWordCount", String.valueOf(userLevel.getLearnedCount()));
 		translationData.put("LearningWordCount", String.valueOf(userLevel.getLearningCount()));
-		
+
 		return translationData;
 	}
 
 	@RequestMapping(value = TranslatorRestURIConstants.VIEW_PROGRESS, method = RequestMethod.POST)
 	public String viewProgress(@RequestBody TranslationRequest request, Model model) {
 		logger.info("Start viewProgress.");
-		
+
 		UserProfileManager userProfileManager = new UserProfileManager();
 		UserLevel userLevel = userProfileManager.checkUserLevel(request.getEmail());
 		logger.info("Obtained userLevel in searchTranslations." + userLevel);
-		
+
 		model.addAttribute("progressInfo", userLevel);
-		
+
 		return "progressChart";
 	}
-	
+
 	@RequestMapping(value = TranslatorRestURIConstants.SUBMIT_FEEDBACK, method = RequestMethod.POST)
-	public @ResponseBody Map<String, String> submitFeedback(
-			@RequestBody FeedbackRequest feedbackForm) {
+	public @ResponseBody Map<String, String> submitFeedback(@RequestBody FeedbackRequest feedbackForm) {
 		logger.info("Start submitFeedback.");
 		FeedbackManager.putFeedback(feedbackForm);
 		logger.info("Completed submitFeedback.");
@@ -152,9 +161,7 @@ public class TranslationController {
 }
 
 /*
-class OperateTalbes{
-	
-}*/
-
-
-
+ * class OperateTalbes{
+ * 
+ * }
+ */

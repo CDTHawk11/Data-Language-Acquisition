@@ -143,9 +143,9 @@ chrome.storage.sync.get("TRAN_LEVEL", function (limit) {
 	
 	// send to background scripts/server
 	console.log(uniqueTrans);
-	var json_to_Translate = JSON.stringify(uniqueTrans),
+	var json_to_Translate = JSON.stringify(cleanSplit),
 	        json_parse = JSON.parse(json_to_Translate);
-
+	console.log(json_parse);
 	var translationReq = {type: "translation", requestObj: {json_parse}};
 	chrome.runtime.sendMessage(translationReq, function(response) { 
 		var jsonArr = response.merged_words;

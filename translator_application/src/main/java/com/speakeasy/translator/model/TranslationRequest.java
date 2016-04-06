@@ -13,16 +13,16 @@ import java.util.List;
 public class TranslationRequest implements Serializable {
 	private static final long serialVersionUID = 123456789L;
     
-    private List<String> q;
+    private List<List<String>> q;
     private String email;
     private String sourceLang;
     private int tranLimit;
     
     
-    public List<String> getQ() {
+    public List<List<String>> getQ() {
         return q;
     }
-    public void setQ(List<String> q) {
+    public void setQ(List<List<String>> q) {
         this.q = q;
     }
 	/**
