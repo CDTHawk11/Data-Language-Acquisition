@@ -4,9 +4,13 @@
 package com.speakeasy.translator.controller;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.Map.Entry;
+import java.util.Comparator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,6 +73,91 @@ public class TranslationController {
 		return translationData;
 	}
 
+	private List<String> wordsToTranslate(List<String> words, Integer tranLimit){
+		Map<String, Integer> wordCounts = new HashMap<String, Integer>();
+		List<String> toTranslate = new ArrayList<String>();
+		for(int i=0;i<words.size();i++){
+			String word = words.get(i);
+			if (wordCounts.containsKey(words)){
+				wordCounts.put(word, wordCounts.get(word)+1);
+			}
+			else{
+				wordCounts.put(word,1);
+			}
+		}
+		// sort by freq
+		Set<Entry<String,Integer>> set = wordCounts.entrySet();
+		List<Entry<String,Integer>> list = new ArrayList<Entry<String,Integer>>(set);
+		Collections.sort(list, new Comparator<Map.Entry<String,Integer>>(){
+			public int compare(Map.Entry<String,Integer> o1, Map.Entry<String,Integer>o2){
+				return o2.getValue().compareTo(o1.getValue());
+			}
+		});
+		
+		for(int j=0;j<tranLimit;j++){
+			toTranslate.add(list.get(j).getKey());
+		}
+		
+		return toTranslate;
+	}
+	
+	private List<String> flatten(List<List<String>> sentences){
+		List<String> words = new ArrayList<String>(); 
+		for (int i = 0; i < sentences.size(); i++) {
+			List<String> sentence = sentences.get(i);
+			for (int j = 0; j < sentence.size(); j++) {
+				words.add(sentence.get(j));
+			}
+		}
+		return words;
+	}
+	
+	private String joinPhrase(List<String> words){
+		String phrase = "";
+		for (int i=0;i<words.size();i++){
+			phrase = phrase.concat(words.get(i));
+			if (i<words.size()-1){
+				phrase = phrase.concat(" ");
+			}
+		}
+		return phrase;
+	}
+	private List<String> getPhrases(List<List<String>> sentences,List<String>toTranslate){
+		List<String> phrases = new ArrayList<String>();
+		List<String> phrase;
+		
+		int midphrase = 0;
+		for(int s=0;s<sentences.size();s++){
+			List<String> sentence = sentences.get(s);
+			midphrase = 0;
+			phrase = new ArrayList<String>();
+			for(int i=0;i<sentence.size();i++){
+				String word = sentence.get(i);
+				// if we're in the middle of a potential phrase:
+				if (midphrase == 1){
+					// check if it needs to be translated
+					if(toTranslate.contains(word)){
+						phrase.add(word);
+						
+						if (i == (sentence.size()-1)){
+							if (phrase.size()>1){
+								phrases.add(joinPhrase(phrase));
+							}
+						}
+					}
+				}
+				else{
+					if (phrase.size()>1){
+						phrases.add(joinPhrase(phrase));
+					}
+					phrase = new ArrayList<String>();
+				}
+			}
+		}
+		return phrases;
+		
+	}
+
 	// search translation
 	// call method in uerprofileManager in separate thread
 	// UserProfileManager.
@@ -80,15 +169,8 @@ public class TranslationController {
 
 		Thread insertUserOrigThread = new Thread() {
 			public void run() {
-				List<List<String>> sentences = request.getQ(); // new
-																// List<List<String>>();
-				List<String> words = new ArrayList<String>();
-				for (int i = 0; i < sentences.size(); i++) {
-					List<String> sentence = sentences.get(i);
-					for (int j = 0; j < sentence.size(); j++) {
-						words.add(sentence.get(j));
-					}
-				}
+				List<List<String>> sentences = request.getQ(); 
+				List<String> words = flatten(sentences);
 				String origLang = request.getSourceLang();
 				UserProfileManager userProfileManager = new UserProfileManager();
 				userProfileManager.createOrUpdateUserOrig(request.getEmail(), words, origLang);
@@ -101,25 +183,28 @@ public class TranslationController {
 		UserProfileManager userProfileManager = new UserProfileManager();
 		List<String> wordsToTranslate = userProfileManager.getWordsToTranslate(25, request.getTranLimit());
 
+		
+		List<List<String>> sentences = request.getQ(); 
+		
 		if (wordsToTranslate.size() == 0) {
-			List<List<String>> sentences = request.getQ(); // new
-			// List<List<String>>();
 			List<String> words = new ArrayList<String>();
 			
-			for (int i = 0; i < sentences.size(); i++) {
-				List<String> sentence = sentences.get(i);
-				for (int j = 0; j < sentence.size(); j++) {
-					words.add(sentence.get(j));
-				}
-			}
-			// wordsToTranslate.addAll(words);
+			words = flatten(sentences);
+			List<String> toTranslate = wordsToTranslate(words, request.getTranLimit());
+			
+			List<String> phrases = getPhrases(sentences,toTranslate);
+			wordsToTranslate.addAll(phrases);
+			wordsToTranslate.addAll(toTranslate);
 			wordsToTranslate.add("a");
 		}
-		// translationData = TranslationManager.translate(request.getQ(),
-		// target);
+		else{
+			List<String> phrases = getPhrases(sentences, wordsToTranslate);
+			wordsToTranslate.addAll(phrases);
+		}
+		// translationData = TranslationManager.translate(request.getQ(),target);
 		translationData = TranslationManager.translate(wordsToTranslate, target);
 		logger.info("Obtained translationsin searchTranslations." + translationData.toString());
-
+		
 		Thread insertUserTransThread = new Thread() {
 			public void run() {
 				UserProfileManager userProfileManager = new UserProfileManager();
