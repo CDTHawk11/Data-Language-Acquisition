@@ -146,12 +146,19 @@ public class TranslationController {
 							}
 						}
 					}
+					else{
+						if (phrase.size()>1){
+							phrases.add(joinPhrase(phrase));
+						}
+						phrase = new ArrayList<String>();
+					}
 				}
 				else{
-					if (phrase.size()>1){
-						phrases.add(joinPhrase(phrase));
-					}
 					phrase = new ArrayList<String>();
+					if (toTranslate.contains(word)){
+						phrase.add(word);
+						midphrase = 1;
+					}
 				}
 			}
 		}
@@ -205,6 +212,8 @@ public class TranslationController {
 
 			List<String> phrases = getPhrases(sentences, wordsToTranslate);
 			wordsToTranslate.addAll(phrases);
+			logger.info("Sent phrases for translation - " + phrases.size());
+			logger.info("Sent wtt for translation - " + wordsToTranslate.size());
 		}
 		// translationData = TranslationManager.translate(request.getQ(),target);
 		translationData = TranslationManager.translate(wordsToTranslate, target);
