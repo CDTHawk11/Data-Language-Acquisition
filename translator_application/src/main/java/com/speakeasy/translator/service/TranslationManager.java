@@ -31,13 +31,21 @@ public class TranslationManager {
 					com.google.api.client.json.jackson2.JacksonFactory.getDefaultInstance(), null)
 							.setApplicationName("SpeakEasy-Translator") // App-Name
 							.build();
-			Translate.Translations.List list = translate.new Translations().list(wordsToTranslate, targetLanguage);
-			// Set your API-Key from https://console.developers.google.com/
-			list.setKey("AIzaSyDh2RwoPqABGWM9Vdi4piOdwecFRf5MF28");
-			TranslationsListResponse response = list.execute();
-			for (TranslationsResource tr : response.getTranslations()) {
-				translations.put(toTranslateIter.next(), tr.getTranslatedText());
+			int j = 0;
+			while(j < wordsToTranslate.size()){
+				j+=120;
+				int maximum = wordsToTranslate.size()-1;
+				List<String> batch = wordsToTranslate.subList(j-120, Math.min(j,maximum));
+			
+				Translate.Translations.List list = translate.new Translations().list(batch, targetLanguage);
+				// Set your API-Key from https://console.developers.google.com/
+				list.setKey("AIzaSyDh2RwoPqABGWM9Vdi4piOdwecFRf5MF28");
+				TranslationsListResponse response = list.execute();
+				for (TranslationsResource tr : response.getTranslations()) {
+					translations.put(toTranslateIter.next(), tr.getTranslatedText());
+				}
 			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
