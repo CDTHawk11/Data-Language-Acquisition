@@ -45,7 +45,7 @@ public class UserProfileManager {
 // user_orig table	-----------------------------------------------
 	public void createOrUpdateUserOrig(UserOriginal userOriginal){
 		DynamoDBMapper dynamoDBMapper = getMapper();
-		logger.info("Saving in createUpdateUserOrig .. " + userOriginal);
+		//logger.info("Saving in createUpdateUserOrig .. " + userOriginal);
 		
 		UserOriginal item = dynamoDBMapper.load(UserOriginal.class, 
 				userOriginal.getEmail(), 
@@ -162,7 +162,6 @@ public class UserProfileManager {
     		}
     	}
     	while(!backup.isEmpty() && extra > 0){
-    		System.out.println("extra: " + extra + "\t" + backup.peek().getLangWord());
     		result.add(backup.poll().getLangWord().split("_")[1]);
     		--extra;
     	}

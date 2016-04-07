@@ -123,6 +123,7 @@ public class TranslationController {
 		return phrase;
 	}
 	private List<String> getPhrases(List<List<String>> sentences,List<String>toTranslate){
+		logger.info("Starting getPhrases.");
 		List<String> phrases = new ArrayList<String>();
 		List<String> phrase;
 		
@@ -154,6 +155,7 @@ public class TranslationController {
 				}
 			}
 		}
+		logger.info("Returning from getPhrases." + phrases);
 		return phrases;
 		
 	}
@@ -192,18 +194,21 @@ public class TranslationController {
 			words = flatten(sentences);
 			List<String> toTranslate = wordsToTranslate(words, request.getTranLimit());
 			
+			logger.info("Most frequent words sent from the request - " + toTranslate);
+
 			List<String> phrases = getPhrases(sentences,toTranslate);
 			wordsToTranslate.addAll(phrases);
 			wordsToTranslate.addAll(toTranslate);
-			wordsToTranslate.add("a");
 		}
 		else{
+			logger.info("Top list of words from database - " + wordsToTranslate);
+
 			List<String> phrases = getPhrases(sentences, wordsToTranslate);
 			wordsToTranslate.addAll(phrases);
 		}
 		// translationData = TranslationManager.translate(request.getQ(),target);
 		translationData = TranslationManager.translate(wordsToTranslate, target);
-		logger.info("Obtained translationsin searchTranslations." + translationData.toString());
+		logger.info("Obtained translations in searchTranslations." + translationData.toString());
 		
 		Thread insertUserTransThread = new Thread() {
 			public void run() {
