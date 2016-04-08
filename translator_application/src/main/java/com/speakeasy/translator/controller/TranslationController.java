@@ -228,7 +228,7 @@ public class TranslationController {
 		};
 		insertUserTransThread.start();
 
-		UserLevel userLevel = userProfileManager.checkUserLevel(request.getEmail());
+		UserLevel userLevel = userProfileManager.checkUserLevel(request.getEmail(), target);
 		logger.info("Obtained userLevel in searchTranslations." + userLevel);
 
 		translationData.put("LearnedWordCount", String.valueOf(userLevel.getLearnedCount()));
@@ -238,11 +238,12 @@ public class TranslationController {
 	}
 
 	@RequestMapping(value = TranslatorConstants.VIEW_PROGRESS, method = RequestMethod.POST)
-	public String viewProgress(@RequestBody TranslationRequest request, Model model) {
+	public String viewProgress(@RequestBody TranslationRequest request, Model model,
+			@PathVariable("target") final String target) {
 		logger.info("Start viewProgress.");
 
 		UserProfileManager userProfileManager = new UserProfileManager();
-		UserLevel userLevel = userProfileManager.checkUserLevel(request.getEmail());
+		UserLevel userLevel = userProfileManager.checkUserLevel(request.getEmail(), target);
 		logger.info("Obtained userLevel in searchTranslations." + userLevel);
 
 		model.addAttribute("progressInfo", userLevel);

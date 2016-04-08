@@ -104,24 +104,28 @@ $(document).ready(function() {
 				
 	    chrome.storage.sync.get("TRAN_USER_EMAIL", function (obj) {
 	    	var tran_user_email = obj["TRAN_USER_EMAIL"];
-			var jsonParameter = {"email":tran_user_email};
+		    chrome.storage.sync.get("TRAN_TARGET", function (obj) {
+		    	var tran_target_lang = obj["TRAN_TARGET"];
+				var jsonParameter = {"email":tran_user_email};
+				var targetURL = "http://localhost:8080/translator/rest/view/progress/" + tran_target_lang;
 
-			$.ajax({
-				url : "http://localhost:8080/translator/rest/view/progress",
-				type : "POST",
-		        data: JSON.stringify(jsonParameter),
-		        contentType: "application/json",
-		        headers: {"Accept": "application/json"},
-				success: function(result, status, xhr) {
-					$("#languageDiv").hide("slide", { direction: "left" }, 400);
-				    $("#feedbackDiv").show("slide", { direction: "right" }, 400);
-				    $("#feedbackDiv").html(result);
-				   
-				},
-				error: function (xhr, status, errorMsg) {
-		            alert(xhr.status + "::" + xhr.statusText + "::" + xhr.responseText);
-		        }
-			});
+				$.ajax({
+					url : targetURL,
+					type : "POST",
+			        data: JSON.stringify(jsonParameter),
+			        contentType: "application/json",
+			        headers: {"Accept": "application/json"},
+					success: function(result, status, xhr) {
+						$("#languageDiv").hide("slide", { direction: "left" }, 400);
+					    $("#feedbackDiv").show("slide", { direction: "right" }, 400);
+					    $("#feedbackDiv").html(result);
+					   
+					},
+					error: function (xhr, status, errorMsg) {
+			            alert(xhr.status + "::" + xhr.statusText + "::" + xhr.responseText);
+			        }
+				});
+		    });
 	    });
 	});
 

@@ -198,8 +198,8 @@ public class UserProfileManager {
 		return wordCount;
 	}
 
-	public UserLevel checkUserLevel(String email){
-		logger.info("In updateUserLevel with email " + email);
+	public UserLevel checkUserLevel(String email, String lang){
+		logger.info("In checkUserLevel with email " + email);
 		DynamoDBMapper dynamoDBMapper = getMapper();
 		UserLevel userLevel = new UserLevel();
 				
@@ -214,20 +214,31 @@ public class UserProfileManager {
 		UserTrans learnedWordKey = new UserTrans();
 		learnedWordKey.setEmail(email);
 		
+		logger.info("Setting expressionAttributeValues updateUserLevel with lang " + lang);
+		Map<String, AttributeValue> expressionAttributeValues = 
+			    new HashMap<String, AttributeValue>();
+			expressionAttributeValues.put(":lang", new AttributeValue().withS(lang)); 
+			
 		DynamoDBQueryExpression<UserTrans> queryExpressionLearned = new DynamoDBQueryExpression<UserTrans>()
 		     .withHashKeyValues(learnedWordKey)
-		     .withRangeKeyCondition("freq", rangeKeyConditionLearned);
+		     .withRangeKeyCondition("freq", rangeKeyConditionLearned)
+		     .withFilterExpression("begins_with(lang_word, :lang)")
+		     .withExpressionAttributeValues(expressionAttributeValues);
 		
 		DynamoDBQueryExpression<UserTrans> queryExpressionLearning = new DynamoDBQueryExpression<UserTrans>()
 			     .withHashKeyValues(learnedWordKey)
-			     .withRangeKeyCondition("freq", rangeKeyConditionLearning);
+			     .withRangeKeyCondition("freq", rangeKeyConditionLearning)
+			     .withFilterExpression("begins_with(lang_word, :lang)")
+			     .withExpressionAttributeValues(expressionAttributeValues);
 
 		int resultCount = dynamoDBMapper.count(UserTrans.class, queryExpressionLearned);
 		userLevel.setLearnedCount(resultCount);
+		logger.info("Retrieved LearnedCount in checkUserLevel " + resultCount);
 
 		int learningCount = dynamoDBMapper.count(UserTrans.class, queryExpressionLearning);
 		userLevel.setLearningCount(learningCount);
-		
+		logger.info("Setting learningCount in checkUserLevel " + learningCount);
+
 		String level = "";
 		
 		if(resultCount <= 75) {
@@ -347,7 +358,7 @@ public class UserProfileManager {
 		
 		userLevel.setLevel(level);
 		
-		logger.info("Returning from updateUserLevel, resultCount .. " + resultCount);
+		logger.info("Returning from checkUserLevel, resultCount .. " + resultCount);
 		
 		return userLevel;
 	}
