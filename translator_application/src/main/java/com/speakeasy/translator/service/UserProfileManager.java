@@ -1,6 +1,7 @@
 package com.speakeasy.translator.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +15,7 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
+import com.amazonaws.services.dynamodbv2.datamodeling.QueryResultPage;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
 import com.amazonaws.services.dynamodbv2.model.Condition;
@@ -170,6 +172,74 @@ public class UserProfileManager {
 	}
 
 	
+	/*
+	 * return words in the user_orig to be translated
+	 */
+	public List<String> getWordsToTranslate(int threshold, int extra, String lang, String email){
+		DynamoDBMapper dynamoDBMapper = getMapper();
+				
+		Condition rangeKeyConditionLearned = new Condition();
+		rangeKeyConditionLearned.withComparisonOperator(ComparisonOperator.GE)
+		     .withAttributeValueList(new AttributeValue().withN(String.valueOf(threshold)));
+
+		Condition rangeKeyConditionExtra = new Condition();
+		rangeKeyConditionExtra.withComparisonOperator(ComparisonOperator.LT)
+		     .withAttributeValueList(new AttributeValue().withN(String.valueOf(threshold)));
+
+		logger.info("Setting expressionAttributeValues getWordsToTranslate with lang " + lang);
+		Map<String, AttributeValue> expressionAttributeValues = 
+			    new HashMap<String, AttributeValue>();
+			expressionAttributeValues.put(":lang", new AttributeValue().withS(lang)); 
+
+		UserOriginal learnedWordKey = new UserOriginal();
+		learnedWordKey.setEmail(email);
+
+		DynamoDBQueryExpression<UserOriginal> queryExpressionLearned = new DynamoDBQueryExpression<UserOriginal>()
+		     .withHashKeyValues(learnedWordKey)
+		     .withRangeKeyCondition("freq", rangeKeyConditionLearned)
+		     .withFilterExpression("begins_with(lang_word, :lang)")
+		     .withExpressionAttributeValues(expressionAttributeValues);
+
+		List<UserOriginal> wordsToTranslate = new ArrayList<UserOriginal>();
+		do {
+		    QueryResultPage<UserOriginal> resultPage = dynamoDBMapper.queryPage(UserOriginal.class, queryExpressionLearned);
+		    wordsToTranslate.addAll(resultPage.getResults());
+		    queryExpressionLearned.setExclusiveStartKey(resultPage.getLastEvaluatedKey());
+
+		} while (queryExpressionLearned.getExclusiveStartKey() != null);
+
+		DynamoDBQueryExpression<UserOriginal> queryExpressionExtra = new DynamoDBQueryExpression<UserOriginal>()
+			     .withHashKeyValues(learnedWordKey)
+			     .withRangeKeyCondition("freq", rangeKeyConditionExtra)
+			     .withFilterExpression("begins_with(lang_word, :lang)")
+			     .withExpressionAttributeValues(expressionAttributeValues);
+
+		List<UserOriginal> extraWords = new ArrayList<UserOriginal>();
+		do {
+		    QueryResultPage<UserOriginal> resultPage = dynamoDBMapper.queryPage(UserOriginal.class, queryExpressionExtra);
+		    extraWords.addAll(resultPage.getResults());
+		    queryExpressionExtra.setExclusiveStartKey(resultPage.getLastEvaluatedKey());
+
+		} while (queryExpressionExtra.getExclusiveStartKey() != null);
+		
+		Collections.sort(extraWords);
+		logger.info("Obtained extraWords in getWordsToTranslate " + extraWords);
+
+    	List<String> result = new ArrayList<String>();
+    	
+    	for(UserOriginal uo : wordsToTranslate){
+    		result.add(uo.getLangWord().split("_")[1]);
+    	}
+		logger.info("Obtained wordsToTranslate in getWordsToTranslate " + result);
+
+    	int index = extraWords.size()-1;
+    	do {
+    		result.add(extraWords.get(index).getLangWord().split("_")[1]);
+    		index--;
+    	} while(index > (extraWords.size() - extra));
+
+		return result;
+	}
 	
 	/*
 	 * count occurrence of each word
