@@ -5,8 +5,8 @@
     	<div style="font-size: 10pt; font-weight: bold; padding-top: 5px">${progressInfo.level}</div>
 		</div>
 	</div>
-	<div id="footer">
-		<input type="button" value="Back" id="backButton" class="button" style="height: 25px; width: 100px; float: left; font-size: 10pt; margin-top: 8px;"/>
+	<div id="footer" style="padding-top: 0;">
+		<input type="button" value="Back" id="backButton" class="button" style="height: 30px; width: 90px; float: left; font-size: 10pt; margin-top: 8px;"/>
 		<div style="float: right; padding-right: 20px;">
 		<div style="float:left; font-size: 11pt; margin-top: 10px;">Share</div>
 		<img id="facebook" title="Share on Facebook" alt="Share on Facebook" src="facebook.png" style="height: 30px; width: 30px;"/>
@@ -368,8 +368,8 @@
 	});
 
 	$("#backButton").click(function() {
-		$("#feedbackDiv").fadeOut(1000);
-	    $("#languageDiv").fadeIn(1000);
+		$("#feedbackDiv").hide("slide", { direction: "right" }, 400);
+	    $("#languageDiv").show("slide", { direction: "left" }, 400);
 	});
 
 </script>
