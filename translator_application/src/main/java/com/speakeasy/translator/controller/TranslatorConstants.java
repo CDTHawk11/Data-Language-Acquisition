@@ -15,6 +15,6 @@ public class TranslatorConstants {
 	public static final String VIEW_PROGRESS = "/rest/view/progress/{target}";
 	public static final String VIEW_SURVEY = "/rest/view/survey";
 	
-	public static final int LEARNED_WORDS_THRESHOLD = 25;
-	public static final int IMMERSION_THRESHOLD = 200;
+	public static final int LEARNED_WORDS_THRESHOLD = 50;
+	public static final int IMMERSION_THRESHOLD = 250;
 }
