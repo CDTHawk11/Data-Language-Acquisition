@@ -21,43 +21,6 @@ chrome.storage.sync.get("TRAN_LEVEL", function (limit) {
 		return;
 	}
 	
-	var words = [];
-	for (i in alltext){
-		if(alltext[i].trim() !== "") words.push(alltext[i].trim());
-	};
-
-	var counts = [];
-
-	// counts number of words
-	for (var i = 0; i < words.length; i++) {
-	    var num = words[i];
-	    counts[num] = counts[num] ? counts[num] + 1 : 1;
-	}
-
-	var unique_numbers = Object.keys(counts).length; // number unique words
-														// that
-														// appear on page
-	// orders words from most occurring to least
-	var counts_new = [];
-	for (var key in counts)
-	    counts_new.push([key, counts[key]]);
-	counts_new.sort(function (a, b) {
-	    return b[1] - a[1]
-	});
-
-	// var arrays_to = counts_new.splice(0, 4); // four most occurring words
-												// (temporary)
-	var arrays_to = counts_new.splice(0, tranLimit-1);
-	console.log(arrays_to);
-	// Extracts the most frequently occurring words from the arrays_to
-	// dictionary and places them in a list
-	words_to = [];
-	for (var key in arrays_to)
-	    words_to.push([arrays_to[key][0]]);
-	var to_Translate = [].concat.apply([], words_to);
-
-	// CONJUGATION CODE:
-	
 	var cleanArray = [];
 	for (i in sentences){
 		if(sentences[i].trim() !== "") cleanArray.push(sentences[i].trim());
@@ -69,80 +32,6 @@ chrome.storage.sync.get("TRAN_LEVEL", function (limit) {
 		cleanSplit.push(cleanArray[i].split(" "));
 	}
 	
-	// find collocated words for translation and group them together for proper conjugation
-	var mergedConsPlus=[];
-	function getPhrases(sentences){
-		var phrases = [];
-		var phrase = [];
-		var midphrase;
-
-		for (var s=0;s < sentences.length;s++){
-			sentence = sentences[s];
-			midphrase = 0;
-			for (var i=0;i<sentence.length;i++){
-				// if we're in the middle of a potential phrase:
-						//console.log("here");
-				if (midphrase === 1){
-					// check if it's to be translated
-					if (needsTranslation(sentence[i],to_Translate)){
-						phrase.push(sentence[i]);
-						// if we're at the end of the sentence
-						if (i === sentence.length-1){
-							if (phrase.length > 1){
-								phrases.push(phrase.join(" "));
-							}
-						}
-					}
-					else{
-						if (phrase.length > 1){
-							phrases.push(phrase.join(" "));
-						}
-
-						phrase = [];
-					}
-				}
-				// otherwise we are not midphrase, and we check if we need to start new phrase.
-				else {
-					phrase = [];
-					if (needsTranslation(sentence[i],to_Translate)){
-						phrase.push(sentence[i]);
-						midphrase = 1;
-					}
-				}
-
-			}
-		}
-		return phrases;
-	}
-	// function to see if word needs to be translated; 
-	// I have put it as a separate function because efficiency should be improvable in the future.
-	function needsTranslation(word, words){
-		if ($.inArray(word,words) === -1){
-			return false;
-		}
-		return true;
-	}
-
-	mergedConsPlus = getPhrases(cleanSplit);
-	
-	// Array consisting of all collections that require conjugation:
-	
-	// CONJUGATION CODE END
-
-	// packaging list of words to be translated in JSON for transfer to
-	// background scripts
-	
-	forTranslation=[];
-	forTranslation=mergedConsPlus.concat(to_Translate);
-	
-	// delete duplicates
-	var uniqueTrans = [];
-	$.each(forTranslation, function(i, el){
-	    if($.inArray(el, uniqueTrans) === -1) uniqueTrans.push(el);
-	});
-	
-	// send to background scripts/server
-	console.log(uniqueTrans);
 	var json_to_Translate = JSON.stringify(cleanSplit),
 	        json_parse = JSON.parse(json_to_Translate);
 	console.log(json_parse);
