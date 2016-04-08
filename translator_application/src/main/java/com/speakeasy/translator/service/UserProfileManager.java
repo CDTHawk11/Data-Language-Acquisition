@@ -17,6 +17,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
 import com.amazonaws.services.dynamodbv2.model.Condition;
+import com.speakeasy.translator.controller.TranslatorConstants;
 import com.speakeasy.user.model.UserLevel;
 import com.speakeasy.user.model.UserOriginal;
 import com.speakeasy.user.model.UserProfile;
@@ -60,7 +61,7 @@ public class UserProfileManager {
 	
 	
 	public void createOrUpdateUserOrig(String email, List<String> origList, String origLang){
-		logger.info("Saving in createUpdateUserOrig .. " + "request list");
+		logger.info("Saving in createUpdateUserOrig .. " + origList);
 		Map<String, Integer> wordCount = countWordNumber(origList);
 		UserOriginal userOriginal = new UserOriginal();
 		
@@ -86,7 +87,7 @@ public class UserProfileManager {
 
 	public void createOrUpdateUserTrans(UserTrans userTrans){
 		DynamoDBMapper dynamoDBMapper = getMapper();
-		logger.info("Saving in createUpdateUserTrans .. " + userTrans);
+		//logger.info("Saving in createUpdateUserTrans .. " + userTrans);
 		
 		UserTrans item = dynamoDBMapper.load(UserTrans.class, 
 				userTrans.getEmail(), 
@@ -102,7 +103,7 @@ public class UserProfileManager {
 	
 	public void createOrUpdateUserTrans(String email, Map<String, String> transList, String transLang){
 		Map<String, Integer> wordCount = countWordNumber(transList);
-		logger.info("Saving in createUpdateUserTrans .. " + "request list");
+		logger.info("Saving in createUpdateUserTrans .. " + transList);
 		
 		UserTrans userTrans = new UserTrans();
 		
@@ -204,11 +205,11 @@ public class UserProfileManager {
 				
 		Condition rangeKeyConditionLearned = new Condition();
 		rangeKeyConditionLearned.withComparisonOperator(ComparisonOperator.GE)
-		     .withAttributeValueList(new AttributeValue().withN(String.valueOf(25)));
+		     .withAttributeValueList(new AttributeValue().withN(String.valueOf(TranslatorConstants.LEARNED_WORDS_THRESHOLD)));
 
 		Condition rangeKeyConditionLearning = new Condition();
 		rangeKeyConditionLearning.withComparisonOperator(ComparisonOperator.LT)
-		     .withAttributeValueList(new AttributeValue().withN(String.valueOf(25)));
+		     .withAttributeValueList(new AttributeValue().withN(String.valueOf(TranslatorConstants.LEARNED_WORDS_THRESHOLD)));
 
 		UserTrans learnedWordKey = new UserTrans();
 		learnedWordKey.setEmail(email);

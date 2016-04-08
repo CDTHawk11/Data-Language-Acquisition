@@ -47,7 +47,7 @@ public class TranslationController {
 	// Map to store employees, ideally we should use database
 	Map<String, String> translationData = new HashMap<String, String>();
 
-	@RequestMapping(value = TranslatorRestURIConstants.DUMMY_TRANSLATE, method = RequestMethod.GET)
+	@RequestMapping(value = TranslatorConstants.DUMMY_TRANSLATE, method = RequestMethod.GET)
 	public @ResponseBody Map<String, String> getDummyTranslation() {
 		logger.info("Start getDummyTranslation");
 		List<String> wordsToTranslate = new ArrayList<String>();
@@ -60,7 +60,7 @@ public class TranslationController {
 		return translationData;
 	}
 
-	@RequestMapping(value = TranslatorRestURIConstants.GET_TRANSLATION, method = RequestMethod.GET)
+	@RequestMapping(value = TranslatorConstants.GET_TRANSLATION, method = RequestMethod.GET)
 	public @ResponseBody Map<String, String> getTranslation(@PathVariable("word") String q,
 			@PathVariable("target") String target) {
 
@@ -172,7 +172,7 @@ public class TranslationController {
 	// UserProfileManager.
 
 	// changed it to final
-	@RequestMapping(value = TranslatorRestURIConstants.TRANSLATE, method = RequestMethod.POST)
+	@RequestMapping(value = TranslatorConstants.TRANSLATE, method = RequestMethod.POST)
 	public @ResponseBody Map<String, String> searchTranslations(@RequestBody final TranslationRequest request,
 			@PathVariable("target") final String target) {
 
@@ -190,7 +190,7 @@ public class TranslationController {
 		logger.info("Start searchTranslations with language immersion limit .. " + request.getTranLimit());
 
 		UserProfileManager userProfileManager = new UserProfileManager();
-		List<String> wordsToTranslate = userProfileManager.getWordsToTranslate(25, request.getTranLimit());
+		List<String> wordsToTranslate = userProfileManager.getWordsToTranslate(TranslatorConstants.IMMERSION_THRESHOLD, request.getTranLimit());
 
 		
 		List<List<String>> sentences = request.getQ(); 
@@ -236,7 +236,7 @@ public class TranslationController {
 		return translationData;
 	}
 
-	@RequestMapping(value = TranslatorRestURIConstants.VIEW_PROGRESS, method = RequestMethod.POST)
+	@RequestMapping(value = TranslatorConstants.VIEW_PROGRESS, method = RequestMethod.POST)
 	public String viewProgress(@RequestBody TranslationRequest request, Model model) {
 		logger.info("Start viewProgress.");
 
@@ -249,7 +249,7 @@ public class TranslationController {
 		return "progressChart";
 	}
 
-	@RequestMapping(value = TranslatorRestURIConstants.SUBMIT_FEEDBACK, method = RequestMethod.POST)
+	@RequestMapping(value = TranslatorConstants.SUBMIT_FEEDBACK, method = RequestMethod.POST)
 	public @ResponseBody Map<String, String> submitFeedback(@RequestBody FeedbackRequest feedbackForm) {
 		logger.info("Start submitFeedback.");
 		FeedbackManager.putFeedback(feedbackForm);
