@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
@@ -250,6 +251,13 @@ public class TranslationController {
 		model.addAttribute("progressInfo", userLevel);
 
 		return "progressChart";
+	}
+
+	@RequestMapping(value = TranslatorConstants.VIEW_SURVEY, method = RequestMethod.GET)
+	public String viewSurvey(Locale locale, Model model) {
+		logger.info("Start viewSurvey.");
+
+		return "survey";
 	}
 
 	@RequestMapping(value = TranslatorConstants.SUBMIT_FEEDBACK, method = RequestMethod.POST)
