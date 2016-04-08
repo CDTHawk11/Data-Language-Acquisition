@@ -6,6 +6,7 @@ package com.speakeasy.translator.controller;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -125,7 +126,8 @@ public class TranslationController {
 	}
 	private List<String> getPhrases(List<List<String>> sentences,List<String>toTranslate){
 		logger.info("Starting getPhrases.");
-		List<String> phrases = new ArrayList<String>();
+		List<String> phrasesList = new ArrayList<String>();
+		Set<String> phrases = new HashSet<String>();
 		List<String> phrase;
 		
 		int midphrase = 0;
@@ -164,7 +166,8 @@ public class TranslationController {
 			}
 		}
 		logger.info("Returning from getPhrases." + phrases);
-		return phrases;
+		phrasesList.addAll(phrases);
+		return phrasesList;
 		
 	}
 
