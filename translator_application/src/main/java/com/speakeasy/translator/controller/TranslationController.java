@@ -194,7 +194,7 @@ public class TranslationController {
 		logger.info("Start searchTranslations with language immersion limit .. " + request.getTranLimit());
 
 		UserProfileManager userProfileManager = new UserProfileManager();
-		List<String> wordsToTranslate = userProfileManager.getWordsToTranslate(TranslatorConstants.IMMERSION_THRESHOLD, request.getTranLimit(), request.getSourceLang(), request.getEmail());
+		List<String> wordsToTranslate = userProfileManager.getWordsToTranslate(request.getTranLimit(), request.getSourceLang(), request.getEmail());
 
 		
 		List<List<String>> sentences = request.getQ(); 

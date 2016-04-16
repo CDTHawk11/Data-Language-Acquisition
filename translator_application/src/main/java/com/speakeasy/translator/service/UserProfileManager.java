@@ -175,68 +175,64 @@ public class UserProfileManager {
 	/*
 	 * return words in the user_orig to be translated
 	 */
-	public List<String> getWordsToTranslate(int threshold, int extra, String lang, String email){
+	public List<String> getWordsToTranslate(int immersionRate, String lang, String email){
 		DynamoDBMapper dynamoDBMapper = getMapper();
-				
-		Condition rangeKeyConditionLearned = new Condition();
-		rangeKeyConditionLearned.withComparisonOperator(ComparisonOperator.GE)
-		     .withAttributeValueList(new AttributeValue().withN(String.valueOf(threshold)));
 
-		Condition rangeKeyConditionExtra = new Condition();
-		rangeKeyConditionExtra.withComparisonOperator(ComparisonOperator.LT)
-		     .withAttributeValueList(new AttributeValue().withN(String.valueOf(threshold)));
-
-		logger.info("Setting expressionAttributeValues getWordsToTranslate with lang " + lang);
 		Map<String, AttributeValue> expressionAttributeValues = 
 			    new HashMap<String, AttributeValue>();
 			expressionAttributeValues.put(":lang", new AttributeValue().withS(lang)); 
+			
+		Condition rangeKeyConditionLearned = new Condition();
+		rangeKeyConditionLearned.withComparisonOperator(ComparisonOperator.GE)
+		     .withAttributeValueList(new AttributeValue().withN(String.valueOf(TranslatorConstants.LEARNED_WORDS_THRESHOLD)));
 
-		UserOriginal learnedWordKey = new UserOriginal();
+		UserTrans learnedWordKey = new UserTrans();
 		learnedWordKey.setEmail(email);
-
-		DynamoDBQueryExpression<UserOriginal> queryExpressionLearned = new DynamoDBQueryExpression<UserOriginal>()
+		
+		DynamoDBQueryExpression<UserTrans> queryExpressionLearned = new DynamoDBQueryExpression<UserTrans>()
 		     .withHashKeyValues(learnedWordKey)
 		     .withRangeKeyCondition("freq", rangeKeyConditionLearned)
 		     .withFilterExpression("begins_with(lang_word, :lang)")
 		     .withExpressionAttributeValues(expressionAttributeValues);
+		
+		int learnedCount = dynamoDBMapper.count(UserTrans.class, queryExpressionLearned);
+		logger.info("Retrieved LearnedCount in getWordsToTranslate " + learnedCount);
 
-		List<UserOriginal> wordsToTranslate = new ArrayList<UserOriginal>();
-		do {
-		    QueryResultPage<UserOriginal> resultPage = dynamoDBMapper.queryPage(UserOriginal.class, queryExpressionLearned);
-		    wordsToTranslate.addAll(resultPage.getResults());
-		    queryExpressionLearned.setExclusiveStartKey(resultPage.getLastEvaluatedKey());
+		Condition rangeKeyConditionExtra = new Condition();
+		rangeKeyConditionExtra.withComparisonOperator(ComparisonOperator.GE)
+		     .withAttributeValueList(new AttributeValue().withN(String.valueOf(1)));
 
-		} while (queryExpressionLearned.getExclusiveStartKey() != null);
+		int extra = immersionRate + learnedCount;
+		
+		UserOriginal extraWordKey = new UserOriginal();
+		extraWordKey.setEmail(email);
 
 		DynamoDBQueryExpression<UserOriginal> queryExpressionExtra = new DynamoDBQueryExpression<UserOriginal>()
-			     .withHashKeyValues(learnedWordKey)
+			     .withHashKeyValues(extraWordKey)
 			     .withRangeKeyCondition("freq", rangeKeyConditionExtra)
 			     .withFilterExpression("begins_with(lang_word, :lang)")
 			     .withExpressionAttributeValues(expressionAttributeValues);
 
-		List<UserOriginal> extraWords = new ArrayList<UserOriginal>();
+		List<UserOriginal> wordsToTranslate = new ArrayList<UserOriginal>();
 		do {
 		    QueryResultPage<UserOriginal> resultPage = dynamoDBMapper.queryPage(UserOriginal.class, queryExpressionExtra);
-		    extraWords.addAll(resultPage.getResults());
+		    wordsToTranslate.addAll(resultPage.getResults());
 		    queryExpressionExtra.setExclusiveStartKey(resultPage.getLastEvaluatedKey());
 
 		} while (queryExpressionExtra.getExclusiveStartKey() != null);
 		
-		Collections.sort(extraWords);
-		logger.info("Obtained extraWords in getWordsToTranslate " + extraWords);
+		Collections.sort(wordsToTranslate);
 
     	List<String> result = new ArrayList<String>();
     	
-    	for(UserOriginal uo : wordsToTranslate){
-    		result.add(uo.getLangWord().split("_")[1]);
-    	}
-		logger.info("Obtained wordsToTranslate in getWordsToTranslate " + result);
+    	int index = wordsToTranslate.size()-1;
 
-    	int index = extraWords.size()-1;
     	do {
-    		result.add(extraWords.get(index).getLangWord().split("_")[1]);
+    		result.add(wordsToTranslate.get(index).getLangWord().split("_")[1]);
     		index--;
-    	} while(index > (extraWords.size() - extra));
+    	} while(index >= (wordsToTranslate.size() - extra));
+
+ 		logger.info("Obtained result in getWordsToTranslate " + result);
 
 		return result;
 	}
