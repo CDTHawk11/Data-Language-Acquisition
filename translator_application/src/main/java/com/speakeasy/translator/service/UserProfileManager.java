@@ -1,6 +1,7 @@
 package com.speakeasy.translator.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -9,6 +10,7 @@ import java.util.PriorityQueue;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
@@ -242,11 +244,15 @@ public class UserProfileManager {
 	 */
 	public Map<String, Integer> countWordNumber(Map<String, String> map){		
 		Map<String, Integer> wordCount = new HashMap<String, Integer>();
+		List<String> words = new ArrayList<String>();
 		for(String str : map.values()){
-			if(wordCount.containsKey(str)){
-				wordCount.put(str, 1 + wordCount.get(str));
+			words.addAll(Arrays.asList(str.trim().split(" ")));
+		}
+		for(String word : words){
+			if(wordCount.containsKey(word)){
+				wordCount.put(word, 1 + wordCount.get(word));
 			}else{
-				wordCount.put(str, 1);
+				wordCount.put(word, 1);
 			}
 		}
 		return wordCount;
