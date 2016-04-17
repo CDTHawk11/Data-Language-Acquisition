@@ -10,7 +10,6 @@ import java.util.PriorityQueue;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.StringUtils;
 
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
@@ -185,7 +184,7 @@ public class UserProfileManager {
 			expressionAttributeValues.put(":lang", new AttributeValue().withS(lang)); 
 			
 		Condition rangeKeyConditionLearned = new Condition();
-		rangeKeyConditionLearned.withComparisonOperator(ComparisonOperator.GE)
+		rangeKeyConditionLearned.withComparisonOperator(ComparisonOperator.GT)
 		     .withAttributeValueList(new AttributeValue().withN(String.valueOf(TranslatorConstants.LEARNED_WORDS_THRESHOLD)));
 
 		UserTrans learnedWordKey = new UserTrans();
@@ -276,12 +275,14 @@ public class UserProfileManager {
 		UserLevel userLevel = new UserLevel();
 				
 		Condition rangeKeyConditionLearned = new Condition();
-		rangeKeyConditionLearned.withComparisonOperator(ComparisonOperator.GE)
+		rangeKeyConditionLearned.withComparisonOperator(ComparisonOperator.GT)
 		     .withAttributeValueList(new AttributeValue().withN(String.valueOf(TranslatorConstants.LEARNED_WORDS_THRESHOLD)));
 
 		Condition rangeKeyConditionLearning = new Condition();
-		rangeKeyConditionLearning.withComparisonOperator(ComparisonOperator.LT)
-		     .withAttributeValueList(new AttributeValue().withN(String.valueOf(TranslatorConstants.LEARNED_WORDS_THRESHOLD)));
+		rangeKeyConditionLearning.withComparisonOperator(ComparisonOperator.BETWEEN)
+		     .withAttributeValueList(
+		    		 new AttributeValue().withN(String.valueOf(TranslatorConstants.LEARNING_WORDS_THRESHOLD)), 
+		    		 new AttributeValue().withN(String.valueOf(TranslatorConstants.LEARNED_WORDS_THRESHOLD)));
 
 		UserTrans learnedWordKey = new UserTrans();
 		learnedWordKey.setEmail(email);
