@@ -81,7 +81,7 @@ public class DynamoDBUtils {
 	}
 
 	public static void main (String args[]) {
-		DynamoDBUtils.deleteFromUserOrig("jlancecunningham@gmail.com", "en");
+		DynamoDBUtils.deleteFromUserOrig("jlancecunningham@gmail.com", "und");
 		//DynamoDBUtils.deleteFromUserTrans("sumanm.82@gmail.com");
 	}
 }

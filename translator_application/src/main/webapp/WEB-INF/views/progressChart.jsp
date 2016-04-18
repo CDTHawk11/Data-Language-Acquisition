@@ -39,10 +39,7 @@
 		var valueArr = new Array();
 		
 		valueArr.push(learned);
-		
-		if(learningBeginner > 0){
-			valueArr.push(learningBeginner);
-		}
+		valueArr.push(learningBeginner);
 		if(remainingBeginner > 0){
 			valueArr.push(remainingBeginner);
 		}
