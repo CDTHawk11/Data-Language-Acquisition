@@ -39,7 +39,7 @@ public class TranslationManager {
 			
 				Translate.Translations.List list = translate.new Translations().list(batch, targetLanguage);
 				// Set your API-Key from https://console.developers.google.com/
-				list.setKey("AIzaSyDh2RwoPqABGWM9Vdi4piOdwecFRf5MF28");
+				list.setKey("AIzaSyCKErN77nZ6xwXNxdLT7onHcLPFGnjd6PA");
 				TranslationsListResponse response = list.execute();
 				for (TranslationsResource tr : response.getTranslations()) {
 					translations.put(toTranslateIter.next(), tr.getTranslatedText());
