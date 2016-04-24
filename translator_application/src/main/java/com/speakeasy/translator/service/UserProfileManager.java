@@ -3,6 +3,7 @@ package com.speakeasy.translator.service;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +33,8 @@ public class UserProfileManager {
 // user table	 ----------------------------------------------------
 	public void createOrUpdateUser(UserProfile userProfile) {
 		DynamoDBMapper dynamoDBMapper = getMapper();
+		Date regisDate = new Date();
+		userProfile.setRegistrationDate(regisDate.toString());
 		logger.info("Saving in createUpdateUser .. " + userProfile);
 		dynamoDBMapper.save(userProfile);
 	}

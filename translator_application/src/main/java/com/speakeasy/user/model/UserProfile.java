@@ -16,6 +16,7 @@ public class UserProfile implements Serializable {
 	private String current;
 	private String target;
 	private String difficulty;
+	private String registrationDate;
 
 	/**
 	 * @return the fullName
@@ -80,6 +81,7 @@ public class UserProfile implements Serializable {
 	/**
 	 * @return the target
 	 */
+	@DynamoDBAttribute(attributeName="target")
 	public String getTarget() {
 		return target;
 	}
@@ -106,6 +108,14 @@ public class UserProfile implements Serializable {
 	}
 	
 	
+	@DynamoDBAttribute(attributeName="regisDt")
+	public String getRegistrationDate() {
+		return registrationDate;
+	}
+
+	public void setRegistrationDate(String registrationDate) {
+		this.registrationDate = registrationDate;
+	}
 
 	@Override
 	public String toString() {
@@ -122,6 +132,8 @@ public class UserProfile implements Serializable {
 		builder.append(target);
 		builder.append(", difficulty=");
 		builder.append(difficulty);
+		builder.append(", registrationDate=");
+		builder.append(registrationDate);
 		builder.append("]");
 		return builder.toString();
 	}
