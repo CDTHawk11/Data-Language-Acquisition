@@ -5,17 +5,18 @@ package com.speakeasy.translator.controller;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
-import java.util.Comparator;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -45,6 +46,9 @@ public class TranslationController {
 	// Declear it in a new thread, not outside of the thread.
 
 	private static final Logger logger = LoggerFactory.getLogger(TranslationController.class);
+	
+	@Autowired
+	private SpringAsyncConfig asyncConfig;
 
 	// Map to store employees, ideally we should use database
 	Map<String, String> translationData = new HashMap<String, String>();
@@ -171,31 +175,18 @@ public class TranslationController {
 		
 	}
 
-	// search translation
-	// call method in uerprofileManager in separate thread
-	// UserProfileManager.
 
-	// changed it to final
+	// search translation
 	@RequestMapping(value = TranslatorConstants.TRANSLATE, method = RequestMethod.POST)
 	public @ResponseBody Map<String, String> searchTranslations(@RequestBody final TranslationRequest request,
 			@PathVariable("target") final String target) {
-
-		Thread insertUserOrigThread = new Thread() {
-			public void run() {
-				List<List<String>> sentences = request.getQ(); 
-				List<String> words = flatten(sentences);
-				String origLang = request.getSourceLang();
-				UserProfileManager userProfileManager = new UserProfileManager();
-				userProfileManager.createOrUpdateUserOrig(request.getEmail(), words, origLang);
-			}
-		};
-		insertUserOrigThread.start();
+		
+		asyncConfig.insertUserOrig(request);
 
 		logger.info("Start searchTranslations with language immersion limit .. " + request.getTranLimit());
 
 		UserProfileManager userProfileManager = new UserProfileManager();
 		List<String> wordsToTranslate = userProfileManager.getWordsToTranslate(request.getTranLimit(), request.getSourceLang(), request.getEmail());
-
 		
 		List<List<String>> sentences = request.getQ(); 
 		
@@ -223,13 +214,7 @@ public class TranslationController {
 		translationData = TranslationManager.translate(wordsToTranslate, target);
 		logger.info("Obtained translations in searchTranslations." + translationData.toString());
 		
-		Thread insertUserTransThread = new Thread() {
-			public void run() {
-				UserProfileManager userProfileManager = new UserProfileManager();
-				userProfileManager.createOrUpdateUserTrans(request.getEmail(), translationData, target);
-			}
-		};
-		insertUserTransThread.start();
+		asyncConfig.insertUserTrans(request.getEmail(), translationData, target);
 
 		UserLevel userLevel = userProfileManager.checkUserLevel(request.getEmail(), target);
 		logger.info("Obtained userLevel in searchTranslations." + userLevel);
@@ -271,9 +256,3 @@ public class TranslationController {
 		return returnMap;
 	}
 }
-
-/*
- * class OperateTalbes{
- * 
- * }
- */
