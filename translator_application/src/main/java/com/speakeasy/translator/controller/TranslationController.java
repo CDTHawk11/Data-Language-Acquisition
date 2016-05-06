@@ -129,7 +129,6 @@ public class TranslationController {
 		return phrase;
 	}
 	private List<String> getPhrases(List<List<String>> sentences,List<String>toTranslate){
-		logger.info("Starting getPhrases.");
 		List<String> phrasesList = new ArrayList<String>();
 		Set<String> phrases = new HashSet<String>();
 		List<String> phrase;
@@ -169,7 +168,7 @@ public class TranslationController {
 				}
 			}
 		}
-		logger.info("Returning from getPhrases." + phrases);
+		//logger.info("Returning from getPhrases." + phrases);
 		phrasesList.addAll(phrases);
 		return phrasesList;
 		
@@ -182,8 +181,6 @@ public class TranslationController {
 			@PathVariable("target") final String target) {
 		
 		asyncConfig.insertUserOrig(request);
-
-		logger.info("Start searchTranslations with language immersion limit .. " + request.getTranLimit());
 
 		UserProfileManager userProfileManager = new UserProfileManager();
 		List<String> wordsToTranslate = userProfileManager.getWordsToTranslate(request.getTranLimit(), request.getSourceLang(), request.getEmail());
@@ -203,21 +200,19 @@ public class TranslationController {
 			wordsToTranslate.addAll(toTranslate);
 		}
 		else{
-			logger.info("Top list of words from database - " + wordsToTranslate);
-
 			List<String> phrases = getPhrases(sentences, wordsToTranslate);
 			wordsToTranslate.addAll(phrases);
-			logger.info("Sent phrases for translation - " + phrases.size());
-			logger.info("Sent wtt for translation - " + wordsToTranslate.size());
+			logger.info("List of phrases for translation - " + phrases.size());
+			logger.info("Total number of units for translation - " + wordsToTranslate.size());
 		}
 		// translationData = TranslationManager.translate(request.getQ(),target);
 		translationData = TranslationManager.translate(wordsToTranslate, target);
-		logger.info("Obtained translations in searchTranslations." + translationData.toString());
+		logger.info("Obtained translations in searchTranslations .. " + translationData.toString());
 		
 		asyncConfig.insertUserTrans(request.getEmail(), translationData, target);
 
 		UserLevel userLevel = userProfileManager.checkUserLevel(request.getEmail(), target);
-		logger.info("Obtained userLevel in searchTranslations." + userLevel);
+		logger.info("Obtained userLevel in searchTranslations .. " + userLevel);
 
 		translationData.put("LearnedWordCount", String.valueOf(userLevel.getLearnedCount()));
 		translationData.put("LearningWordCount", String.valueOf(userLevel.getLearningCount()));

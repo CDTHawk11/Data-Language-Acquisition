@@ -67,7 +67,6 @@ public class UserProfileManager {
 	
 	
 	public void createOrUpdateUserOrig(String email, List<String> origList, String origLang){
-		logger.info("Saving in createUpdateUserOrig .. " + origList);
 		Map<String, Integer> wordCount = countWordNumber(origList);
 		UserOriginal userOriginal = new UserOriginal();
 		
@@ -109,7 +108,6 @@ public class UserProfileManager {
 	
 	public void createOrUpdateUserTrans(String email, Map<String, String> transList, String transLang){
 		Map<String, Integer> wordCount = countWordNumber(transList);
-		logger.info("Saving in createUpdateUserTrans .. " + transList);
 		
 		UserTrans userTrans = new UserTrans();
 		
@@ -180,6 +178,8 @@ public class UserProfileManager {
 	 * return words in the user_orig to be translated
 	 */
 	public List<String> getWordsToTranslate(int immersionRate, String lang, String email){
+		logger.info("In getWordsToTranslate for " + email + " with immersion rate " + immersionRate);
+
 		DynamoDBMapper dynamoDBMapper = getMapper();
 
 		Map<String, AttributeValue> expressionAttributeValues = 
@@ -313,7 +313,7 @@ public class UserProfileManager {
 
 		int learningCount = dynamoDBMapper.count(UserTrans.class, queryExpressionLearning);
 		userLevel.setLearningCount(learningCount);
-		logger.info("Setting learningCount in checkUserLevel " + learningCount);
+		logger.info("Retrieved learningCount in checkUserLevel " + learningCount);
 
 		String level = "";
 		
@@ -433,9 +433,7 @@ public class UserProfileManager {
 		} 
 		
 		userLevel.setLevel(level);
-		
-		logger.info("Returning from checkUserLevel, resultCount .. " + resultCount);
-		
+				
 		return userLevel;
 	}
 }
