@@ -71,7 +71,7 @@ public class UserTranslationServiceImpl implements UserTranslationService {
 
 	@Async
 	public void enqueueUserOrig(TranslationRequest request){
-		logger.info("Saving in enqueueUserOrig for .. " + request.getEmail());
+		logger.info("enqueueUserOrig for user .. " + request.getEmail() + " with orig lang : " + request.getSourceLang());
 		
 		List<String> words = flatten(request.getQ());
 		
@@ -88,7 +88,7 @@ public class UserTranslationServiceImpl implements UserTranslationService {
 
 	@Async
 	public void enqueueUserTrans(String email, Map<String, String> translationData, String target){
-		logger.info("Saving in enqueueUserTrans for .. " + email);
+		logger.info("enqueueUserTrans for user .. " + email + " with target lang : " + target);
 				
 		Map<String, Integer> wordCount = countWordNumber(translationData);
 		

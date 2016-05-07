@@ -46,11 +46,11 @@
 	
 	<task:annotation-driven executor="taskExecutor" scheduler="scheduledProcessor" />
 	
-	<task:scheduler id="scheduledProcessor" />
+	<task:scheduler id="scheduledProcessor" pool-size="10" />
 	
 	<task:scheduled-tasks scheduler="scheduledProcessor">
-	    <task:scheduled ref="scheduler" method="processOrig" fixed-delay="120" />
-	    <task:scheduled ref="scheduler" method="processTrans" fixed-delay="850" />
+	    <task:scheduled ref="scheduler" method="processOrig" fixed-delay="500" />
+	    <task:scheduled ref="scheduler" method="processTrans" fixed-delay="1000" />
 	</task:scheduled-tasks>
 	
 	<context:component-scan base-package="com.speakeasy" />
