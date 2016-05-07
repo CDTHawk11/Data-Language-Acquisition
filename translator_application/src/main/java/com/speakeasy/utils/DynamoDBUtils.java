@@ -13,8 +13,8 @@ import com.amazonaws.services.dynamodbv2.datamodeling.QueryResultPage;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
 import com.amazonaws.services.dynamodbv2.model.Condition;
-import com.speakeasy.user.model.UserOriginal;
-import com.speakeasy.user.model.UserTrans;
+import com.speakeasy.translator.model.UserOriginal;
+import com.speakeasy.translator.model.UserTrans;
 
 public class DynamoDBUtils {
 

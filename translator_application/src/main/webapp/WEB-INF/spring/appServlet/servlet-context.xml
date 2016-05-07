@@ -44,7 +44,14 @@
 	    <beans:property name="keepAliveSeconds" value="10" />
 	</beans:bean>
 	
-	<task:annotation-driven executor="taskExecutor" />
+	<task:annotation-driven executor="taskExecutor" scheduler="scheduledProcessor" />
+	
+	<task:scheduler id="scheduledProcessor" />
+	
+	<task:scheduled-tasks scheduler="scheduledProcessor">
+	    <task:scheduled ref="scheduler" method="processOrig" fixed-delay="120" />
+	    <task:scheduled ref="scheduler" method="processTrans" fixed-delay="850" />
+	</task:scheduled-tasks>
 	
 	<context:component-scan base-package="com.speakeasy" />
 	

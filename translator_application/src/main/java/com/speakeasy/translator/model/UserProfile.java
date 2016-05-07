@@ -1,4 +1,4 @@
-package com.speakeasy.user.model;
+package com.speakeasy.translator.model;
 
 import java.io.Serializable;
 

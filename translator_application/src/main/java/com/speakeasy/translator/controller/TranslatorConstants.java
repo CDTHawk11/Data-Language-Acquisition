@@ -14,6 +14,8 @@ public class TranslatorConstants {
 	public static final String SUBMIT_FEEDBACK = "/rest/submit/feedback";
 	public static final String VIEW_PROGRESS = "/rest/view/progress/{target}";
 	public static final String VIEW_SURVEY = "/rest/view/survey";
+	public static final String SETUP_PROFILE = "/rest/user/profile";
+	public static final String SAVE_PROFILE = "/rest/user/save";
 	
 	public static final int LEARNED_WORDS_THRESHOLD = 50;
 	public static final int LEARNING_WORDS_THRESHOLD = 30;

@@ -1,58 +1,52 @@
-package com.speakeasy.translator.service;
+package com.speakeasy.translator.dao;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.PriorityQueue;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
 
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.QueryResultPage;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
 import com.amazonaws.services.dynamodbv2.model.Condition;
 import com.speakeasy.translator.controller.TranslatorConstants;
-import com.speakeasy.user.model.UserLevel;
-import com.speakeasy.user.model.UserOriginal;
-import com.speakeasy.user.model.UserProfile;
-import com.speakeasy.user.model.UserTrans;
+import com.speakeasy.translator.model.UserLevel;
+import com.speakeasy.translator.model.UserOriginal;
+import com.speakeasy.translator.model.UserProfile;
+import com.speakeasy.translator.model.UserTrans;
 
-public class UserProfileManager {
-	private static final Logger logger = LoggerFactory.getLogger(UserProfileManager.class);
+@Repository("userTranslationDao")
+public class UserTranslationDaoImpl implements UserTranslationDao {
+	private static final Logger logger = LoggerFactory.getLogger(UserTranslationDaoImpl.class);
 
 // user table	 ----------------------------------------------------
 	public void createOrUpdateUser(UserProfile userProfile) {
-		DynamoDBMapper dynamoDBMapper = getMapper();
+		AmazonDynamoDBClient client = new AmazonDynamoDBClient().withRegion(Regions.US_WEST_2);
+		//AmazonDynamoDBClient client = new AmazonDynamoDBClient();
+		//client.setEndpoint("http://localhost:8000");
+		DynamoDBMapper dynamoDBMapper = new DynamoDBMapper(client);
 		Date regisDate = new Date();
 		userProfile.setRegistrationDate(regisDate.toString());
 		logger.info("Saving in createUpdateUser .. " + userProfile);
 		dynamoDBMapper.save(userProfile);
 	}
 	
-	public UserProfile loadUserItem(UserProfile userProfile){
-		return loadUserItem(userProfile.getEmail());
-	}
-	
-	public UserProfile loadUserItem(String email){
-		DynamoDBMapper dynamoDBMapper = getMapper();
-		UserProfile item = dynamoDBMapper.load(UserProfile.class, email);
-		return item;
-	}
-	
 // user_orig table	-----------------------------------------------
 	public void createOrUpdateUserOrig(UserOriginal userOriginal){
-		DynamoDBMapper dynamoDBMapper = getMapper();
-		//logger.info("Saving in createUpdateUserOrig .. " + userOriginal);
+		AmazonDynamoDBClient client = new AmazonDynamoDBClient().withRegion(Regions.US_WEST_2);
+		//AmazonDynamoDBClient client = new AmazonDynamoDBClient();
+		//client.setEndpoint("http://localhost:8000");
+		DynamoDBMapper dynamoDBMapper = new DynamoDBMapper(client);
 		
 		UserOriginal item = dynamoDBMapper.load(UserOriginal.class, 
 				userOriginal.getEmail(), 
@@ -65,34 +59,13 @@ public class UserProfileManager {
 		}
 	}
 	
-	
-	public void createOrUpdateUserOrig(String email, List<String> origList, String origLang){
-		Map<String, Integer> wordCount = countWordNumber(origList);
-		UserOriginal userOriginal = new UserOriginal();
-		
-		for(String str : wordCount.keySet()){
-			userOriginal.setEmail(email);
-			userOriginal.setLangWord(origLang + "_" + str);
-			userOriginal.setFreq(wordCount.get(str));
-			createOrUpdateUserOrig(userOriginal);
-		}
-	}
-
-	
-	public UserOriginal loadUserOrigItem(UserOriginal userOriginal){
-		return loadUserOrigItem(userOriginal.getEmail(), userOriginal.getLangWord());
-	}
-	
-	public UserOriginal loadUserOrigItem(String email, String langWord){
-		DynamoDBMapper dynamoDBMapper = getMapper();
-		return dynamoDBMapper.load(UserOriginal.class, email, langWord);
-	}
-	
 //user_trans table ----------------------------------------------------------------
 
 	public void createOrUpdateUserTrans(UserTrans userTrans){
-		DynamoDBMapper dynamoDBMapper = getMapper();
-		//logger.info("Saving in createUpdateUserTrans .. " + userTrans);
+		AmazonDynamoDBClient client = new AmazonDynamoDBClient().withRegion(Regions.US_WEST_2);
+		//AmazonDynamoDBClient client = new AmazonDynamoDBClient();
+		//client.setEndpoint("http://localhost:8000");
+		DynamoDBMapper dynamoDBMapper = new DynamoDBMapper(client);
 		
 		UserTrans item = dynamoDBMapper.load(UserTrans.class, 
 				userTrans.getEmail(), 
@@ -105,82 +78,16 @@ public class UserProfileManager {
 		}
 	}
 	
-	
-	public void createOrUpdateUserTrans(String email, Map<String, String> transList, String transLang){
-		Map<String, Integer> wordCount = countWordNumber(transList);
-		
-		UserTrans userTrans = new UserTrans();
-		
-		for(String str : wordCount.keySet()){
-			userTrans.setEmail(email);
-			userTrans.setLangWord(transLang + "_" + str);
-			userTrans.setFreq(wordCount.get(str));
-			createOrUpdateUserTrans(userTrans);
-		}
-	}
-	
-	public UserTrans loadUserTransItem(UserTrans userTrans){
-		return loadUserTransItem(userTrans.getEmail(), userTrans.getLangWord());
-	}
-	
-	public UserTrans loadUserTransItem(String user, String langWord){
-		DynamoDBMapper dynamoDBMapper = getMapper();
-		return dynamoDBMapper.load(UserTrans.class, user, langWord);
-	}
-	
-	
-	/*
-	 * get mapper instance
-	 */
-	public DynamoDBMapper getMapper(){
-		AmazonDynamoDBClient client = new AmazonDynamoDBClient().withRegion(Regions.US_WEST_2);
-		//AmazonDynamoDBClient client = new AmazonDynamoDBClient();
-		//client.setEndpoint("http://localhost:8000");
-		DynamoDBMapper dynamoDBMapper = new DynamoDBMapper(client);
-		return dynamoDBMapper;
-	}
-	 
-	
-	/*
-	 * return words in the user_orig to be translated
-	 */
-	public List<String> getWordsToTranslate(int threshold, int extra){
-		DynamoDBMapper dynamoDBMapper = getMapper();
-
-    	HashMap<String, AttributeValue> eav = new HashMap<String, AttributeValue>();
-    	eav.put(":v1", new AttributeValue().withN("1"));
-    	       
-    	DynamoDBScanExpression scanExpression = new DynamoDBScanExpression();
-    	/*
-    	    .withFilterExpression("freq >= :v1")
-    	    .withExpressionAttributeValues(eav);*/
-    	List<UserOriginal> replies =  dynamoDBMapper.scan(UserOriginal.class, scanExpression);
-    	
-    	List<String> result = new ArrayList<String>();
-    	
-    	PriorityQueue<UserOriginal> backup = new PriorityQueue<UserOriginal>();
-    	for(UserOriginal uo : replies){
-    		if(uo.getFreq() >= threshold){
-    			result.add(uo.getLangWord().split("_")[1]);
-    		}else{
-    			backup.offer(uo);
-    		}
-    	}
-    	while(!backup.isEmpty() && extra > 0){
-    		result.add(backup.poll().getLangWord().split("_")[1]);
-    		--extra;
-    	}
-		return result;
-	}
-
-	
 	/*
 	 * return words in the user_orig to be translated
 	 */
 	public List<String> getWordsToTranslate(int immersionRate, String lang, String email){
 		logger.info("In getWordsToTranslate for " + email + " with immersion rate " + immersionRate);
 
-		DynamoDBMapper dynamoDBMapper = getMapper();
+		AmazonDynamoDBClient client = new AmazonDynamoDBClient().withRegion(Regions.US_WEST_2);
+		//AmazonDynamoDBClient client = new AmazonDynamoDBClient();
+		//client.setEndpoint("http://localhost:8000");
+		DynamoDBMapper dynamoDBMapper = new DynamoDBMapper(client);
 
 		Map<String, AttributeValue> expressionAttributeValues = 
 			    new HashMap<String, AttributeValue>();
@@ -241,40 +148,12 @@ public class UserProfileManager {
 		return result;
 	}
 	
-	/*
-	 * count occurrence of each word
-	 */
-	public Map<String, Integer> countWordNumber(Map<String, String> map){		
-		Map<String, Integer> wordCount = new HashMap<String, Integer>();
-		List<String> words = new ArrayList<String>();
-		for(String str : map.values()){
-			words.addAll(Arrays.asList(str.trim().split(" ")));
-		}
-		for(String word : words){
-			if(wordCount.containsKey(word)){
-				wordCount.put(word, 1 + wordCount.get(word));
-			}else{
-				wordCount.put(word, 1);
-			}
-		}
-		return wordCount;
-	}
-	
-	public Map<String, Integer> countWordNumber(List<String> list){
-		Map<String, Integer> wordCount = new HashMap<String, Integer>();
-		for(String str : list){
-			if(wordCount.containsKey(str)){
-				wordCount.put(str, 1 + wordCount.get(str));
-			}else{
-				wordCount.put(str, 1);
-			}
-		}
-		return wordCount;
-	}
-
 	public UserLevel checkUserLevel(String email, String lang){
 		logger.info("In checkUserLevel with email " + email);
-		DynamoDBMapper dynamoDBMapper = getMapper();
+		AmazonDynamoDBClient client = new AmazonDynamoDBClient().withRegion(Regions.US_WEST_2);
+		//AmazonDynamoDBClient client = new AmazonDynamoDBClient();
+		//client.setEndpoint("http://localhost:8000");
+		DynamoDBMapper dynamoDBMapper = new DynamoDBMapper(client);
 		UserLevel userLevel = new UserLevel();
 				
 		Condition rangeKeyConditionLearned = new Condition();

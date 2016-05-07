@@ -27,10 +27,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.speakeasy.translator.model.FeedbackRequest;
 import com.speakeasy.translator.model.TranslationRequest;
+import com.speakeasy.translator.model.UserLevel;
 import com.speakeasy.translator.service.FeedbackManager;
 import com.speakeasy.translator.service.TranslationManager;
-import com.speakeasy.translator.service.UserProfileManager;
-import com.speakeasy.user.model.UserLevel;
+import com.speakeasy.translator.service.UserTranslationService;
 
 /**
  * Handles requests for the Translation service.
@@ -48,7 +48,7 @@ public class TranslationController {
 	private static final Logger logger = LoggerFactory.getLogger(TranslationController.class);
 	
 	@Autowired
-	private SpringAsyncConfig asyncConfig;
+	private UserTranslationService userTranslationService;
 
 	// Map to store employees, ideally we should use database
 	Map<String, String> translationData = new HashMap<String, String>();
@@ -174,16 +174,14 @@ public class TranslationController {
 		
 	}
 
-
 	// search translation
 	@RequestMapping(value = TranslatorConstants.TRANSLATE, method = RequestMethod.POST)
 	public @ResponseBody Map<String, String> searchTranslations(@RequestBody final TranslationRequest request,
 			@PathVariable("target") final String target) {
 		
-		asyncConfig.insertUserOrig(request);
+		userTranslationService.enqueueUserOrig(request);
 
-		UserProfileManager userProfileManager = new UserProfileManager();
-		List<String> wordsToTranslate = userProfileManager.getWordsToTranslate(request.getTranLimit(), request.getSourceLang(), request.getEmail());
+		List<String> wordsToTranslate = userTranslationService.getWordsToTranslate(request);
 		
 		List<List<String>> sentences = request.getQ(); 
 		
@@ -209,9 +207,9 @@ public class TranslationController {
 		translationData = TranslationManager.translate(wordsToTranslate, target);
 		logger.info("Obtained translations in searchTranslations .. " + translationData.toString());
 		
-		asyncConfig.insertUserTrans(request.getEmail(), translationData, target);
+		userTranslationService.enqueueUserTrans(request.getEmail(), translationData, target);
 
-		UserLevel userLevel = userProfileManager.checkUserLevel(request.getEmail(), target);
+		UserLevel userLevel = userTranslationService.checkUserLevel(request.getEmail(), target);
 		logger.info("Obtained userLevel in searchTranslations .. " + userLevel);
 
 		translationData.put("LearnedWordCount", String.valueOf(userLevel.getLearnedCount()));
@@ -225,8 +223,7 @@ public class TranslationController {
 			@PathVariable("target") final String target) {
 		logger.info("Start viewProgress.");
 
-		UserProfileManager userProfileManager = new UserProfileManager();
-		UserLevel userLevel = userProfileManager.checkUserLevel(request.getEmail(), target);
+		UserLevel userLevel = userTranslationService.checkUserLevel(request.getEmail(), target);
 		logger.info("Obtained userLevel in searchTranslations." + userLevel);
 
 		model.addAttribute("progressInfo", userLevel);

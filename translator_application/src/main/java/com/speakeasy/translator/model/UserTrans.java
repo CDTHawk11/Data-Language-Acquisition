@@ -1,4 +1,4 @@
-package com.speakeasy.user.model;
+package com.speakeasy.translator.model;
 
 import java.io.Serializable;
 
@@ -7,9 +7,9 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBIndexRangeKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
-@DynamoDBTable(tableName="user_orig")
-public class UserOriginal implements Serializable, Comparable<UserOriginal> {
-	private static final long serialVersionUID = 999000000L;
+@DynamoDBTable(tableName="user_trans")
+public class UserTrans implements Serializable {
+	private static final long serialVersionUID = 999000001L;
 	
 	private String email;
 	private String langWord;
@@ -48,7 +48,7 @@ public class UserOriginal implements Serializable, Comparable<UserOriginal> {
 	/**
 	 * @return the count
 	 */
-	@DynamoDBIndexRangeKey(attributeName="freq", localSecondaryIndexName="OrigCountIndex")
+	@DynamoDBIndexRangeKey(attributeName="freq", localSecondaryIndexName="TransCountIndex")
 	public int getFreq() {
 		return freq;
 	}
@@ -62,18 +62,6 @@ public class UserOriginal implements Serializable, Comparable<UserOriginal> {
 
 	@Override
 	public String toString() {
-		return "UserOriginal [email=" + email + ", langWord=" + langWord + ", freq=" + freq + "]";
-	}
-
-	@Override
-	public int compareTo(UserOriginal arg0) {
-		// TODO Auto-generated method stub
-		if(this.getFreq() > arg0.getFreq()){
-			return 1;
-		}else if(this.getFreq() == arg0.getFreq()){
-			return -1;
-		}else{
-			return 0;
-		}
+		return "UserTrans [email=" + email + ", langWord=" + langWord + ", freq=" + freq + "]";
 	}
 }

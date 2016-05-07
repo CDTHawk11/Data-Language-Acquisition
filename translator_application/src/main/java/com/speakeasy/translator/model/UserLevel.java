@@ -1,4 +1,4 @@
-package com.speakeasy.user.model;
+package com.speakeasy.translator.model;
 
 public class UserLevel {
 	private static final long serialVersionUID = 123498765L;
