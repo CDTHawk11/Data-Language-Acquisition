@@ -15,7 +15,7 @@ public class ScheduledProcessor {
 	@Autowired
 	private UserTranslationService userTranslationService;
 
-	@Scheduled(fixedDelay = 500)
+	@Scheduled(fixedDelay = 1000)
 	public void processOrig() {
 		int count = 0;
 		for (int i = 0; i < 25; i++) {
@@ -31,7 +31,7 @@ public class ScheduledProcessor {
 		}
 	}
 
-	@Scheduled(fixedDelay = 1000)
+	@Scheduled(fixedDelay = 5000)
 	public void processTrans() {
 		int count = 0;
 		for (int i = 0; i < 10; i++) {
