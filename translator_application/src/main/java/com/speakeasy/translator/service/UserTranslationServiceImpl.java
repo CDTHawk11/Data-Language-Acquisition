@@ -101,20 +101,24 @@ public class UserTranslationServiceImpl implements UserTranslationService {
 		}
 	}
 
-	public void insertUserOrig(){
+	public boolean insertUserOrig(){
 		UserOriginal userOriginal = originalWordPipe.poll();
-
+		boolean processed = false;
 		if(userOriginal != null) {
 			userTranslationDao.createOrUpdateUserOrig(userOriginal);
+			processed = true;
 		}
+		return processed;
 	}
 
-	public void insertUserTrans(){
+	public boolean insertUserTrans(){
 		UserTrans userTrans = translationWordPipe.poll();
-
+		boolean processed = false;
 		if(userTrans != null) {
 			userTranslationDao.createOrUpdateUserTrans(userTrans);
+			processed = true;
 		}
+		return processed;
 	}
 	
 	public List<String> getWordsToTranslate(TranslationRequest request) {

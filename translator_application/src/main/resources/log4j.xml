@@ -9,10 +9,35 @@
 			<param name="ConversionPattern" value="%d{MMM dd,yyyy HH:mm:ss} - %-5p [%c] - %m%n" />
 		</layout>
 	</appender>
+
+   <!-- Time/date based rolling appenders -->
+   <appender name="translatorFile" class="org.apache.log4j.RollingFileAppender">
+	   	<param name="Threshold" value="INFO" />
+	   	<param name="File" value="/home/ec2-user/apache-tomcat-8.0.30/logs/translator.log"/>
+	   	<param name="Append" value="true"/>
+	   	<param name="MaxFileSize" value="20MB"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{MMM dd,yyyy HH:mm:ss} - %-5p [%c] - %m%n" />
+		</layout>
+   </appender>
+   <appender name="schedulerFile" class="org.apache.log4j.RollingFileAppender">
+	   	<param name="Threshold" value="INFO" />
+	   	<param name="File" value="/home/ec2-user/apache-tomcat-8.0.30/logs/scheduler.log"/>
+	   	<param name="Append" value="true"/>
+	   	<param name="MaxFileSize" value="20MB"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{MMM dd,yyyy HH:mm:ss} - %-5p [%c] - %m%n" />
+		</layout>
+   </appender>
 	
 	<!-- Application Loggers -->
 	<logger name="com.speakeasy.translator">
 		<level value="info" />
+		<appender-ref ref="translatorFile" />
+	</logger>
+	<logger name="com.speakeasy.schedule">
+		<level value="info" />
+		<appender-ref ref="schedulerFile" />
 	</logger>
 	
 	<!-- 3rdparty Loggers -->

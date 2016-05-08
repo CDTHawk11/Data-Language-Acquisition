@@ -1,12 +1,12 @@
-package com.speakeasy.translator.service;
-
-import java.util.Date;
+package com.speakeasy.schedule;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+
+import com.speakeasy.translator.service.UserTranslationService;
 
 @Service("scheduler")
 public class ScheduledProcessor {
@@ -17,17 +17,33 @@ public class ScheduledProcessor {
 
 	@Scheduled(fixedDelay = 500)
 	public void processOrig() {
-		logger.info("processOrig next chunk .. " + new Date());
+		int count = 0;
 		for (int i = 0; i < 25; i++) {
-			userTranslationService.insertUserOrig();
+			boolean isProcessed = userTranslationService.insertUserOrig();
+			
+			if(isProcessed) {
+				count++;
+			}
+		}
+		
+		if(count > 0) {
+			logger.info("processOrig inserted .. " + count);
 		}
 	}
 
 	@Scheduled(fixedDelay = 1000)
 	public void processTrans() {
-		logger.info("processTrans next chunk .. " + new Date());
+		int count = 0;
 		for (int i = 0; i < 10; i++) {
-			userTranslationService.insertUserTrans();
+			boolean isProcessed = userTranslationService.insertUserTrans();
+			
+			if(isProcessed) {
+				count++;
+			}
+		}
+		
+		if(count > 0) {
+			logger.info("processTrans inserted .. " + count);
 		}
 	}
 }

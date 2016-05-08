@@ -12,8 +12,8 @@ public interface UserTranslationService {
 	public void createOrUpdateUser(UserProfile userProfile);
 	public void enqueueUserOrig(TranslationRequest request);
 	public void enqueueUserTrans(String email, Map<String, String> translationData, String target);
-	public void insertUserOrig();
-	public void insertUserTrans();
+	public boolean insertUserOrig();
+	public boolean insertUserTrans();
 	public List<String> getWordsToTranslate(TranslationRequest request);
 	public UserLevel checkUserLevel(String email, String lang);
 }
