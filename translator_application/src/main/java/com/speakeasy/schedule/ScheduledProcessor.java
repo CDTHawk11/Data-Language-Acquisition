@@ -18,7 +18,7 @@ public class ScheduledProcessor {
 	@Scheduled(fixedDelay = 1000)
 	public void processOrig() {
 		int count = 0;
-		for (int i = 0; i < 25; i++) {
+		for (int i = 0; i < 40; i++) {
 			boolean isProcessed = userTranslationService.insertUserOrig();
 			
 			if(isProcessed) {
