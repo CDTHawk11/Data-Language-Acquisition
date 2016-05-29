@@ -1,5 +1,54 @@
 $(document).ready(function() {
-	
+
+	var tranLimit = 5;
+
+	chrome.storage.sync.get("TRAN_LIMIT", function(limit) {
+
+		if (!(limit["TRAN_LIMIT"])) {
+			chrome.storage.sync.set({
+				'TRAN_LIMIT' : tranLimit
+			}, function() {
+			});
+		} else {
+			tranLimit = limit["TRAN_LIMIT"];
+		}
+
+		$('#application-progress').slider({
+			step : 10,
+			min : 5,
+			value : tranLimit,
+			max : 25,
+			animate : true,
+			slide : function(event, ui) {
+				$("#progress").val(ui.value);
+				var translationLimit = $("#progress").val();
+				chrome.storage.sync.set({
+					'TRAN_LIMIT' : translationLimit
+				}, function() {
+				});
+			},
+		});
+
+		$("#progress").val($("#application-progress").slider("value"));
+
+	});
+
+    chrome.storage.sync.get("SPKESY_LRND", function (obj) {
+		if (!obj["SPKESY_LRND"] || obj["SPKESY_LRND"] == "") {
+			$("#wordsLearned").val(0);
+		} else {
+			$("#wordsLearned").val(obj["SPKESY_LRND"]);
+		}
+    });
+
+    chrome.storage.sync.get("SPKESY_LRNG", function (obj) {
+		if (!obj["SPKESY_LRNG"] || obj["SPKESY_LRNG"] == "") {
+			$("#wordsLearning").val(0);
+		} else {
+			$("#wordsLearning").val(obj["SPKESY_LRNG"]);
+		}
+    });
+
     chrome.storage.sync.get("TRAN_TARGET", function (obj) {
 		if (!obj["TRAN_TARGET"] || obj["TRAN_TARGET"] == "") {
 			$("#setupTarget").css("display", "block");
@@ -49,35 +98,52 @@ $(document).ready(function() {
 	});
 
 	// Attach a submit handler to feedback form
-	$('#feedbackForm').submit(function(event) {
+	$('#checkProgress').click(function(event) {
 		
 		event.preventDefault();
-		
-		var array = $(this).serializeArray();
-		var jsonParameter = {};
-		
-		jQuery.each(array, function() {
-			jsonParameter[this.name] = this.value || '';
+				
+	    chrome.storage.sync.get("TRAN_USER_EMAIL", function (obj) {
+	    	var tran_user_email = obj["TRAN_USER_EMAIL"];
+		    chrome.storage.sync.get("TRAN_TARGET", function (obj) {
+		    	var tran_target_lang = obj["TRAN_TARGET"];
+				var jsonParameter = {"email":tran_user_email};
+				var targetURL = "http://localhost:8080/rest/view/progress/" + tran_target_lang;
+				//var targetURL = "http://ec2-52-35-34-105.us-west-2.compute.amazonaws.com:8080/translator/rest/view/progress/" + tran_target_lang;
+
+				$.ajax({
+					url : targetURL,
+					type : "POST",
+			        data: JSON.stringify(jsonParameter),
+			        contentType: "application/json",
+			        headers: {"Accept": "application/json"},
+					success: function(result, status, xhr) {
+						$("#languageDiv").hide("slide", { direction: "left" }, 400);
+					    $("#feedbackDiv").show("slide", { direction: "right" }, 400);
+					    $("#feedbackDiv").html(result);
+					   
+					},
+					error: function (xhr, status, errorMsg) {
+			            alert(xhr.status + "::" + xhr.statusText + "::" + xhr.responseText);
+			        }
+				});
+		    });
 	    });
-		
+	});
+
+	$("#feedbackButton").click(function() {
 		$.ajax({
-			url : "http://ec2-52-35-34-105.us-west-2.compute.amazonaws.com:8080/translator/rest/submit/feedback",
-			type : "POST",
-	        data: JSON.stringify(jsonParameter),
-	        contentType: "application/json",
-	        headers: {"Accept": "application/json"},
+			url : "http://localhost:8080/rest/view/survey",
+			//url : "http://ec2-52-35-34-105.us-west-2.compute.amazonaws.com:8080/translator/rest/view/survey",
+			type : "GET",
 			success: function(result, status, xhr) {
-				$("#feedbackDiv").html(result['message']);
+				$("#languageDiv").hide("slide", { direction: "left" }, 400);
+			    $("#feedbackDiv").show("slide", { direction: "right" }, 400);
+			    $("#feedbackDiv").html(result);
 			},
 			error: function (xhr, status, errorMsg) {
 	            alert(xhr.status + "::" + xhr.statusText + "::" + xhr.responseText);
 	        }
 		});
-	});
-
-	$("#feedbackButton").click(function() {
-		$("#languageDiv").hide("slide", { direction: "left" }, 400);
-	    $("#feedbackDiv").show("slide", { direction: "right" }, 400);
 	});
 	
 	$("#off").click(function() {
@@ -98,6 +164,14 @@ $(document).ready(function() {
 		window.open("http://spkeasy.weebly.com/help-page.html","_blank");
 	});
 	
+	$("#facebook").click(function() {
+		window.open("http://facebook.com/speakeasylanguagelearning","_blank");
+	});
+
+	$("#twitter").click(function() {
+		window.open("http://twitter.com/speakeasyell","_blank");
+	});
+
 	$(".difficultyDescription").tooltip({
 	      position: {
 	          my: "center bottom-15",

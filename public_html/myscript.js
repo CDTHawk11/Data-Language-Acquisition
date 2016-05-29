@@ -21,43 +21,6 @@ chrome.storage.sync.get("TRAN_LEVEL", function (limit) {
 		return;
 	}
 	
-	var words = [];
-	for (i in alltext){
-		if(alltext[i].trim() !== "") words.push(alltext[i].trim());
-	};
-
-	var counts = [];
-
-	// counts number of words
-	for (var i = 0; i < words.length; i++) {
-	    var num = words[i];
-	    counts[num] = counts[num] ? counts[num] + 1 : 1;
-	}
-
-	var unique_numbers = Object.keys(counts).length; // number unique words
-														// that
-														// appear on page
-	// orders words from most occurring to least
-	var counts_new = [];
-	for (var key in counts)
-	    counts_new.push([key, counts[key]]);
-	counts_new.sort(function (a, b) {
-	    return b[1] - a[1]
-	});
-
-	// var arrays_to = counts_new.splice(0, 4); // four most occurring words
-												// (temporary)
-	var arrays_to = counts_new.splice(0, tranLimit-1);
-	console.log(arrays_to);
-	// Extracts the most frequently occurring words from the arrays_to
-	// dictionary and places them in a list
-	words_to = [];
-	for (var key in arrays_to)
-	    words_to.push([arrays_to[key][0]]);
-	var to_Translate = [].concat.apply([], words_to);
-
-	// CONJUGATION CODE:
-	
 	var cleanArray = [];
 	for (i in sentences){
 		if(sentences[i].trim() !== "") cleanArray.push(sentences[i].trim());
@@ -69,80 +32,9 @@ chrome.storage.sync.get("TRAN_LEVEL", function (limit) {
 		cleanSplit.push(cleanArray[i].split(" "));
 	}
 	
-	// find collocated words for translation and group them together for proper conjugation
-	var mergedConsPlus=[];
-	
-	
-loop1:	
-	for (i in cleanSplit){
-loop2:
-		t=0;
-		for (t; t<=cleanSplit[i].length; t++){
-			//console.log(cleanArray[i].length);
-			var joinedCons=[];
-			var conjugs=[];
-			var z=0;
-			var x=0;
-			var mergedCons=[];
-loop3:
-			for (word in to_Translate){
-				if (cleanSplit[i][t]===to_Translate[word]){
-					var limit=cleanSplit[i].length-1;
-					if (t < limit){
-						t=parseInt(t);
-						var a=t+1;
-						var conjugsPlus=[];
-loop4:						
-						for (a; a<=limit; a++){
-loop5:
-							for (w in to_Translate){
-								if (to_Translate[w]===cleanSplit[i][a]){
-									z=z+1;
-								};
-							};	
-							if(z>x){
-								x=x+1;
-							} else {break loop4;}
-						conjugsPlus.push(cleanSplit[i][a]);
-						};
-					};	
-				};					
-			};
-		if (z>0){
-			conjugs.push(cleanSplit[i][t]);
-			conjugs.push(conjugsPlus);
-			mergedCons.push(conjugs);
-			mergedCons = [].concat.apply([], conjugs);
-			joinedCons=mergedCons.join(' ');
-			mergedConsPlus.push(joinedCons);
-			if (a<limit){
-				t=a+1;
-				}
-			}
-		};	
-	};
-	
-	// Array consisting of all collections that require conjugation:
-	
-	// CONJUGATION CODE END
-
-	// packaging list of words to be translated in JSON for transfer to
-	// background scripts
-	
-	forTranslation=[];
-	forTranslation=mergedConsPlus.concat(to_Translate);
-	
-	// delete duplicates
-	var uniqueTrans = [];
-	$.each(forTranslation, function(i, el){
-	    if($.inArray(el, uniqueTrans) === -1) uniqueTrans.push(el);
-	});
-	
-	// send to background scripts/server
-	console.log(uniqueTrans);
-	var json_to_Translate = JSON.stringify(uniqueTrans),
+	var json_to_Translate = JSON.stringify(cleanSplit),
 	        json_parse = JSON.parse(json_to_Translate);
-
+	console.log(json_parse);
 	var translationReq = {type: "translation", requestObj: {json_parse}};
 	chrome.runtime.sendMessage(translationReq, function(response) { 
 		var jsonArr = response.merged_words;
@@ -185,37 +77,44 @@ function findAndReplace(node, matcher, replacement) {
     var match;
     var curNode = node;
     while (match = pattern.exec(curNode.data)) {
-        // Create the wrapper span and add the matched text to it.
-		var span = document.createElement('span');
-		$(span).attr("title", matcher);
-		$(span).tooltip({
-	      position: {
-	          my: "center bottom-15",
-	          at: "center top",
-	          using: function( position, feedback ) {
-	            $( this ).css( position );
-	            $( "<div>" )
-	              .addClass( "arrow" )
-	              .addClass( feedback.vertical )
-	              .addClass( feedback.horizontal )
-	              .appendTo( this );
-	          	}
-	        },
-	        open: function( event, ui ) {
-	        	chrome.runtime.sendMessage({type: "tts", requestObj: replacement});
-	        }
-		});
-		var middlebit, endbit;
-		if(match[0].search(/[\u0000-\u001F\u0021-\u0026\u0028-\u0040\u005B-\u0060\u007B-\u00BF\u2000-\u206F\u2E00-\u2E7F\s]/g) == 0) {
-			middlebit = curNode.splitText(match.index + 1);
-			endbit = middlebit.splitText(match[0].length - 1);
-		} else {
-			middlebit = curNode.splitText(match.index);
-			endbit = middlebit.splitText(match[0].length);
-		}
-        span.appendChild(document.createTextNode(replacement));
-        middlebit.parentNode.replaceChild(span, middlebit);
-        curNode = endbit;
+    	// Check if text is already wrapped
+    	if (curNode.parentNode.className === "spkeasy"){
+    		return;
+    	}
+    	else{		
+	        // Create the wrapper span and add the matched text to it.
+			var span = document.createElement('span');
+			$(span).attr("title", matcher);
+			$(span).attr("class","spkeasy");
+			$(span).tooltip({
+		      position: {
+		          my: "center bottom-15",
+		          at: "center top",
+		          using: function( position, feedback ) {
+		            $( this ).css( position );
+		            $( "<div>" )
+		              .addClass( "arrow" )
+		              .addClass( feedback.vertical )
+		              .addClass( feedback.horizontal )
+		              .appendTo( this );
+		          	}
+		        },
+		        open: function( event, ui ) {
+		        	chrome.runtime.sendMessage({type: "tts", requestObj: replacement});
+		        }
+			});
+			var middlebit, endbit;
+			if(match[0].search(/[\u0000-\u001F\u0021-\u0026\u0028-\u0040\u005B-\u0060\u007B-\u00BF\u2000-\u206F\u2E00-\u2E7F\s]/g) == 0) {
+				middlebit = curNode.splitText(match.index + 1);
+				endbit = middlebit.splitText(match[0].length - 1);
+			} else {
+				middlebit = curNode.splitText(match.index);
+				endbit = middlebit.splitText(match[0].length);
+			}
+	        span.appendChild(document.createTextNode(replacement));
+	        middlebit.parentNode.replaceChild(span, middlebit);
+	        curNode = endbit;
+    	}
     }
 }
 

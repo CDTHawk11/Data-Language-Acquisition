@@ -8,14 +8,15 @@ chrome.runtime.onInstalled.addListener(function(details) {
 				var topPos = win.top + 70;
 		        chrome.windows.create({
 		            type: "popup",
-		            width: 610,
-		            height: 440,
+		            width: 500,
+		            height: 575,
 		            top: topPos,
 		            left: leftPos,
 		            focused: true
 		        }, function(window) {
 		        	chrome.tabs.create({
-		                url: "http://localhost:8080/translator/rest/user/profile",
+		                url: "http://localhost:8080/rest/user/register",
+		                //url: "http://ec2-52-35-34-105.us-west-2.compute.amazonaws.com:8080/translator/rest/user/profile",
 		                windowId: window.id
 		            });
 		        });
@@ -54,6 +55,14 @@ function getTranslations(request, sender, sendResponse) {
     var deferred = $.Deferred();
     translate(request.json_parse, deferred);
     deferred.done(function (merged) {
+    	var learnedWords = merged.LearnedWordCount;
+    	var learningWords = merged.LearningWordCount;
+		chrome.storage.sync.set({"SPKESY_LRND":learnedWords}, function() {
+		});
+		chrome.storage.sync.set({"SPKESY_LRNG":learningWords}, function() {
+		});
+    	delete merged.LearnedWordCount;
+    	delete merged.LearningWordCount;
         chrome.storage.sync.get("SPKESY_TRAN", function (obj) {
         	if (!(obj["SPKESY_TRAN"]) || obj["SPKESY_TRAN"] === "") {
         		chrome.storage.sync.set({"SPKESY_TRAN":"ON"}, function() {
@@ -72,48 +81,46 @@ function getTranslations(request, sender, sendResponse) {
 
 function translate(original_text, dfrd) {
 	var jsonParameter = {};
+	var targetURL = "http://localhost:8080/rest/trans/";
+	//var targetURL = "http://ec2-52-35-34-105.us-west-2.compute.amazonaws.com:8080/translator/rest/trans/";
+	var tran_data = ["TRAN_TARGET", "TRAN_LIMIT", "TRAN_USER_EMAIL"];
 	
-    chrome.storage.sync.get("TRAN_USER_EMAIL", function (emailObj) {
-    	if (!(emailObj["TRAN_USER_EMAIL"]) || emailObj["TRAN_USER_EMAIL"] == "") {
+    chrome.storage.sync.get(tran_data, function (obj) {
+    	var tran_target_lang = obj["TRAN_TARGET"];
+    	var tran_user_email = obj["TRAN_USER_EMAIL"];
+    	var tran_immersion_limit = obj["TRAN_LIMIT"];
+
+    	if (!tran_target_lang || !tran_user_email || tran_target_lang === "" || tran_user_email === "") {
     		return false;
     	} else {
-    		userEmail = emailObj["TRAN_USER_EMAIL"];
+    		targetURL = targetURL + tran_target_lang;
+    		
+    		setVoice(tran_target_lang);
+
     		var sourceLang;
     		chrome.tabs.getSelected(null, function(tab) {
     			  chrome.tabs.detectLanguage(tab.id, function(language) {
-    				  sourceLang = language;
+    		    		console.log(language);
+    				  	jsonParameter = {"q":original_text, "email":tran_user_email, "sourceLang":language, "tranLimit":tran_immersion_limit};
+ 
+    	    		    $.ajax({
+    	    		    	type: "POST",
+    		    	        url: targetURL,
+    		    	        data: JSON.stringify(jsonParameter),
+    		    	        contentType: "application/json",
+    		    	        headers: {"Accept": "application/json"},
+    		    	        dataType: "json",
+    		    	        success: function (result, status, xhr) {
+    		    	               dfrd.resolve(result);
+    		    	        },
+    		    	        error: function (xhr, status, errorMsg) {
+    		    	            console.log(xhr.status + "::" + xhr.statusText + "::" + xhr.responseText);
+    		    	        }
+    		    	    });
     			  });
     		});
-    		jsonParameter = {"q":original_text, "email":userEmail, "sourceLang":sourceLang};
     	}
     });
-    
-	var targetURL = "http://localhost:8080/translator/rest/trans/";
-	
-    chrome.storage.sync.get("TRAN_TARGET", function (obj) {
-    	if (!(obj["TRAN_TARGET"]) || obj["TRAN_TARGET"] == "") {
-    		return false;
-    	} else {
-    		targetURL = targetURL + obj["TRAN_TARGET"];
-    		
-    		setVoice(obj["TRAN_TARGET"]);
-
-    	    $.ajax({
-    	        type: "POST",
-    	        url: targetURL,
-    	        data: JSON.stringify(jsonParameter),
-    	        contentType: "application/json",
-    	        headers: {"Accept": "application/json"},
-    	        dataType: "json",
-    	        success: function (result, status, xhr) {
-    	               dfrd.resolve(result);
-    	        },
-    	        error: function (xhr, status, errorMsg) {
-    	            console.log(xhr.status + "::" + xhr.statusText + "::" + xhr.responseText);
-    	        }
-    	    });
-    	}
-    });	
 }
 
 function setVoice(targetLang) {
