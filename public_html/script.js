@@ -107,8 +107,8 @@ $(document).ready(function() {
 		    chrome.storage.sync.get("TRAN_TARGET", function (obj) {
 		    	var tran_target_lang = obj["TRAN_TARGET"];
 				var jsonParameter = {"email":tran_user_email};
-				var targetURL = "http://localhost:8080/rest/view/progress/" + tran_target_lang;
-				//var targetURL = "http://ec2-52-35-34-105.us-west-2.compute.amazonaws.com:8080/translator/rest/view/progress/" + tran_target_lang;
+				//var targetURL = "http://localhost:9080/langacquisitionapp/rest/view/progress/" + tran_target_lang;
+				var targetURL = "http://ec2-52-34-38-44.us-west-2.compute.amazonaws.com:9080/langacquisitionapp/rest/view/progress/" + tran_target_lang;
 
 				$.ajax({
 					url : targetURL,
@@ -132,8 +132,8 @@ $(document).ready(function() {
 
 	$("#feedbackButton").click(function() {
 		$.ajax({
-			url : "http://localhost:8080/rest/view/survey",
-			//url : "http://ec2-52-35-34-105.us-west-2.compute.amazonaws.com:8080/translator/rest/view/survey",
+			//url : "http://localhost:9080/langacquisitionapp/rest/view/survey",
+			url : "http://ec2-52-34-38-44.us-west-2.compute.amazonaws.com:9080/langacquisitionapp/rest/view/survey",
 			type : "GET",
 			success: function(result, status, xhr) {
 				$("#languageDiv").hide("slide", { direction: "left" }, 400);
